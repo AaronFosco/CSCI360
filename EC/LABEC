@@ -1,0 +1,314 @@
+//KC03B13A JOB ,'Aaron Fosco',MSGCLASS=H
+//STEP1    EXEC  PGM=ASSIST
+//STEPLIB    DD  DSN=KC02293.ASSIST.LOADLIB,DISP=SHR
+//SYSPRINT   DD  SYSOUT=*
+//SYSIN      DD  *
+************************************************************
+*
+*  Program:     ASSIGNEXC
+*  Programmer:  Aaron Fosco
+*
+*  Register usage:
+* 
+*  1  Parameter list
+*  2  loader for parameter list
+*  12 Base register
+*  13 Addr of 18F storage
+*  14 Return ptr for subroutines
+*
+************************************************************
+MAIN     CSECT
+         STM   14,12,12(13)            STD ENTRY LINKAGE
+         LR    12,15
+         USING MAIN,12
+         LA    14,MAINSAV
+         ST    13,4(,14)
+         ST    14,8(,13)
+         LR    13,14
+         LA    1,PLIST                 2 SETS OF LOADING PLIST
+         L     15,=V(BUILD1)           AND BRACHING TO EXTERN
+         BALR  14,15                   ROUTINE
+         LA    1,PLIST
+         L     15,=V(PRINT)
+         BALR  14,15
+         LA    2,TABLE2                UPDATE PLIST FOR TABLE
+         ST    2,PLIST                 #2
+         LA    2,EOT2
+         ST    2,PLIST+4
+         MVC   CAPTION(22),=CL22'Second List of Clients'
+         LA    1,PLIST                 2 MORE SETS OF LOAD
+         L     15,=V(BUILD2)           PLIST AND BRANCH
+         BALR  14,15
+         LA    1,PLIST
+         L     15,=V(PRINT)
+         BALR  14,15
+         LA    2,TABLE1                UPDATE PLIST FOR MERGE
+         ST    2,PLIST                 ROUTINE
+         LA    2,EOT1
+         ST    2,PLIST+4
+         LA    2,TABLE2
+         ST    2,PLIST+8
+         MVC   CAPTION(22),=CL22'Master List of Clients'
+         LA    1,PLIST                 BRANCH TO MERGE ROUTINE
+         L     15,=V(MERGE)
+         BALR  14,15
+         LA    2,TABLE3                FINALLY, UPDATE PLIST
+         ST    2,PLIST                 FOR FINAL PRINT
+         LA    2,EOT3
+         ST    2,PLIST+4
+         LA    2,CAPTION
+         ST    2,PLIST+8
+         LA    1,PLIST                 BRANCH TO FINAL PRINT
+         L     15,=V(PRINT)
+         BALR  14,15
+         L     13,4(,13)                STD EXIT LINKAGE
+         LM    14,12,12(13)
+         BR    14                       END OF ROUTINE
+         LTORG
+MAINSAV  DS    18F                     MAIN SAVESPACE
+TABLE1   DC    15CL32' '               TABLE & EOT X3
+EOT1     DC    A(TABLE1)
+TABLE2   DC    15CL32' '
+EOT2     DC    A(TABLE2)
+TABLE3   DC    30CL32' '
+EOT3     DC    A(TABLE3)
+PLIST    DC    A(TABLE1)               PARAM LIST
+         DC    A(EOT1)
+         DC    A(CAPTION)
+         DC    A(EOT2)
+         DC    A(TABLE3)
+         DC    A(EOT3)
+CAPTION  DC    CL22'First List of Clients '
+ENTRY    DSECT                         DESCT FOR TABLES
+LNAME    DS    12C
+FNAME    DS    12C
+LID      DS    7C
+         DS    C
+********************************************
+* Subroutine: BUILD1
+*
+* Desc: Builds a table with First name, last
+*       Names, and ID numbers
+*
+* Expected parameters:
+* 1F: Addr of table
+* 2F: Addr of EOT
+*
+* REG USAGE:
+*
+* R2 - Table Address Cursor
+* R3 - EOT ptr
+*
+********************************************
+BUILD1   CSECT
+         STM   14,12,12(13)            STD ENTRY LINKAGE
+         LR    12,15
+         USING BUILD1,12
+         LA    14,BUI1SAVE
+         ST    13,4(0,14)
+         ST    14,8(0,13)
+         LR    13,14
+         LM    2,3,0(1)                LOAD PARAMS
+         USING ENTRY,2                 DSECT FOR EASE OF USE
+L1SRT    XREAD CARD1,80                READ SOME DATA
+         BC    B'0100',L1END           ENDLOOP ON EOF
+         CLI   CARD1,C'-'              ENDLOOP ON FINDING C'-'
+         BE    L1END
+         MVC   FNAME(10),CARD1         COPY FNAME,LNAME, &
+         MVC   LNAME(12),CARD1+10      ID FROM CARDSPACE TO
+         MVC   LID(2),=CL2'GP'         THE TABLE
+         MVC   LID+2(5),CARD1+24
+         LA    2,32(,2)                INCREMENT CURSOR
+         B     L1SRT                   GOTO TOP OF LOOP
+L1END    ST    2,0(,3)                 STORE EOT PTR
+         DROP  2                       CLEAR ASSOCIATION
+         L     13,4(0,13)              STD EXIT LINKAGE
+         LM    14,12,12(13)
+         BR    14
+         LTORG
+BUI1SAVE DS    18F
+CARD1    DS    CL80
+         DC    C'*'
+********************************************
+* Subroutine: BUILD2
+*
+* Desc: Builds a table with First name, last
+*       Names, and ID numbers
+*
+* Expected parameters:
+* 1F: Addr of table
+* 2F: Addr of EOT
+*
+* REG USAGE:
+*
+* R2 - Table Address Cursor
+* R3 - EOT ptr
+*
+********************************************
+BUILD2   CSECT
+         STM   14,12,12(13)            STD ENTRY LINKAGE
+         LR    12,15
+         USING BUILD2,12
+         LA    14,BUI2SAVE
+         ST    13,4(0,14)
+         ST    14,8(0,13)
+         LR    13,14
+         LM    2,3,0(1)                LOAD PARAMS
+         USING ENTRY,2                 DSECT FOR TABLE
+L2SRT    XREAD CARD2,80                READ SOME DATA
+         BC    B'0100',L2END           ENDLOOP OF EOF
+         MVC   LID(7),CARD2            COPY FNAME, LNAME, & ID
+         MVC   LNAME(10),CARD2+7       FROM CARDSPACE TO TABLE
+         MVC   FNAME(12),CARD2+19
+         LA    2,32(,2)                INCREMENT CURSOR
+         B     L2SRT                   BR TO TOP OF LOOP
+L2END    ST    2,0(,3)                 STORE EOT
+         DROP  2                       CLEAR ASSOCATION
+         L     13,4(0,13)              STD EXIT LINKAGE
+         LM    14,12,12(13)
+         BR    14
+         LTORG
+BUI2SAVE DS    18F
+CARD2    DS    CL80
+         DC    C'*'
+********************************************
+* Subroutine: PRINT
+*
+* Desc: Prints out all the data stored in a the
+*       table built by the build routine with
+*       a supplied header
+*
+* Expected parameters:
+* 1F: Addr of table
+* 2F: Addr of EOT ptr
+* 3F: Addr of Headder text
+*
+* R2 - Table cursor
+* R3 - EOT ptr
+* R4 - Addr of header text
+*
+********************************************
+PRINT    CSECT
+         STM   14,12,12(13)            STD ENTRY LINKAGE
+         LR    12,15
+         USING PRINT,12
+         LA    14,PRNSAVE
+         ST    13,4(0,14)
+         ST    14,8(0,13)
+         LR    13,14
+         LM    2,4,0(1)                LOAD PARAMS
+         USING ENTRY,2                 DSECT FOR TABLE
+         MVI   PRINTLN,C'1'            CREATE THE HEADER
+         MVI   PRINTLN+1,C' '
+         MVC   PRINTLN+2(85),PRINTLN+1
+         MVC   PRINTLN+33(22),0(4)
+         XPRNT PRINTLN,87              PRINT HEADER
+         MVI   PRINTLN,C'-'            CREATE NAME HEADER
+         MVC   PRINTLN+2(85),PRINTLN+1
+         MVC   PRINTLN+15(10),=CL10'First Name'
+         MVC   PRINTLN+40(9),=CL9'Last Name'
+         MVC   PRINTLN+66(7),=CL7'LogonID'
+         XPRNT PRINTLN,87              PRINT NAME HEADER
+         MVC   PRINTLN+14(12),=12C'-'  CREATE SEPERATOR
+         MVC   PRINTLN+40(12),=12C'-'
+         MVC   PRINTLN+66(7),=7C'-'
+         XPRNT PRINTLN,87              PRINT SEPERATOR
+         MVI   PRINTLN,C' '
+         MVC   PRINTLN+1(86),PRINTLN   CLEAR THE PRINTLN
+L3SRT    MVC   PRINTLN+14(12),FNAME    COPY FNAME, LNAME, & ID
+         MVC   PRINTLN+40(12),LNAME    FROM TABLE TO PRINTLN
+         MVC   PRINTLN+66(7),LID
+         XPRNT PRINTLN,87              PRINT A ROW OF DATA
+         LA    2,32(,2)                INCREMENT CURSOR
+         CR    2,3                     BREAK LOOP IF AT EOT
+         BC    B'1010',L3END
+         B     L3SRT                   BR TO TOP OF LOOP
+L3END    DS    0H
+         DROP  2                       CLEAR ASSOCIATIONS
+         L     13,4(0,13)              STD EXIT LINKAGE
+         LM    14,12,12(13)
+         BR    14
+         LTORG
+PRNSAVE  DS    18F
+PRINTLN  DS    87C
+********************************************
+* Subroutine: MERGE
+*
+* Desc: Merges two Tables of max len 15. The
+*       Tables should be built by one of the
+*       two build routines
+*
+* Expected parameters:
+* 1F: Addr of table 1
+* 2F: Addr of EOT ptr 1
+* 1F: Addr of table 2
+* 2F: Addr of EOT ptr 2
+* 1F: Addr of storage table 3
+* 2F: Addr of storage EOT ptr 3
+*
+* REG USAGE:
+* R2 - Cursor for table 1
+* R3 - Ptr to eot 1
+* R4 - Cursor for table 2
+* R5 - Ptr to eot 2
+* R6 - Cursor for table 3
+* R7 - Ptr to eot 3
+*
+********************************************
+MERGE    CSECT
+         STM   14,12,12(13)            STD ENTRY LINKAGE
+         LR    12,15
+         USING MERGE,12
+         LA    14,MERSAVE
+         ST    13,4(0,14)
+         ST    14,8(0,13)
+         LR    13,14
+         LM    2,7,0(1)                LOAD PARAMS
+         L     3,0(,3)                 GET ADDR FROM EOT1
+         L     5,0(,5)                 GET ADDR FROM EOT2
+M1LSRT   CR    2,3                     BREAK LOOP IF AT EOT1
+         BC    B'1010',M1LEND
+         CR    4,5                     BREAK LOOP IF AT EOT2
+         BC    B'1010',M1LEND
+IF1      CLC   0(12,2),0(4)            IF LNAME1 > LNAME2
+         BC    B'1010',ELSE1           BR TO ELSE
+         MVC   0(12,6),0(2)            COPY TABLE1 ENTRY INTO
+         MVC   12(12,6),12(2)          TABLE3
+         MVC   24(7,6),24(2)
+         LA    2,32(,2)                INCREMENT T1 CURSOR
+         B     IF1END                  BR TO ENDIF
+ELSE1    MVC   0(12,6),0(4)            COPY TABLE2 ENTRY INTO
+         MVC   12(12,6),12(4)          TABLE3
+         MVC   24(7,6),24(4)
+         LA    4,32(,4)                INCREMENT T2 CURSOR
+IF1END   LA    6,32(,6)                INCREMENT T3 CURSOR
+         B     M1LSRT                  BR TO TOP OF LOOP
+M1LEND   DS    0H                      END LOOP
+M2LSRT   CR    2,3                     IF AT END OF TABLE 1
+         BC    B'1010',M2LEND          BREAK OUT OF LOOP
+         MVC   0(12,6),0(2)            COPY THE REST OF T1
+         MVC   12(12,6),12(2)          INTO T3
+         MVC   24(7,6),24(2)
+         LA    2,32(,2)                INCREMENT T1 CURSOR
+         LA    6,32(,6)                INCREMENT T3 CURSOR
+         B     M2LSRT
+M2LEND   DS    0H                      ENDLOOP
+M3LSRT   CR    4,5                     IF AT END OF TABLE 2
+         BC    B'1010',M3LEND          BREAK OUT OF LOOP
+         MVC   0(12,6),0(4)            COPY THE REST OF T2
+         MVC   12(12,6),12(4)          INTO T3
+         MVC   24(7,6),24(4)
+         LA    4,32(,4)                INCREMENT T2 CURSOR
+         LA    6,32(,6)                INCREMENT T3 CURSOR
+         B     M3LSRT
+M3LEND   ST    6,0(,7)                 STORE EOT3 PTR
+         L     13,4(0,13)              STD EXIT LINKAGE
+         LM    14,12,12(13)
+         BR    14
+         LTORG
+MERSAVE  DS    18F
+         END   MAIN
+/*
+//FT05F001  DD  DSN=KC02314.SUMMER18.CSCI360.HWEXDATA,DISP=SHR
+//FT06F001   DD SYSOUT=*
+//

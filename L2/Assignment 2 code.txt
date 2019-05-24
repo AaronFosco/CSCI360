@@ -1,0 +1,94 @@
+//KC03B13A JOB ,'Aaron fosco',MSGCLASS=H                                00010003
+//STEP1   EXEC  PGM=ASSIST                                              00020000
+//STEPLIB   DD  DSN=KC02293.ASSIST.LOADLIB,DISP=SHR                     00030005
+//SYSPRINT  DD  SYSOUT=*                                                00040000
+//SYSIN     DD  *                                                       00050000
+***************************                                             00060000
+*                                                                       00070000
+* Program: ASSIGN2                                                      00080000
+* Programer: Aaron Fosco                                                00090000
+*                                                                       00100000
+* USING FORMULA: (W-X+Y-Z)                                              00101009
+*                                                                       00102009
+* Register Usage:                                                       00110000
+*                                                                       00120000
+* 2 W (NUMERIC VALUE)                                                   00130025
+* 3 X (NUMERIC VALUE)                                                   00131025
+* 4 Y (NUMERIC VALUE)                                                   00132025
+* 5 Z (NUMERIC VALUE)                                                   00133025
+* 6 COUNT (OUTPUT LINE COUNT)                                           00133125
+* 7 TOTAL (NUMERIC VALUE)                                               00133225
+* 1 XDECI (ASSIST X-INSTRUC)                                            00134025
+*                                                                       00140000
+***************************                                             00150000
+MAIN      CSECT                                                         00150101
+          USING MAIN,15                                                 00150202
+          SR    2,2            ZERO REGS 2-7                            00150322
+          SR    3,3                                                     00150402
+          SR    4,4                                                     00150502
+          SR    5,5                                                     00150609
+          SR    6,6                                                     00150709
+          SR    7,7                                                     00150809
+LSRT      XREAD CARD,80        READ INSTRM TO CARD                      00151028
+          BC    B'0100',LEND   BRANCH ON EOF                            00151128
+          LA    1,CARD         POINT R1 TO BEGIN                        00151228
+*                              OF CARD                                  00151328
+          XDECI 2,0(1)         LOAD NUMBS TO R2                         00151428
+          XDECO 2,OUTW         STORE R2                                 00151522
+          XDECI 3,0(1)         LOAD/STORE REPEATED                      00151722
+          XDECO 3,OUTX                                                  00151815
+          XDECI 4,0(1)                                                  00152109
+          XDECO 4,OUTY                                                  00152215
+          XDECI 5,0(1)                                                  00152509
+          XDECO 5,OUTZ                                                  00152615
+          SR    2,3            DO W+X-Y+Z                               00152922
+          AR    2,4                                                     00153009
+          SR    2,5                                                     00153109
+          AR    7,2            ADD RESULT TO TOTAL                      00153833
+          XDECO 2,OUTR         STORE R2                                 00154231
+          LA    6,1(0,6)       ADD 1 TO COUNT                           00154322
+          XPRNT START,91       PRINT FULL OUTPUT                        00154422
+          BC    B'1111',LSRT                                            00154510
+*                              END OF LOOP LSRT                         00154622
+LEND      DS    0H                                                      00154802
+          XDECO 6,OUTF1        STORE COUNTER                            00154922
+          XDECO 7,OUTF2        STORE TOTAL                              00155022
+          XPRNT FINAL,61       PRINT FINAL OUTPUT                       00155133
+          BR    14                                                      00155202
+*                              END OF EXEC CODE                         00155322
+CARD      DS    CL80                                                    00155402
+START     DC    C'0 W = '                                               00155515
+OUTW      DS    CL12                                                    00155612
+          DC    C' X = '                                                00155715
+OUTX      DS    CL12                                                    00155812
+          DC    C' Y = '                                                00155915
+OUTY      DS    CL12                                                    00156012
+          DC    C' Z = '                                                00156115
+OUTZ      DS    CL12                                                    00156212
+          DC    C' RESULT = '                                           00156315
+OUTR      DS    CL12                                                    00156412
+FINAL     DC    C' Number of lines = '                                  00156529
+OUTF1     DS    CL12                                                    00156615
+          DC    C' Sum of results = '                                   00156729
+OUTF2     DS    CL12                                                    00156815
+          END   MAIN                                                    00156906
+/*                                                                      00157001
+//FT05F001  DD  *                                                       00160000
+    0006   0001   0002   0004                                           00170025
+    9991   9972   9908   9926                                           00180025
+    4500   -230      9     58                                           00190025
+       0     +7      2    -45                                           00200025
+    8516   2853      0     17                                           00210025
+    0020      0   3245    316                                           00220025
+    5529   6977   1681      0                                           00230025
+    1013    250     85    831                                           00240025
+       0   3364   5275      0                                           00250025
+    -887   1100   2293   -993                                           00260030
+    1234   4447   8591     13                                           00261029
+     -89     -7     23   -104                                           00262029
+    8513   5409   2538   1001                                           00270025
+    0001   0002   0003   0004                                           00280025
+    9999   9998   9997   9996                                           00290025
+/*                                                                      00300000
+//FT06F001  DD  SYSOUT=*                                                00310000
+//                                                                      00320000

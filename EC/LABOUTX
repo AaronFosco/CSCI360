@@ -1,0 +1,453 @@
+1                    J E S 2  J O B  L O G  --  S Y S T E M  S 0 W 1  --  N O D E  Z O S K C T R         
+0 
+ 10.01.50 JOB02506 ---- TUESDAY,   07 AUG 2018 ----
+ 10.01.50 JOB02506  IRR010I  USERID KC03B13  IS ASSIGNED TO THIS JOB.
+ 10.01.50 JOB02506  ICH70001I KC03B13  LAST ACCESS AT 10:01:29 ON TUESDAY, AUGUST 7, 2018
+ 10.01.50 JOB02506  $HASP373 KC03B13A STARTED - INIT 2    - CLASS A        - SYS S0W1
+ 10.01.50 JOB02506  -                                         --TIMINGS (MINS.)--            ----PAGING COUNTS---
+ 10.01.50 JOB02506  -JOBNAME  STEPNAME PROCSTEP    RC   EXCP    TCB    SRB  CLOCK   SERV  PG   PAGE   SWAP    VIO SWAPS
+ 10.01.50 JOB02506  -KC03B13A                      00     88 ******    .00     .0    230   0      0      0      0     0
+ 10.01.50 JOB02506  -KC03B13A ENDED.  NAME-Aaron Fosco          TOTAL TCB CPU TIME=   .00  TOTAL ELAPSED TIME=    .0
+ 10.01.50 JOB02506  $HASP395 KC03B13A ENDED
+0------ JES2 JOB STATISTICS ------
+-  07 AUG 2018 JOB EXECUTION DATE
+-          313 CARDS READ
+-          453 SYSOUT PRINT RECORDS
+-            0 SYSOUT PUNCH RECORDS
+-           34 SYSOUT SPOOL KBYTES
+-         0.00 MINUTES EXECUTION TIME
+         1 //KC03B13A JOB ,'Aaron Fosco',MSGCLASS=H                                JOB02506
+         2 //STEP1    EXEC  PGM=ASSIST                                                     
+         3 //STEPLIB    DD  DSN=KC02293.ASSIST.LOADLIB,DISP=SHR                            
+         4 //SYSPRINT   DD  SYSOUT=*                                                       
+         5 //SYSIN      DD  *                                                              
+         6 //FT05F001  DD  DSN=KC02314.SUMMER18.CSCI360.HWEXDATA,DISP=SHR                  
+         7 //FT06F001   DD SYSOUT=*                                                        
+ ICH70001I KC03B13  LAST ACCESS AT 10:01:29 ON TUESDAY, AUGUST 7, 2018
+ IEF236I ALLOC. FOR KC03B13A STEP1
+ IGD103I SMS ALLOCATED TO DDNAME STEPLIB
+ IEF237I JES2 ALLOCATED TO SYSPRINT
+ IEF237I JES2 ALLOCATED TO SYSIN
+ IGD103I SMS ALLOCATED TO DDNAME FT05F001
+ IEF237I JES2 ALLOCATED TO FT06F001
+ IEF142I KC03B13A STEP1 - STEP WAS EXECUTED - COND CODE 0000
+ IGD104I KC02293.ASSIST.LOADLIB                       RETAINED,  DDNAME=STEPLIB 
+ IEF285I   KC03B13.KC03B13A.JOB02506.D0000102.?         SYSOUT        
+ IEF285I   KC03B13.KC03B13A.JOB02506.D0000101.?         SYSIN         
+ IGD104I KC02314.SUMMER18.CSCI360.HWEXDATA            RETAINED,  DDNAME=FT05F001
+ IEF285I   KC03B13.KC03B13A.JOB02506.D0000103.?         SYSOUT        
+ IEF373I STEP/STEP1   /START 2018219.1001
+ IEF032I STEP/STEP1   /STOP  2018219.1001 
+         CPU:     0 HR  00 MIN  00.01 SEC    SRB:     0 HR  00 MIN  00.00 SEC    
+         VIRT:   584K  SYS:   272K  EXT:        4K  SYS:    11416K
+         ATB- REAL:                     0K  SLOTS:                     0K
+              VIRT- ALLOC:       0M SHRD:       0M
+ IEF375I  JOB/KC03B13A/START 2018219.1001
+ IEF033I  JOB/KC03B13A/STOP  2018219.1001 
+         CPU:     0 HR  00 MIN  00.01 SEC    SRB:     0 HR  00 MIN  00.00 SEC    
+1*** ASSIST 4.0/A2-05/15/82  470/V7A/0:OS/VS2  INS=SDFP7/X=BGHO, CHECK/TRC/=1180, OPTS=CDKMPR FROM PENN ST*NIU COMPSCI*LT         
+0                                                                                                                                 
+0                                                                                                               PAGE    1         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+                                       1 ************************************************************                             
+                                       2 *                                                                                        
+                                       3 *  Program:     ASSIGNEXC                                                                
+                                       4 *  Programmer:  Aaron Fosco                                                              
+                                       5 *                                                                                        
+                                       6 *  Register usage:                                                                       
+                                       7 *                                                                                        
+                                       8 *  1  Parameter list                                                                     
+                                       9 *  2  loader for parameter list                                                          
+                                      10 *  12 Base register                                                                      
+                                      11 *  13 Addr of 18F storage                                                                
+                                      12 *  14 Return ptr for subroutines                                                         
+                                      13 *                                                                                        
+                                      14 ************************************************************                             
+ 000000                               15 MAIN     CSECT                                                                           
+ 000000 90EC D00C            0000C    16          STM   14,12,12(13)            STD ENTRY LINKAGE                                 
+ 000004 18CF                          17          LR    12,15                                                                     
+ 000000                               18          USING MAIN,12                                                                   
+ 000006 41E0 C0E4            000E4    19          LA    14,MAINSAV                                                                
+ 00000A 50D0 E004            00004    20          ST    13,4(,14)                                                                 
+ 00000E 50E0 D008            00008    21          ST    14,8(,13)                                                                 
+ 000012 18DE                          22          LR    13,14                                                                     
+ 000014 4110 C8B8            008B8    23          LA    1,PLIST                 2 SETS OF LOADING PLIST                           
+ 000018 58F0 C0A8            000A8    24          L     15,=V(BUILD1)           AND BRACHING TO EXTERN                            
+ 00001C 05EF                          25          BALR  14,15                   ROUTINE                                           
+ 00001E 4110 C8B8            008B8    26          LA    1,PLIST                                                                   
+ 000022 58F0 C0AC            000AC    27          L     15,=V(PRINT)                                                              
+ 000026 05EF                          28          BALR  14,15                                                                     
+ 000028 4120 C310            00310    29          LA    2,TABLE2                UPDATE PLIST FOR TABLE                            
+ 00002C 5020 C8B8            008B8    30          ST    2,PLIST                 #2                                                
+ 000030 4120 C4F0            004F0    31          LA    2,EOT2                                                                    
+ 000034 5020 C8BC            008BC    32          ST    2,PLIST+4                                                                 
+ 000038 D215 C8D0 C0B8 008D0 000B8    33          MVC   CAPTION(22),=CL22'Second List of Clients'                                 
+ 00003E 4110 C8B8            008B8    34          LA    1,PLIST                 2 MORE SETS OF LOAD                               
+ 000042 58F0 C0B0            000B0    35          L     15,=V(BUILD2)           PLIST AND BRANCH                                  
+ 000046 05EF                          36          BALR  14,15                                                                     
+ 000048 4110 C8B8            008B8    37          LA    1,PLIST                                                                   
+ 00004C 58F0 C0AC            000AC    38          L     15,=V(PRINT)                                                              
+ 000050 05EF                          39          BALR  14,15                                                                     
+ 000052 4120 C12C            0012C    40          LA    2,TABLE1                UPDATE PLIST FOR MERGE                            
+ 000056 5020 C8B8            008B8    41          ST    2,PLIST                 ROUTINE                                           
+ 00005A 4120 C30C            0030C    42          LA    2,EOT1                                                                    
+ 00005E 5020 C8BC            008BC    43          ST    2,PLIST+4                                                                 
+ 000062 4120 C310            00310    44          LA    2,TABLE2                                                                  
+ 000066 5020 C8C0            008C0    45          ST    2,PLIST+8                                                                 
+ 00006A D215 C8D0 C0CE 008D0 000CE    46          MVC   CAPTION(22),=CL22'Master List of Clients'                                 
+ 000070 4110 C8B8            008B8    47          LA    1,PLIST                 BRANCH TO MERGE ROUTINE                           
+ 000074 58F0 C0B4            000B4    48          L     15,=V(MERGE)                                                              
+ 000078 05EF                          49          BALR  14,15                                                                     
+ 00007A 4120 C4F4            004F4    50          LA    2,TABLE3                FINALLY, UPDATE PLIST                             
+ 00007E 5020 C8B8            008B8    51          ST    2,PLIST                 FOR FINAL PRINT                                   
+ 000082 4120 C8B4            008B4    52          LA    2,EOT3                                                                    
+1                                                                                                               PAGE    2         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 000086 5020 C8BC            008BC    53          ST    2,PLIST+4                                                                 
+ 00008A 4120 C8D0            008D0    54          LA    2,CAPTION                                                                 
+ 00008E 5020 C8C0            008C0    55          ST    2,PLIST+8                                                                 
+ 000092 4110 C8B8            008B8    56          LA    1,PLIST                 BRANCH TO FINAL PRINT                             
+ 000096 58F0 C0AC            000AC    57          L     15,=V(PRINT)                                                              
+ 00009A 05EF                          58          BALR  14,15                                                                     
+ 00009C 58D0 D004            00004    59          L     13,4(,13)                STD EXIT LINKAGE                                 
+ 0000A0 98EC D00C            0000C    60          LM    14,12,12(13)                                                              
+ 0000A4 07FE                          61          BR    14                       END OF ROUTINE                                   
+                                      62          LTORG                                                                           
+ 0000A8 000008E8                      63                =V(BUILD1)                                                                
+ 0000AC 00000AD0                      64                =V(PRINT)                                                                 
+ 0000B0 000009E0                      65                =V(BUILD2)                                                                
+ 0000B4 00000C48                      66                =V(MERGE)                                                                 
+ 0000B8 E2858396958440D3              67                =CL22'Second List of Clients'                                             
+ 0000CE D481A2A3859940D3              68                =CL22'Master List of Clients'                                             
+ 0000E4                               69 MAINSAV  DS    18F                     MAIN SAVESPACE                                    
+ 00012C 4040404040404040              70 TABLE1   DC    15CL32' '               TABLE & EOT X3                                    
+ 00030C 0000012C                      71 EOT1     DC    A(TABLE1)                                                                 
+ 000310 4040404040404040              72 TABLE2   DC    15CL32' '                                                                 
+ 0004F0 00000310                      73 EOT2     DC    A(TABLE2)                                                                 
+ 0004F4 4040404040404040              74 TABLE3   DC    30CL32' '                                                                 
+ 0008B4 000004F4                      75 EOT3     DC    A(TABLE3)                                                                 
+ 0008B8 0000012C                      76 PLIST    DC    A(TABLE1)               PARAM LIST                                        
+ 0008BC 0000030C                      77          DC    A(EOT1)                                                                   
+ 0008C0 000008D0                      78          DC    A(CAPTION)                                                                
+ 0008C4 000004F0                      79          DC    A(EOT2)                                                                   
+ 0008C8 000004F4                      80          DC    A(TABLE3)                                                                 
+ 0008CC 000008B4                      81          DC    A(EOT3)                                                                   
+ 0008D0 C68999A2A340D389              82 CAPTION  DC    CL22'First List of Clients '                                              
+ 000000                               83 ENTRY    DSECT                         DESCT FOR TABLES                                  
+ 000000                               84 LNAME    DS    12C                                                                       
+ 00000C                               85 FNAME    DS    12C                                                                       
+ 000018                               86 LID      DS    7C                                                                        
+ 00001F                               87          DS    C                                                                         
+                                      88 ********************************************                                             
+                                      89 * Subroutine: BUILD1                                                                     
+                                      90 *                                                                                        
+                                      91 * Desc: Builds a table with First name, last                                             
+                                      92 *       Names, and ID numbers                                                            
+                                      93 *                                                                                        
+                                      94 * Expected parameters:                                                                   
+                                      95 * 1F: Addr of table                                                                      
+                                      96 * 2F: Addr of EOT                                                                        
+                                      97 *                                                                                        
+                                      98 * REG USAGE:                                                                             
+                                      99 *                                                                                        
+                                     100 * R2 - Table Address Cursor                                                              
+                                     101 * R3 - EOT ptr                                                                           
+                                     102 *                                                                                        
+                                     103 ********************************************                                             
+ 0008E8                              104 BUILD1   CSECT                                                                           
+ 0008E8 90EC D00C            0000C   105          STM   14,12,12(13)            STD ENTRY LINKAGE                                 
+ 0008EC 18CF                         106          LR    12,15                                                                     
+ 0008E8                              107          USING BUILD1,12                                                                 
+ 0008EE 41E0 C05C            00944   108          LA    14,BUI1SAVE                                                               
+ 0008F2 50D0 E004            00004   109          ST    13,4(0,14)                                                                
+1                                                                                                               PAGE    3         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 0008F6 50E0 D008            00008   110          ST    14,8(0,13)                                                                
+ 0008FA 18DE                         111          LR    13,14                                                                     
+ 0008FC 9823 1000            00000   112          LM    2,3,0(1)                LOAD PARAMS                                       
+ 000000                              113          USING ENTRY,2                 DSECT FOR EASE OF USE                             
+ 000900 E000 C0A4 0050 0098C         114 L1SRT    XREAD CARD1,80                READ SOME DATA                                    
+ 000906 4740 C04A            00932   115          BC    B'0100',L1END           ENDLOOP ON EOF                                    
+ 00090A 9560 C0A4      0098C         116          CLI   CARD1,C'-'              ENDLOOP ON FINDING C'-'                           
+ 00090E 4780 C04A            00932   117          BE    L1END                                                                     
+ 000912 D209 200C C0A4 0000C 0098C   118          MVC   FNAME(10),CARD1         COPY FNAME,LNAME, &                               
+ 000918 D20B 2000 C0AE 00000 00996   119          MVC   LNAME(12),CARD1+10      ID FROM CARDSPACE TO                              
+ 00091E D201 2018 C058 00018 00940   120          MVC   LID(2),=CL2'GP'         THE TABLE                                         
+ 000924 D204 201A C0BC 0001A 009A4   121          MVC   LID+2(5),CARD1+24                                                         
+ 00092A 4120 2020            00020   122          LA    2,32(,2)                INCREMENT CURSOR                                  
+ 00092E 47F0 C018            00900   123          B     L1SRT                   GOTO TOP OF LOOP                                  
+ 000932 5020 3000            00000   124 L1END    ST    2,0(,3)                 STORE EOT PTR                                     
+ 000936                              125          DROP  2                       CLEAR ASSOCIATION                                 
+ 000936 58D0 D004            00004   126          L     13,4(0,13)              STD EXIT LINKAGE                                  
+ 00093A 98EC D00C            0000C   127          LM    14,12,12(13)                                                              
+ 00093E 07FE                         128          BR    14                                                                        
+                                     129          LTORG                                                                           
+ 000940 C7D7                         130                =CL2'GP'                                                                  
+ 000944                              131 BUI1SAVE DS    18F                                                                       
+ 00098C                              132 CARD1    DS    CL80                                                                      
+ 0009DC 5C                           133          DC    C'*'                                                                      
+                                     134 ********************************************                                             
+                                     135 * Subroutine: BUILD2                                                                     
+                                     136 *                                                                                        
+                                     137 * Desc: Builds a table with First name, last                                             
+                                     138 *       Names, and ID numbers                                                            
+                                     139 *                                                                                        
+                                     140 * Expected parameters:                                                                   
+                                     141 * 1F: Addr of table                                                                      
+                                     142 * 2F: Addr of EOT                                                                        
+                                     143 *                                                                                        
+                                     144 * REG USAGE:                                                                             
+                                     145 *                                                                                        
+                                     146 * R2 - Table Address Cursor                                                              
+                                     147 * R3 - EOT ptr                                                                           
+                                     148 *                                                                                        
+                                     149 ********************************************                                             
+ 0009E0                              150 BUILD2   CSECT                                                                           
+ 0009E0 90EC D00C            0000C   151          STM   14,12,12(13)            STD ENTRY LINKAGE                                 
+ 0009E4 18CF                         152          LR    12,15                                                                     
+ 0009E0                              153          USING BUILD2,12                                                                 
+ 0009E6 41E0 C050            00A30   154          LA    14,BUI2SAVE                                                               
+ 0009EA 50D0 E004            00004   155          ST    13,4(0,14)                                                                
+ 0009EE 50E0 D008            00008   156          ST    14,8(0,13)                                                                
+ 0009F2 18DE                         157          LR    13,14                                                                     
+ 0009F4 9823 1000            00000   158          LM    2,3,0(1)                LOAD PARAMS                                       
+ 000000                              159          USING ENTRY,2                 DSECT FOR TABLE                                   
+ 0009F8 E000 C098 0050 00A78         160 L2SRT    XREAD CARD2,80                READ SOME DATA                                    
+ 0009FE 4740 C03C            00A1C   161          BC    B'0100',L2END           ENDLOOP OF EOF                                    
+ 000A02 D206 2018 C098 00018 00A78   162          MVC   LID(7),CARD2            COPY FNAME, LNAME, & ID                           
+ 000A08 D209 2000 C09F 00000 00A7F   163          MVC   LNAME(10),CARD2+7       FROM CARDSPACE TO TABLE                           
+ 000A0E D20B 200C C0AB 0000C 00A8B   164          MVC   FNAME(12),CARD2+19                                                        
+ 000A14 4120 2020            00020   165          LA    2,32(,2)                INCREMENT CURSOR                                  
+ 000A18 47F0 C018            009F8   166          B     L2SRT                   BR TO TOP OF LOOP                                 
+1                                                                                                               PAGE    4         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 000A1C 5020 3000            00000   167 L2END    ST    2,0(,3)                 STORE EOT                                         
+ 000A20                              168          DROP  2                       CLEAR ASSOCATION                                  
+ 000A20 58D0 D004            00004   169          L     13,4(0,13)              STD EXIT LINKAGE                                  
+ 000A24 98EC D00C            0000C   170          LM    14,12,12(13)                                                              
+ 000A28 07FE                         171          BR    14                                                                        
+                                     172          LTORG                                                                           
+ 000A30                              173 BUI2SAVE DS    18F                                                                       
+ 000A78                              174 CARD2    DS    CL80                                                                      
+ 000AC8 5C                           175          DC    C'*'                                                                      
+                                     176 ********************************************                                             
+                                     177 * Subroutine: PRINT                                                                      
+                                     178 *                                                                                        
+                                     179 * Desc: Prints out all the data stored in a the                                          
+                                     180 *       table built by the build routine with                                            
+                                     181 *       a supplied header                                                                
+                                     182 *                                                                                        
+                                     183 * Expected parameters:                                                                   
+                                     184 * 1F: Addr of table                                                                      
+                                     185 * 2F: Addr of EOT ptr                                                                    
+                                     186 * 3F: Addr of Headder text                                                               
+                                     187 *                                                                                        
+                                     188 * R2 - Table cursor                                                                      
+                                     189 * R3 - EOT ptr                                                                           
+                                     190 * R4 - Addr of header text                                                               
+                                     191 *                                                                                        
+                                     192 ********************************************                                             
+ 000AD0                              193 PRINT    CSECT                                                                           
+ 000AD0 90EC D00C            0000C   194          STM   14,12,12(13)            STD ENTRY LINKAGE                                 
+ 000AD4 18CF                         195          LR    12,15                                                                     
+ 000AD0                              196          USING PRINT,12                                                                  
+ 000AD6 41E0 C0D8            00BA8   197          LA    14,PRNSAVE                                                                
+ 000ADA 50D0 E004            00004   198          ST    13,4(0,14)                                                                
+ 000ADE 50E0 D008            00008   199          ST    14,8(0,13)                                                                
+ 000AE2 18DE                         200          LR    13,14                                                                     
+ 000AE4 9824 1000            00000   201          LM    2,4,0(1)                LOAD PARAMS                                       
+ 000000                              202          USING ENTRY,2                 DSECT FOR TABLE                                   
+ 000AE8 92F1 C120      00BF0         203          MVI   PRINTLN,C'1'            CREATE THE HEADER                                 
+ 000AEC 9240 C121      00BF1         204          MVI   PRINTLN+1,C' '                                                            
+ 000AF0 D254 C122 C121 00BF2 00BF1   205          MVC   PRINTLN+2(85),PRINTLN+1                                                   
+ 000AF6 D215 C141 4000 00C11 00000   206          MVC   PRINTLN+33(22),0(4)                                                       
+ 000AFC E020 C120 0057 00BF0         207          XPRNT PRINTLN,87              PRINT HEADER                                      
+ 000B02 9260 C120      00BF0         208          MVI   PRINTLN,C'-'            CREATE NAME HEADER                                
+ 000B06 D254 C122 C121 00BF2 00BF1   209          MVC   PRINTLN+2(85),PRINTLN+1                                                   
+ 000B0C D209 C12F C0B4 00BFF 00B84   210          MVC   PRINTLN+15(10),=CL10'First Name'                                          
+ 000B12 D208 C148 C0BE 00C18 00B8E   211          MVC   PRINTLN+40(9),=CL9'Last Name'                                             
+ 000B18 D206 C162 C0C7 00C32 00B97   212          MVC   PRINTLN+66(7),=CL7'LogonID'                                               
+ 000B1E E020 C120 0057 00BF0         213          XPRNT PRINTLN,87              PRINT NAME HEADER                                 
+ 000B24 D20B C12E C0A8 00BFE 00B78   214          MVC   PRINTLN+14(12),=12C'-'  CREATE SEPERATOR                                  
+ 000B2A D20B C148 C0A8 00C18 00B78   215          MVC   PRINTLN+40(12),=12C'-'                                                    
+ 000B30 D206 C162 C0CE 00C32 00B9E   216          MVC   PRINTLN+66(7),=7C'-'                                                      
+ 000B36 E020 C120 0057 00BF0         217          XPRNT PRINTLN,87              PRINT SEPERATOR                                   
+ 000B3C 9240 C120      00BF0         218          MVI   PRINTLN,C' '                                                              
+ 000B40 D255 C121 C120 00BF1 00BF0   219          MVC   PRINTLN+1(86),PRINTLN   CLEAR THE PRINTLN                                 
+ 000B46 D20B C12E 200C 00BFE 0000C   220 L3SRT    MVC   PRINTLN+14(12),FNAME    COPY FNAME, LNAME, & ID                           
+ 000B4C D20B C148 2000 00C18 00000   221          MVC   PRINTLN+40(12),LNAME    FROM TABLE TO PRINTLN                             
+ 000B52 D206 C162 2018 00C32 00018   222          MVC   PRINTLN+66(7),LID                                                         
+ 000B58 E020 C120 0057 00BF0         223          XPRNT PRINTLN,87              PRINT A ROW OF DATA                               
+1                                                                                                               PAGE    5         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 000B5E 4120 2020            00020   224          LA    2,32(,2)                INCREMENT CURSOR                                  
+ 000B62 1923                         225          CR    2,3                     BREAK LOOP IF AT EOT                              
+ 000B64 47A0 C09C            00B6C   226          BC    B'1010',L3END                                                             
+ 000B68 47F0 C076            00B46   227          B     L3SRT                   BR TO TOP OF LOOP                                 
+ 000B6C                              228 L3END    DS    0H                                                                        
+ 000B6C                              229          DROP  2                       CLEAR ASSOCIATIONS                                
+ 000B6C 58D0 D004            00004   230          L     13,4(0,13)              STD EXIT LINKAGE                                  
+ 000B70 98EC D00C            0000C   231          LM    14,12,12(13)                                                              
+ 000B74 07FE                         232          BR    14                                                                        
+                                     233          LTORG                                                                           
+ 000B78 6060606060606060             234                =12C'-'                                                                   
+ 000B84 C68999A2A340D581             235                =CL10'First Name'                                                         
+ 000B8E D381A2A340D58194             236                =CL9'Last Name'                                                           
+ 000B97 D396879695C9C4               237                =CL7'LogonID'                                                             
+ 000B9E 60606060606060               238                =7C'-'                                                                    
+ 000BA8                              239 PRNSAVE  DS    18F                                                                       
+ 000BF0                              240 PRINTLN  DS    87C                                                                       
+                                     241 ********************************************                                             
+                                     242 * Subroutine: MERGE                                                                      
+                                     243 *                                                                                        
+                                     244 * Desc: Merges two Tables of max len 15. The                                             
+                                     245 *       Tables should be built by one of the                                             
+                                     246 *       two build routines                                                               
+                                     247 *                                                                                        
+                                     248 * Expected parameters:                                                                   
+                                     249 * 1F: Addr of table 1                                                                    
+                                     250 * 2F: Addr of EOT ptr 1                                                                  
+                                     251 * 1F: Addr of table 2                                                                    
+                                     252 * 2F: Addr of EOT ptr 2                                                                  
+                                     253 * 1F: Addr of storage table 3                                                            
+                                     254 * 2F: Addr of storage EOT ptr 3                                                          
+                                     255 *                                                                                        
+                                     256 * REG USAGE:                                                                             
+                                     257 * R2 - Cursor for table 1                                                                
+                                     258 * R3 - Ptr to eot 1                                                                      
+                                     259 * R4 - Cursor for table 2                                                                
+                                     260 * R5 - Ptr to eot 2                                                                      
+                                     261 * R6 - Cursor for table 3                                                                
+                                     262 * R7 - Ptr to eot 3                                                                      
+                                     263 *                                                                                        
+                                     264 ********************************************                                             
+ 000C48                              265 MERGE    CSECT                                                                           
+ 000C48 90EC D00C            0000C   266          STM   14,12,12(13)            STD ENTRY LINKAGE                                 
+ 000C4C 18CF                         267          LR    12,15                                                                     
+ 000C48                              268          USING MERGE,12                                                                  
+ 000C4E 41E0 C0C8            00D10   269          LA    14,MERSAVE                                                                
+ 000C52 50D0 E004            00004   270          ST    13,4(0,14)                                                                
+ 000C56 50E0 D008            00008   271          ST    14,8(0,13)                                                                
+ 000C5A 18DE                         272          LR    13,14                                                                     
+ 000C5C 9827 1000            00000   273          LM    2,7,0(1)                LOAD PARAMS                                       
+ 000C60 5830 3000            00000   274          L     3,0(,3)                 GET ADDR FROM EOT1                                
+ 000C64 5850 5000            00000   275          L     5,0(,5)                 GET ADDR FROM EOT2                                
+ 000C68 1923                         276 M1LSRT   CR    2,3                     BREAK LOOP IF AT EOT1                             
+ 000C6A 47A0 C06E            00CB6   277          BC    B'1010',M1LEND                                                            
+ 000C6E 1945                         278          CR    4,5                     BREAK LOOP IF AT EOT2                             
+ 000C70 47A0 C06E            00CB6   279          BC    B'1010',M1LEND                                                            
+ 000C74 D50B 2000 4000 00000 00000   280 IF1      CLC   0(12,2),0(4)            IF LNAME1 > LNAME2                                
+1                                                                                                               PAGE    6         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 000C7A 47A0 C050            00C98   281          BC    B'1010',ELSE1           BR TO ELSE                                        
+ 000C7E D20B 6000 2000 00000 00000   282          MVC   0(12,6),0(2)            COPY TABLE1 ENTRY INTO                            
+ 000C84 D20B 600C 200C 0000C 0000C   283          MVC   12(12,6),12(2)          TABLE3                                            
+ 000C8A D206 6018 2018 00018 00018   284          MVC   24(7,6),24(2)                                                             
+ 000C90 4120 2020            00020   285          LA    2,32(,2)                INCREMENT T1 CURSOR                               
+ 000C94 47F0 C066            00CAE   286          B     IF1END                  BR TO ENDIF                                       
+ 000C98 D20B 6000 4000 00000 00000   287 ELSE1    MVC   0(12,6),0(4)            COPY TABLE2 ENTRY INTO                            
+ 000C9E D20B 600C 400C 0000C 0000C   288          MVC   12(12,6),12(4)          TABLE3                                            
+ 000CA4 D206 6018 4018 00018 00018   289          MVC   24(7,6),24(4)                                                             
+ 000CAA 4140 4020            00020   290          LA    4,32(,4)                INCREMENT T2 CURSOR                               
+ 000CAE 4160 6020            00020   291 IF1END   LA    6,32(,6)                INCREMENT T3 CURSOR                               
+ 000CB2 47F0 C020            00C68   292          B     M1LSRT                  BR TO TOP OF LOOP                                 
+ 000CB6                              293 M1LEND   DS    0H                      END LOOP                                          
+ 000CB6 1923                         294 M2LSRT   CR    2,3                     IF AT END OF TABLE 1                              
+ 000CB8 47A0 C092            00CDA   295          BC    B'1010',M2LEND          BREAK OUT OF LOOP                                 
+ 000CBC D20B 6000 2000 00000 00000   296          MVC   0(12,6),0(2)            COPY THE REST OF T1                               
+ 000CC2 D20B 600C 200C 0000C 0000C   297          MVC   12(12,6),12(2)          INTO T3                                           
+ 000CC8 D206 6018 2018 00018 00018   298          MVC   24(7,6),24(2)                                                             
+ 000CCE 4120 2020            00020   299          LA    2,32(,2)                INCREMENT T1 CURSOR                               
+ 000CD2 4160 6020            00020   300          LA    6,32(,6)                INCREMENT T3 CURSOR                               
+ 000CD6 47F0 C06E            00CB6   301          B     M2LSRT                                                                    
+ 000CDA                              302 M2LEND   DS    0H                      ENDLOOP                                           
+ 000CDA 1945                         303 M3LSRT   CR    4,5                     IF AT END OF TABLE 2                              
+ 000CDC 47A0 C0B6            00CFE   304          BC    B'1010',M3LEND          BREAK OUT OF LOOP                                 
+ 000CE0 D20B 6000 4000 00000 00000   305          MVC   0(12,6),0(4)            COPY THE REST OF T2                               
+ 000CE6 D20B 600C 400C 0000C 0000C   306          MVC   12(12,6),12(4)          INTO T3                                           
+ 000CEC D206 6018 4018 00018 00018   307          MVC   24(7,6),24(4)                                                             
+ 000CF2 4140 4020            00020   308          LA    4,32(,4)                INCREMENT T2 CURSOR                               
+ 000CF6 4160 6020            00020   309          LA    6,32(,6)                INCREMENT T3 CURSOR                               
+ 000CFA 47F0 C092            00CDA   310          B     M3LSRT                                                                    
+ 000CFE 5060 7000            00000   311 M3LEND   ST    6,0(,7)                 STORE EOT3 PTR                                    
+ 000D02 58D0 D004            00004   312          L     13,4(0,13)              STD EXIT LINKAGE                                  
+ 000D06 98EC D00C            0000C   313          LM    14,12,12(13)                                                              
+ 000D0A 07FE                         314          BR    14                                                                        
+                                     315          LTORG                                                                           
+ 000D10                              316 MERSAVE  DS    18F                                                                       
+                                     317          END   MAIN                                                                      
+0***  NO   STATEMENTS FLAGGED -  NO   WARNINGS,  NO   ERRORS                                                                      
+0*** DYNAMIC CORE AREA USED:  LOW:   14060 HIGH:    1544 LEAVING:  477964 FREE BYTES. AVERAGE:       49 BYTES/STMT ***            
+0*** ASSEMBLY TIME =    0.001 SECS,   318000 STATEMENTS/SEC ***                                                                   
+0*** PROGRAM EXECUTION BEGINNING - ANY OUTPUT BEFORE EXECUTION TIME MESSAGE IS PRODUCED BY USER PROGRAM ***                       
+1                                First List of Clients                                                                            
+-              First Name               Last Name                 LogonID                                                         
+-             ------------              ------------              -------                                                         
+              Edward                     Davis                    GP90986                                                         
+              Carol                      Edwards                  GP36663                                                         
+              David                      Green                    GP76022                                                         
+              Charles                    Hernandez                GP27664                                                         
+              Thomas                     Jackson                  GP33775                                                         
+              Kimberley                  Jones                    GP00006                                                         
+              Laura                      Lopez                    GP56785                                                         
+              William                    Lopez                    GP79907                                                         
+              Helen                      Martinez                 GP46624                                                         
+              Ruth                       Martinez                 GP70217                                                         
+              Paul                       Perez                    GP16211                                                         
+              David                      Robinson                 GP28763                                                         
+              Ruth                       Smith                    GP66668                                                         
+              Paul                       Thomas                   GP10948                                                         
+                                                                                                                                  
+1                                Second List of Clients                                                                           
+-              First Name               Last Name                 LogonID                                                         
+-             ------------              ------------              -------                                                         
+              Katherine                  Anderson                 GP00019                                                         
+              Melissa                    Campbell                 GP47265                                                         
+              Clarissa                   Edwards                  GP32100                                                         
+              Zoe                        Edwards                  GP30124                                                         
+              Kenneth                    Jones                    GP24564                                                         
+              Minnie                     Parker                   GP88279                                                         
+              Leticia                    Perez                    GP65027                                                         
+              Kelly                      Walker                   GP02930                                                         
+              Victoria                   Walker                   GP68828                                                         
+              Rowena                     Williams                 GP90566                                                         
+              Christopher                Wilson                   GP32102                                                         
+              James                      Wilson                   GP00003                                                         
+              Jeff                       Wilson                   GP00001                                                         
+                                                                                                                                  
+                                                                                                                                  
+1                                Master List of Clients                                                                           
+-              First Name               Last Name                 LogonID                                                         
+-             ------------              ------------              -------                                                         
+              Katherine                  Anderson                 GP00019                                                         
+              Melissa                    Campbell                 GP47265                                                         
+              Edward                     Davis                    GP90986                                                         
+              Clarissa                   Edwards                  GP32100                                                         
+              Zoe                        Edwards                  GP30124                                                         
+              Carol                      Edwards                  GP36663                                                         
+              David                      Green                    GP76022                                                         
+              Charles                    Hernandez                GP27664                                                         
+              Thomas                     Jackson                  GP33775                                                         
+              Kenneth                    Jones                    GP24564                                                         
+              Kimberley                  Jones                    GP00006                                                         
+              Laura                      Lopez                    GP56785                                                         
+              William                    Lopez                    GP79907                                                         
+              Helen                      Martinez                 GP46624                                                         
+              Ruth                       Martinez                 GP70217                                                         
+              Minnie                     Parker                   GP88279                                                         
+              Leticia                    Perez                    GP65027                                                         
+              Paul                       Perez                    GP16211                                                         
+              David                      Robinson                 GP28763                                                         
+              Ruth                       Smith                    GP66668                                                         
+              Paul                       Thomas                   GP10948                                                         
+              Kelly                      Walker                   GP02930                                                         
+              Victoria                   Walker                   GP68828                                                         
+              Rowena                     Williams                 GP90566                                                         
+              Christopher                Wilson                   GP32102                                                         
+              James                      Wilson                   GP00003                                                         
+              Jeff                       Wilson                   GP00001                                                         
+                                                                                                                                  
+                                                                                                                                  
+                                                                                                                                  
+0*** EXECUTION TIME =    0.002 SECS.      1195 INSTRUCTIONS EXECUTED -   597500 INSTRUCTIONS/SEC ***                              
+0*** AM004 - NORMAL USER TERMINATION BY RETURN ***                                                                                

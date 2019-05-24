@@ -1,0 +1,468 @@
+1                    J E S 2  J O B  L O G  --  S Y S T E M  S 0 W 1  --  N O D E  Z O S K C T R         
+0 
+ 22.26.24 JOB04892 ---- SUNDAY,    22 JUL 2018 ----
+ 22.26.24 JOB04892  IRR010I  USERID KC03B13  IS ASSIGNED TO THIS JOB.
+ 22.26.24 JOB04892  ICH70001I KC03B13  LAST ACCESS AT 22:26:15 ON SUNDAY, JULY 22, 2018
+ 22.26.24 JOB04892  $HASP373 KC03B13A STARTED - INIT 2    - CLASS A        - SYS S0W1
+ 22.26.24 JOB04892  -                                         --TIMINGS (MINS.)--            ----PAGING COUNTS---
+ 22.26.24 JOB04892  -JOBNAME  STEPNAME PROCSTEP    RC   EXCP    TCB    SRB  CLOCK   SERV  PG   PAGE   SWAP    VIO SWAPS
+ 22.26.24 JOB04892  -KC03B13A                      00    124 ******    .00     .0    274   0      0      0      0     0
+ 22.26.24 JOB04892  -KC03B13A ENDED.  NAME-Aaron Fosco          TOTAL TCB CPU TIME=   .00  TOTAL ELAPSED TIME=    .0
+ 22.26.24 JOB04892  $HASP395 KC03B13A ENDED
+0------ JES2 JOB STATISTICS ------
+-  22 JUL 2018 JOB EXECUTION DATE
+-          295 CARDS READ
+-          468 SYSOUT PRINT RECORDS
+-            0 SYSOUT PUNCH RECORDS
+-           38 SYSOUT SPOOL KBYTES
+-         0.00 MINUTES EXECUTION TIME
+         1 //KC03B13A JOB ,'Aaron Fosco',MSGCLASS=H                                JOB04892
+         2 //STEP1    EXEC  PGM=ASSIST                                                     
+         3 //STEPLIB    DD  DSN=KC02293.ASSIST.LOADLIB,DISP=SHR                            
+         4 //SYSPRINT   DD  SYSOUT=*                                                       
+         5 //SYSIN      DD  *                                                              
+         6 //FT05F001  DD  DSN=KC02314.SUMMER18.CSCI360.HW6DATA,DISP=SHR                   
+         7 //FT06F001   DD SYSOUT=*                                                        
+ ICH70001I KC03B13  LAST ACCESS AT 22:26:15 ON SUNDAY, JULY 22, 2018
+ IEF236I ALLOC. FOR KC03B13A STEP1
+ IGD103I SMS ALLOCATED TO DDNAME STEPLIB
+ IEF237I JES2 ALLOCATED TO SYSPRINT
+ IEF237I JES2 ALLOCATED TO SYSIN
+ IGD103I SMS ALLOCATED TO DDNAME FT05F001
+ IEF237I JES2 ALLOCATED TO FT06F001
+ IEF142I KC03B13A STEP1 - STEP WAS EXECUTED - COND CODE 0000
+ IGD104I KC02293.ASSIST.LOADLIB                       RETAINED,  DDNAME=STEPLIB 
+ IEF285I   KC03B13.KC03B13A.JOB04892.D0000102.?         SYSOUT        
+ IEF285I   KC03B13.KC03B13A.JOB04892.D0000101.?         SYSIN         
+ IGD104I KC02314.SUMMER18.CSCI360.HW6DATA             RETAINED,  DDNAME=FT05F001
+ IEF285I   KC03B13.KC03B13A.JOB04892.D0000103.?         SYSOUT        
+ IEF373I STEP/STEP1   /START 2018203.2226
+ IEF032I STEP/STEP1   /STOP  2018203.2226 
+         CPU:     0 HR  00 MIN  00.01 SEC    SRB:     0 HR  00 MIN  00.00 SEC    
+         VIRT:   584K  SYS:   276K  EXT:        4K  SYS:    11444K
+         ATB- REAL:                     0K  SLOTS:                     0K
+              VIRT- ALLOC:       0M SHRD:       0M
+ IEF375I  JOB/KC03B13A/START 2018203.2226
+ IEF033I  JOB/KC03B13A/STOP  2018203.2226 
+         CPU:     0 HR  00 MIN  00.01 SEC    SRB:     0 HR  00 MIN  00.00 SEC    
+1*** ASSIST 4.0/A2-05/15/82  470/V7A/0:OS/VS2  INS=SDFP7/X=BGHO, CHECK/TRC/=1180, OPTS=CDKMPR FROM PENN ST*NIU COMPSCI*LT         
+0                                                                                                                                 
+0                                                                                                               PAGE    1         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+                                       1 ************************************************************                             
+                                       2 *                                                                                        
+                                       3 *  Program:     ASSIGN6                                                                  
+                                       4 *  Programmer:  Aaron Fosco                                                              
+                                       5 *                                                                                        
+                                       6 *  Register usage:                                                                       
+                                       7 *                                                                                        
+                                       8 *  1  Parameter list                                                                     
+                                       9 *  12 Base register                                                                      
+                                      10 *  13 Addr of 18F storage                                                                
+                                      11 *  14 Return ptr for subroutines                                                         
+                                      12 ************************************************************                             
+ 000000                               13 MAIN     CSECT                                                                           
+ 000000 90EC D00C            0000C    14          STM   14,12,12(13)            STD ENTRY LINKAGE                                 
+ 000004 18CF                          15          LR    12,15                                                                     
+ 000000                               16          USING MAIN,12                                                                   
+ 000006 41E0 C04C            0004C    17          LA    14,MAINSAV                                                                
+ 00000A 50D0 E004            00004    18          ST    13,4(,14)                                                                 
+ 00000E 50E0 D008            00008    19          ST    14,8(,13)                                                                 
+ 000012 18DE                          20          LR    13,14                                                                     
+ 000014 4110 C094            00094    21          LA    1,PLIST                 LOAD PARAMS AND                                   
+ 000018 58F0 C040            00040    22          L     15,=V(BUILD)            EXCUTE ROUTINES                                   
+ 00001C 05EF                          23          BALR  14,15                                                                     
+ 00001E 4110 C094            00094    24          LA    1,PLIST                                                                   
+ 000022 58F0 C044            00044    25          L     15,=V(PRINT)                                                              
+ 000026 05EF                          26          BALR  14,15                                                                     
+ 000028 4110 C094            00094    27          LA    1,PLIST                                                                   
+ 00002C 58F0 C048            00048    28          L     15,=V(TALLY)                                                              
+ 000030 05EF                          29          BALR  14,15                                                                     
+ 000032 58D0 D004            00004    30          L     13,4(,13)                STD EXIT LINKAGE                                 
+ 000036 98EC D00C            0000C    31          LM    14,12,12(13)                                                              
+ 00003A 07FE                          32          BR    14                                                                        
+                                      33          LTORG                                                                           
+ 000040 00000DC8                      34                =V(BUILD)                                                                 
+ 000044 00000EC8                      35                =V(PRINT)                                                                 
+ 000048 00001198                      36                =V(TALLY)                                                                 
+ 00004C                               37 MAINSAV  DS    18F                     MAIN SAVESPACE                                    
+ 000094 000000A0                      38 PLIST    DC    A(TABLE)                                                                  
+ 000098 00000DC0                      39          DC    A(EOT)                                                                    
+ 0000A0                               40          ORG   MAIN+(*-MAIN+15)/16*16                                                    
+ 0000A0                               41 TABLE    DS    70CL48                                                                    
+ 000DC0 000000A0                      42 EOT      DC    A(TABLE)                                                                  
+ 000000                               43 TABLM    DSECT                                                                           
+ 000000                               44 FNAME    DS    CL10                                                                      
+ 00000A                               45 LNAME    DS    CL10                                                                      
+ 000014                               46 BALAC    DS    PL5                                                                       
+ 000019                               47 PASSW    DS    CL8                                                                       
+ 000021                               48 EXPDT    DS    PL5                                                                       
+ 000026                               49 IDNUM    DS    CL9                                                                       
+ 00002F                               50 FILLR    DS    C                                                                         
+                                      51 *                                                                                        
+                                      52 ********************************************                                             
+1                                                                                                               PAGE    2         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+                                      53 * Subroutine: BUILD                                                                      
+                                      54 *                                                                                        
+                                      55 * Desc: Used to build a table with first names                                           
+                                      56 *       last names, balances, passwords, exp.dates                                       
+                                      57 *       and ID numbers                                                                   
+                                      58 *                                                                                        
+                                      59 * Expected parameters:                                                                   
+                                      60 * 1F: Addr of table                                                                      
+                                      61 * 2F: Addr of EOT                                                                        
+                                      62 *                                                                                        
+                                      63 * REG USAGE:                                                                             
+                                      64 *                                                                                        
+                                      65 * R2 - PTR TO INPUT BUFFER                                                               
+                                      66 * R3 - PTR TO EOT LABEL                                                                  
+                                      67 *                                                                                        
+                                      68 ********************************************                                             
+ 000DC8                               69 BUILD    CSECT                                                                           
+ 000DC8 90EC D00C            0000C    70          STM   14,12,12(13)            STD ENTRY LINKAGE                                 
+ 000DCC 18CF                          71          LR    12,15                                                                     
+ 000DC8                               72          USING BUILD,12                                                                  
+ 000DCE 41E0 C060            00E28    73          LA    14,BUISAVE                                                                
+ 000DD2 50D0 E004            00004    74          ST    13,4(0,14)                                                                
+ 000DD6 50E0 D008            00008    75          ST    14,8(0,13)                                                                
+ 000DDA 18DE                          76          LR    13,14                                                                     
+ 000000                               77          USING TABLM,2                 OFFSETS FOR EASE OF USE                           
+ 000DDC 9823 1000            00000    78          LM    2,3,0(1)                LOAD TABLE & EOF PTRS                             
+ 000DE0 E000 C0A8 0050 00E70          79 LSRT     XREAD CARD,80                 READ SOME DATA                                    
+ 000DE6 4740 C04E            00E16    80          BC    B'0100',LEND            BRANCH ON EOF                                     
+ 000DEA D209 2000 C0A8 00000 00E70    81          MVC   FNAME(10),CARD          COPY DATA FROM CARDSPACE TO                       
+ 000DF0 D209 200A C0B4 0000A 00E7C    82          MVC   LNAME(10),CARD+12       TABLE. DATA IS COPIED INTO                        
+ 000DF6 D207 2019 C0C0 00019 00E88    83          MVC   PASSW(8),CARD+24        THE TABLE THE SAME ORDER IT                       
+ 000DFC D208 2026 C0CA 00026 00E92    84          MVC   IDNUM(9),CARD+34        WILL BE PRINTED OUT                               
+ 000E02 F247 2021 C0D5 00021 00E9D    85          PACK  EXPDT(5),CARD+45(8)                                                       
+ 000E08 F246 2014 C0DF 00014 00EA7    86          PACK  BALAC(5),CARD+55(7)                                                       
+ 000E0E 4120 2030            00030    87          LA    2,48(,2)                DISPACE TABLE CURSOR                              
+ 000E12 47F0 C018            00DE0    88          B     LSRT                                                                      
+ 000E16 5020 3000            00000    89 LEND     ST    2,0(,3)                 STORE TABLE CURSOR TO EOT                         
+ 000E1A                               90          DROP  2                       CLEAR ASSOCATION                                  
+ 000E1A 58D0 D004            00004    91          L     13,4(0,13)              STD EXIT LINKAGE                                  
+ 000E1E 98EC D00C            0000C    92          LM    14,12,12(13)                                                              
+ 000E22 07FE                          93          BR    14                                                                        
+                                      94          LTORG                                                                           
+ 000E28                               95 BUISAVE  DS    18F                                                                       
+ 000E70                               96 CARD     DS    CL80                    XREAD SPACE                                       
+ 000EC0 5C                            97          DC    C'*'                                                                      
+                                      98 *                                                                                        
+                                      99 ********************************************                                             
+                                     100 * Subroutine: PRINT                                                                      
+                                     101 *                                                                                        
+                                     102 * Desc: Prints out all the data stored in a the                                          
+                                     103 *       table built by the build routine                                                 
+                                     104 *                                                                                        
+                                     105 * Expected parameters:                                                                   
+                                     106 * 1F: Addr of table                                                                      
+                                     107 * 2F: Addr of EOT ptr                                                                    
+                                     108 *                                                                                        
+                                     109 * R2 - PTR TO INPUT BUFFER                                                               
+1                                                                                                               PAGE    3         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+                                     110 * R3 - PTR TO EOT LABEL                                                                  
+                                     111 * R4 - Counter for page                                                                  
+                                     112 *                                                                                        
+                                     113 *                                                                                        
+                                     114 ********************************************                                             
+ 000EC8                              115 PRINT    CSECT                                                                           
+ 000EC8 90EC D00C            0000C   116          STM   14,12,12(13)            STD ENTRY LINKAGE                                 
+ 000ECC 18CF                         117          LR    12,15                                                                     
+ 000EC8                              118          USING PRINT,12                                                                  
+ 000ECE 41E0 C1A8            01070   119          LA    14,PRNSAVE                                                                
+ 000ED2 50D0 E004            00004   120          ST    13,4(0,14)                                                                
+ 000ED6 50E0 D008            00008   121          ST    14,8(0,13)                                                                
+ 000EDA 18DE                         122          LR    13,14                                                                     
+ 000000                              123          USING TABLM,2                OFFSETS FOR EASE OF USE                            
+ 000EDC 9823 1000            00000   124          LM    2,3,0(1)               LOAD PARAMS                                        
+ 000EE0 5830 3000            00000   125          L     3,0(,3)                LOAD WHAT EOT IS POINTING TO                       
+ 000EE4                              126 REPRNT   DS    0H                                                                        
+1                                                                                                               PAGE    4         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+                                                                                                                                  
+                                                                                                                                  
+ 000EE4 1B44                         128          SR    4,4                    ZERO PRNT COUNTER                                  
+ 000EE6 92F1 C1F0      010B8         129          MVI   PRINTLN,C'1'           NEXT LINES UP TO TOPLOP                            
+ 000EEA 9240 C1F1      010B9         130          MVI   PRINTLN+1,C' '         ARE USED TO MAKE A HEADER                          
+ 000EEE D276 C1F2 C1F1 010BA 010B9   131          MVC   PRINTLN+2(119),PRINTLN+1                                                  
+ 000EF4 D21C C21E C15A 010E6 01022   132          MVC   PRINTLN+46(29),=CL29'Familiar Names -- Client List'                       
+ 000EFA E020 C1F0 0079 010B8         133          XPRNT PRINTLN,121                                                               
+ 000F00 9260 C1F0      010B8         134          MVI   PRINTLN,C'-'                                                              
+ 000F04 D276 C1F2 C1F1 010BA 010B9   135          MVC   PRINTLN+2(119),PRINTLN+1                                                  
+ 000F0A D209 C1FA C144 010C2 0100C   136          MVC   PRINTLN+10(10),=CL10'First Name'                                          
+ 000F10 D208 C20D C177 010D5 0103F   137          MVC   PRINTLN+29(9),=CL9'Last Name'                                             
+ 000F16 D206 C220 C180 010E8 01048   138          MVC   PRINTLN+48(7),=CL7'Balance'                                               
+ 000F1C D207 C232 C128 010FA 00FF0   139          MVC   PRINTLN+66(8),=CL8'Password'                                              
+ 000F22 D208 C244 C187 0110C 0104F   140          MVC   PRINTLN+84(9),=CL9'Exp. Date'                                             
+ 000F28 D208 C257 C190 0111F 01058   141          MVC   PRINTLN+103(9),=CL9'ID Number'                                            
+ 000F2E E020 C1F0 0079 010B8         142          XPRNT PRINTLN,121                                                               
+ 000F34 9240 C1F0      010B8         143          MVI   PRINTLN,C' '                                                              
+ 000F38 D277 C1F1 C1F0 010B9 010B8   144          MVC   PRINTLN+1(120),PRINTLN                                                    
+ 000F3E D209 C1FA C14E 010C2 01016   145          MVC   PRINTLN+10(10),=CL10'----------'                                          
+ 000F44 D209 C20D C14E 010D5 01016   146          MVC   PRINTLN+29(10),=CL10'----------'                                          
+ 000F4A D209 C220 C14E 010E8 01016   147          MVC   PRINTLN+48(10),=CL10'----------'                                          
+ 000F50 D209 C232 C14E 010FA 01016   148          MVC   PRINTLN+66(10),=CL10'----------'                                          
+ 000F56 D209 C244 C14E 0110C 01016   149          MVC   PRINTLN+84(10),=CL10'----------'                                          
+ 000F5C D209 C257 C14E 0111F 01016   150          MVC   PRINTLN+103(10),=CL10'----------'                                         
+ 000F62 E020 C1F0 0079 010B8         151          XPRNT PRINTLN,121                                                               
+ 000F68 92F0 C1F0      010B8         152          MVI   PRINTLN,C'0'                                                              
+ 000F6C 9240 C1F1      010B9         153          MVI   PRINTLN+1,C' '                                                            
+ 000F70 D276 C1F2 C1F1 010BA 010B9   154 TOPLOP   MVC   PRINTLN+2(119),PRINTLN+1  START PLACING DATA INTO                         
+ 000F76 D209 C1FA 2000 010C2 00000   155          MVC   PRINTLN+10(10),FNAME      A PRINTLN                                       
+ 000F7C D209 C20D 200A 010D5 0000A   156          MVC   PRINTLN+29(10),LNAME                                                      
+ 000F82 D20C C21B C199 010E3 01061   157          MVC   PRINTLN+43(13),=X'40206B2020206B2021204B2020'                             
+ 000F88 4110 C224            010EC   158          LA    1,PRINTLN+52                                                              
+ 000F8C DF0C C21B 2014 010E3 00014   159          EDMK  PRINTLN+43(13),BALAC     FORMAT BALAC FOR OUTPUT                          
+ 000F92 47B0 C0D4            00F9C   160          BC    B'1011',AFTCR                                                             
+ 000F96 D201 C228 C158 010F0 01020   161          MVC   PRINTLN+56(2),=CL2'CR'   ADD CR IF NEGATIVE                               
+ 000F9C 0610                         162 AFTCR    BCTR  1,0                                                                       
+ 000F9E 925B 1000      00000         163          MVI   0(1),C'$'                LEADING $ SIGN                                   
+ 000FA2 D207 C232 2019 010FA 00019   164          MVC   PRINTLN+66(8),PASSW                                                       
+ 000FA8 D278 C244 C130 0110C 00FF8   165          MVC   PRINTLN+84,=X'402020202020612020612020'                                   
+ 000FAE DE0B C244 2021 0110C 00021   166          ED    PRINTLN+84(12),EXPDT     OUTPUT DATE                                      
+ 000FB4 D208 C257 2026 0111F 00026   167          MVC   PRINTLN+103(9),IDNUM                                                      
+ 000FBA 9240 C260      01128         168          MVI   PRINTLN+112,C' '                                                          
+ 000FBE D207 C261 C260 01129 01128   169          MVC   PRINTLN+113(8),PRINTLN+112                                                
+ 000FC4 E020 C1F0 0079 010B8         170          XPRNT PRINTLN,121                                                               
+ 000FCA 4120 2030            00030   171          LA    2,48(,2)                ADD 48 TO TABLE CURSOR                            
+ 000FCE 1923                         172          CR    2,3                     COMPAIR EOT                                       
+ 000FD0 47A0 C11C            00FE4   173          BC    B'1010',ENDL                                                              
+ 000FD4 5A40 C13C            01004   174          A     4,=F'1'                 ADD 1 TO PAGE COUNT                               
+ 000FD8 5940 C140            01008   175          C     4,=F'20'                EJECT & PRINT HEADER IF                           
+ 000FDC 4780 C01C            00EE4   176          BE    REPRNT                  PAGECNT REACHS 20                                 
+ 000FE0 47F0 C0A8            00F70   177          B     TOPLOP                                                                    
+ 000FE4                              178 ENDL     DS    0H                                                                        
+ 000FE4                              179          DROP  2                       CLEAR ASSOCIATION                                 
+ 000FE4 58D0 D004            00004   180          L     13,4(0,13)              STD EXIT LINKAGE                                  
+ 000FE8 98EC D00C            0000C   181          LM    14,12,12(13)                                                              
+ 000FEC 07FE                         182          BR    14                                                                        
+1                                                                                                               PAGE    5         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+                                     183          LTORG                                                                           
+ 000FF0 D781A2A2A6969984             184                =CL8'Password'                                                            
+ 000FF8 4020202020206120             185                =X'402020202020612020612020'                                              
+ 001004 00000001                     186                =F'1'                                                                     
+ 001008 00000014                     187                =F'20'                                                                    
+ 00100C C68999A2A340D581             188                =CL10'First Name'                                                         
+ 001016 6060606060606060             189                =CL10'----------'                                                         
+ 001020 C3D9                         190                =CL2'CR'                                                                  
+ 001022 C681948993898199             191                =CL29'Familiar Names -- Client List'                                      
+ 00103F D381A2A340D58194             192                =CL9'Last Name'                                                           
+ 001048 C2819381958385               193                =CL7'Balance'                                                             
+ 00104F C5A7974B40C481A3             194                =CL9'Exp. Date'                                                           
+ 001058 C9C440D5A4948285             195                =CL9'ID Number'                                                           
+ 001061 40206B2020206B20             196                =X'40206B2020206B2021204B2020'                                            
+ 001070                              197 PRNSAVE  DS    18F                                                                       
+ 0010B8                              198 PRINTLN  DS    CL121                                                                     
+ 001134                              199          DS    24F                                                                       
+                                     200 *                                                                                        
+                                     201 ********************************************                                             
+                                     202 * Subroutine: TALLY                                                                      
+                                     203 *                                                                                        
+                                     204 * Desc: Calculates # of clients, Sum of balances,                                        
+                                     205 *       Avg balance, Largest Balance, & # of neg                                         
+                                     206 *       balances.                                                                        
+                                     207 *                                                                                        
+                                     208 * Expected parameters:                                                                   
+                                     209 * 1F: Addr of table                                                                      
+                                     210 * 2F: Addr of EOT ptr                                                                    
+                                     211 *                                                                                        
+                                     212 * REG USAGE:                                                                             
+                                     213 * R2 - PTR TO INPUT BUFFER                                                               
+                                     214 * R3 - PTR TO EOT LABEL                                                                  
+                                     215 *                                                                                        
+                                     216 ********************************************                                             
+ 001198                              217 TALLY    CSECT                                                                           
+ 001198 90EC D00C            0000C   218          STM   14,12,12(13)            STD ENTRY LINKAGE                                 
+ 00119C 18CF                         219          LR    12,15                                                                     
+ 001198                              220          USING TALLY,12                                                                  
+ 00119E 41E0 C210            013A8   221          LA    14,TALSAVE                                                                
+ 0011A2 50D0 E004            00004   222          ST    13,4(0,14)                                                                
+ 0011A6 50E0 D008            00008   223          ST    14,8(0,13)                                                                
+ 0011AA 18DE                         224          LR    13,14                                                                     
+ 000000                              225          USING TABLM,2                 OFFSETS FOR EASE OF USE                           
+ 0011AC 9823 1000            00000   226          LM    2,3,0(1)                LOAD TABLE & EOF PTRS                             
+ 0011B0 5830 3000            00000   227          L     3,0(,3)                 LOAD WHAT EOT IF PTING TO                         
+ 0011B4 F810 C451 C1FC 015E9 01394   228          ZAP   NCOUNT,=P'0'            ZERO NEGATIVE COUNT                               
+ 0011BA F810 C44F C1FD 015E7 01395   229          ZAP   COUNT,=P'1'             ADD 1 TO TOTAL COUNT                              
+ 0011C0 F940 2014 C1FC 00014 01394   230          CP    BALAC(5),=P'0'          IF THE FIRST NUMBER IS                            
+ 0011C6 47B0 C038            011D0   231          BC    B'1011',NONEGO          NEG, ADD 1 TO NCOUNT                              
+ 0011CA FA10 C451 C1FD 015E9 01395   232          AP    NCOUNT,=P'1'                                                              
+ 0011D0 F864 C43C 2014 015D4 00014   233 NONEGO   ZAP   SUM,BALAC               INITALIZE SUM AND THE                             
+ 0011D6 F844 C44A 2014 015E2 00014   234          ZAP   LARGST,BALAC            LARGEST NUMBER                                    
+ 0011DC 4120 2030            00030   235 L1SRT    LA    2,48(,2)                UPDATE TABLE CURSOR                               
+ 0011E0 1923                         236          CR    2,3                     IF AT EOT, EXIT LOOP                              
+ 0011E2 47A0 C07E            01216   237          BC    B'1010',L1END                                                             
+ 0011E6 FA10 C44F C1FD 015E7 01395   238          AP    COUNT,=P'1'             ADD 1 TO TOTAL COUNT                              
+ 0011EC FA64 C43C 2014 015D4 00014   239          AP    SUM,BALAC               ADD CURRENT BALAC TO SUM                          
+1                                                                                                               PAGE    6         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 0011F2 F944 2014 C1FE 00014 01396   240          CP    BALAC(5),=PL5'0'        CHECK IF BALAC IS NEG                             
+ 0011F8 47B0 C06A            01202   241          BC    B'1011',NONEG           IF SO, ADD 1 TO NCOUNT                            
+ 0011FC FA10 C451 C1FD 015E9 01395   242          AP    NCOUNT,=P'1'                                                              
+ 001202 F944 C44A 2014 015E2 00014   243 NONEG    CP    LARGST(5),BALAC(5)      CHECK IF THE CURRENT NUM                          
+ 001208 47B0 C044            011DC   244          BC    B'1011',L1SRT           IS BIGGER THAN THE LARGST                         
+ 00120C F844 C44A 2014 015E2 00014   245          ZAP   LARGST(5),BALAC(5)                                                        
+ 001212 47F0 C044            011DC   246          B     L1SRT                                                                     
+ 001216 92F0 C258      013F0         247 L1END    MVI   TALPNT,C'0'             FORMAT DATA FOR OUTPUT                            
+ 00121A 9240 C259      013F1         248          MVI   TALPNT+1,C' '                                                             
+ 00121E D276 C25A C259 013F2 013F1   249          MVC   TALPNT+2(119),TALPNT+1                                                    
+ 001224 D211 C27B C1D8 01413 01370   250          MVC   TALPNT+35(18),=CL18'Number of clients:'                                   
+ 00122A D203 C299 C1B8 01431 01350   251          MVC   TALPNT+65(4),=X'40202020'                                                 
+ 001230 DE03 C299 C44F 01431 015E7   252          ED    TALPNT+65(4),COUNT      PRINT OUT COUNT                                   
+ 001236 E020 C258 0079 013F0         253          XPRNT TALPNT,121                                                                
+ 00123C 9240 C299      01431         254          MVI   TALPNT+65,C' '                                                            
+ 001240 D235 C29A C299 01432 01431   255          MVC   TALPNT+66(54),TALPNT+65                                                   
+ 001246 D217 C27B C170 01413 01308   256          MVC   TALPNT+35(24),=CL24'Sum of account balances:'                             
+ 00124C D211 C299 C1EA 01431 01382   257          MVC   TALPNT+65(18),=X'4020206B2020206B2020206B2021204B2020'                    
+ 001252 4110 C258            013F0   258          LA    1,TALPNT                                                                  
+ 001256 DF11 C299 C43C 01431 015D4   259          EDMK  TALPNT+65(18),SUM     PRINT OUT SUM                                       
+ 00125C 0610                         260          BCTR  1,0                                                                       
+ 00125E 925B 1000      00000         261          MVI   0(1),C'$'                                                                 
+ 001262 E020 C258 0079 013F0         262          XPRNT TALPNT,121                                                                
+ 001268 9240 C299      01431         263          MVI   TALPNT+65,C' '                                                            
+ 00126C D235 C29A C299 01432 01431   264          MVC   TALPNT+66(54),TALPNT+65                                                   
+ 001272 D217 C27B C188 01413 01320   265          MVC   TALPNT+35(24),=CL24'Average account balance:'                             
+ 001278 D20C C299 C203 01431 0139B   266          MVC   TALPNT+65(13),=X'40206B2020206B2021204B2020'                              
+ 00127E F866 C443 C43C 015DB 015D4   267          ZAP   AVG,SUM                                                                   
+ 001284 FD61 C443 C44F 015DB 015E7   268          DP    AVG(7),COUNT(2)         CALCULATE THE AVG                                 
+ 00128A 4110 C29C            01434   269          LA    1,TALPNT+68                                                               
+ 00128E DF0C C299 C443 01431 015DB   270          EDMK  TALPNT+65(13),AVG       PRINT OUT AVG                                     
+ 001294 0610                         271          BCTR  1,0                                                                       
+ 001296 925B 1000      00000         272          MVI   0(1),C'$'                                                                 
+ 00129A E020 C258 0079 013F0         273          XPRNT TALPNT,121                                                                
+ 0012A0 9240 C299      01431         274          MVI   TALPNT+65,C' '                                                            
+ 0012A4 D235 C29A C299 01432 01431   275          MVC   TALPNT+66(54),TALPNT+65                                                   
+ 0012AA D217 C27B C1A0 01413 01338   276          MVC   TALPNT+35(24),=CL24'Largest account balance:'                             
+ 0012B0 D20C C299 C203 01431 0139B   277          MVC   TALPNT+65(13),=X'40206B2020206B2021204B2020'                              
+ 0012B6 4110 C258            013F0   278          LA    1,TALPNT                                                                  
+ 0012BA DF0C C299 C44A 01431 015E2   279          EDMK  TALPNT+65(13),LARGST    PRINT OUT LARGEST NUM                             
+ 0012C0 0610                         280          BCTR  1,0                                                                       
+ 0012C2 925B 1000      00000         281          MVI   0(1),C'$'                                                                 
+ 0012C6 E020 C258 0079 013F0         282          XPRNT TALPNT,121                                                                
+ 0012CC 9240 C299      01431         283          MVI   TALPNT+65,C' '                                                            
+ 0012D0 D235 C29A C299 01432 01431   284          MVC   TALPNT+66(54),TALPNT+65                                                   
+ 0012D6 D21B C27B C1BC 01413 01354   285          MVC   TALPNT+35(28),=CL28'Number of negative balances:'                         
+ 0012DC 9240 C298      01430         286          MVI   TALPNT+64,C' '                                                            
+ 0012E0 D213 C299 C298 01431 01430   287          MVC   TALPNT+65(20),TALPNT+64                                                   
+ 0012E6 D203 C299 C1B8 01431 01350   288          MVC   TALPNT+65(4),=X'40202020'                                                 
+ 0012EC DE03 C299 C451 01431 015E9   289          ED    TALPNT+65(4),NCOUNT     PRINT OUT NEG COUNT                               
+ 0012F2 E020 C258 0079 013F0         290          XPRNT TALPNT,121                                                                
+ 0012F8                              291          DROP  2                                                                         
+ 0012F8 58D0 D004            00004   292          L     13,4(0,13)              STD EXIT LINKAGE                                  
+ 0012FC 98EC D00C            0000C   293          LM    14,12,12(13)                                                              
+ 001300 07FE                         294          BR    14                                                                        
+                                     295          LTORG                                                                           
+ 001308 E2A4944096864081             296                =CL24'Sum of account balances:'                                           
+1                                                                                                               PAGE    7         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 001320 C1A5859981878540             297                =CL24'Average account balance:'                                           
+ 001338 D381998785A2A340             298                =CL24'Largest account balance:'                                           
+ 001350 40202020                     299                =X'40202020'                                                              
+ 001354 D5A4948285994096             300                =CL28'Number of negative balances:'                                       
+ 001370 D5A4948285994096             301                =CL18'Number of clients:'                                                 
+ 001382 4020206B2020206B             302                =X'4020206B2020206B2020206B2021204B2020'                                  
+ 001394 0C                           303                =P'0'                                                                     
+ 001395 1C                           304                =P'1'                                                                     
+ 001396 000000000C                   305                =PL5'0'                                                                   
+ 00139B 40206B2020206B20             306                =X'40206B2020206B2021204B2020'                                            
+ 0013A8                              307 TALSAVE  DS    18F                                                                       
+ 0013F0                              308 TALPNT   DS    121F                                                                      
+ 0015D4                              309 SUM      DS    PL7                                                                       
+ 0015DB                              310 AVG      DS    PL7                                                                       
+ 0015E2                              311 LARGST   DS    PL5                                                                       
+ 0015E7                              312 COUNT    DS    PL2                                                                       
+ 0015E9                              313 NCOUNT   DS    PL2                                                                       
+                                     314          END   MAIN                                                                      
+0***  NO   STATEMENTS FLAGGED -  NO   WARNINGS,  NO   ERRORS                                                                      
+0*** DYNAMIC CORE AREA USED:  LOW:   15900 HIGH:    2028 LEAVING:  475640 FREE BYTES. AVERAGE:       56 BYTES/STMT ***            
+0*** ASSEMBLY TIME =    0.001 SECS,   315000 STATEMENTS/SEC ***                                                                   
+0*** PROGRAM EXECUTION BEGINNING - ANY OUTPUT BEFORE EXECUTION TIME MESSAGE IS PRODUCED BY USER PROGRAM ***                       
+1                                             Familiar Names -- Client List                                                       
+-         First Name         Last Name          Balance           Password          Exp. Date          ID Number                  
+          ----------         ----------         ----------        ----------        ----------         ----------                 
+0         Anna               Leonowens             $0.00          SIAMS4ME            2018/08/01      A1621350L                  
+0         Barry              Reed                  $1.74CR        THEREIGO            2018/09/02      B7602565R                  
+0         Ben                Grimm               $470.40          STRONGUY            2018/10/03      B2876543G                  
+0         Boris              Badenov               $0.00          KILLMOOS            2019/03/04      B2766631B                  
+0         Bruce              Banner            $2,019.57          HULKISME            2019/02/05      B3377711B                  
+0         Bruce              Wayne               $161.33CR        BATYCOON            2019/01/06      B9098765W                  
+0         Buffy              Summers              $25.90          VAMPSRME            2018/12/07      B7990241S                  
+0         Bullwinkle         Moose                 $0.00          ROCKYPAL            2018/11/08      B1094477M                  
+0         Casper             Ghost                 $0.00          FRIENDLY            2019/10/09      C9162021G                  
+0         Charles            Xavier            $2,120.93          BALDIE              2019/09/10      C0987654X                  
+0         Clark              Kent                $201.96CR        SUPERME             2018/08/11      C6789012K                  
+0         Daisy              Duck                  $0.00          FEMINIST            2019/07/12      D5432109D                  
+0         Dawn               Summers              $78.90          GREENKID            2019/06/13      D9054788S                  
+0         Diana              Prince                $0.00          AMAZON              2018/05/14      D8374651P                  
+0         Dick               Grayson           $1,100.61          SIDEKICK            2019/04/15      D8765439G                  
+0         Don                Blake               $501.02CR        ODINSSON            2018/09/16      D1223347B                  
+0         Donald             Duck                  $0.00          MICKSPAL            2018/12/17      D2345678D                  
+0         Draco              Malfoy              $734.10          BULLYBOY            2018/11/18      D3131313M                  
+0         Edward             Nygma             $3,151.53          IAMSMART            2019/12/19      E9012345N                  
+0         Ellen              Ripley              $315.92          ALIENIST            2019/11/20      E3666000R                  
+1                                             Familiar Names -- Client List                                                       
+-         First Name         Last Name          Balance           Password          Exp. Date          ID Number                  
+          ----------         ----------         ----------        ----------        ----------         ----------                 
+0         Hal                Jordan              $401.02CR        GREENMAN            2019/10/21      H4662160J                  
+0         Harold             Hill                  $0.00          MUSICMAN            2019/09/22      H5678947H                  
+0         Harry              Potter            $8,745.90          DESTINED            2019/08/23      H0000000P                  
+0         Henry              Higgins               $0.00          POLYLING            2019/07/24      H7021600H                  
+0         Hermione           Granger             $951.00          STUDIOUS            2019/06/25      H6666666G                  
+0         Indiana            Jones             $5,642.99          FOUNDARK            2019/05/26      I7766655J                  
+0         Jean               Gray                $321.03          ESPGIRL             2019/04/27      J0789012G                  
+0         Jimmy              Olsen               $151.53          JUSTAKID            2019/03/28      J3781223O                  
+0         John               Watson                $1.50CR        LOYALDOC            2018/11/29      J0293843W                  
+0         Johnny             Storm               $100.32          FIREMAN             2018/10/30      J3012345S                  
+0         Joyce              Summers               $0.00          DECEASED            2018/12/31      J4726151S                  
+0         Lamont             Cranston              $0.00          SHADOWY             2018/11/01      L9056734C                  
+0         Lana               Lang                $561.64          REDHEAD             2018/10/02      L6502700L                  
+0         Lemuel             Gulliver            $214.56          TRAVELER            2018/09/03      L6882255G                  
+0         Lex                Luthor              $212.15          IWANTALL            2019/08/04      L8827315L                  
+0         Lois               Lane                  $5.97          MYSUPER             2019/07/05      L3210987L                  
+0         Lori               Lemaris               $0.00          FISHGIRL            2019/09/06      L0000100L                  
+0         Lucy               Lane                $372.48          JIMSGIRL            2018/08/07      L3210987L                  
+0         Luke               Skywalker           $458.47          FORCEFUL            2018/08/08      L0000000S                  
+0         Mary               Watson               $70.72CR        LOVEPETE            2019/09/29      M2456789W                  
+1                                             Familiar Names -- Client List                                                       
+-         First Name         Last Name          Balance           Password          Exp. Date          ID Number                  
+          ----------         ----------         ----------        ----------        ----------         ----------                 
+0         Matt               Murdock               $0.00          BLINDMAN            2018/10/10      M4889900M                  
+0         Mickey             Mouse                 $0.00          DONSPAL             2019/02/11      M4543210M                  
+0         Mighty             Mouse                 $0.05          HEREIAM             2018/11/12      M8230451M                  
+0         Nellie             Forbush               $0.00          WASHHAIR            2019/07/04      N3952025F                  
+0         Nick               Fury                $340.40          OLDGUARD            2019/11/14      N7223344F                  
+0         Norman             Osborne               $0.00          GGOBLIN             2019/10/15      N0324571O                  
+0         Percy              Weasley              $76.73          BESTBOY             2019/09/16      P0090907W                  
+0         Perry              White                $21.22          IAMBOSS             2019/08/17      P8337610W                  
+0         Peter              Parker              $120.81CR        ARACHNID            2019/07/18      P0432109P                  
+0         Reed               Richards          $1,113.27          STRETCHY            2019/10/31      R5901234R                  
+0         Road               Runner                $0.00          BEEPBEEP            2018/12/20      R9999999R                  
+0         Rocket             Squirrel              $0.00          ICANFLY             2018/11/21      R1390245S                  
+0         Ron                Weasley              $23.13          FRECKLES            2018/10/22      R5432871W                  
+0         Rupert             Giles               $235.71          WATCHER             2019/02/27      R9087436G                  
+0         Sarah              Connor            $1,764.23CR        SURVIVOR            2018/02/24      S0000000C                  
+0         Scott              Summers               $0.00          FOUREYES            2018/10/25      S9028776S                  
+0         Scrooge            McDuck                $0.00          IAMRICH             2019/04/26      S6234567M                  
+0         Sherlock           Holmes                $0.00          DETECTIV            2018/12/28      S0000000H                  
+0         Stephen            Strange               $0.00          AMULET              2018/07/30      S3455667S                  
+0         Steve              Rogers                $0.00          CAPTAINA            2019/06/01      S7492871R                  
+1                                             Familiar Names -- Client List                                                       
+-         First Name         Last Name          Balance           Password          Exp. Date          ID Number                  
+          ----------         ----------         ----------        ----------        ----------         ----------                 
+0         Sue                Storm                 $0.00          REEDSGAL            2019/07/15      S2765432S                  
+0         Sylvester          Cat                 $194.56          PUDDYTAT            2018/11/01      S5050505C                  
+0         Tony               Stark                 $0.00          STEELGUY            2018/12/30      T4678901S                  
+0         Tweety             Bird                  $0.00          TARGET              2018/11/11      T0404040B                  
+0         Wiley              Coyote            $7,523.41          BUYSACME            2018/11/11      W0990009C                  
+0         Willow             Rosenberg           $156.72          BIGWITCH            2019/10/31      W7356012R                  
+0         Xander             Harris               $95.96CR        GOODGUY             2018/12/31      X7205879H                  
+0                                  Number of clients:              67                                                             
+0                                  Sum of account balances:              $34,120.81                                               
+0                                  Average account balance:            $509.26                                                    
+0                                  Largest account balance:          $8,745.90                                                    
+0                                  Number of negative balances:    10                                                             
+0*** EXECUTION TIME =    0.003 SECS.      3038 INSTRUCTIONS EXECUTED -  1012666 INSTRUCTIONS/SEC ***                              
+0*** AM004 - NORMAL USER TERMINATION BY RETURN ***                                                                                

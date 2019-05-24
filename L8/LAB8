@@ -1,0 +1,326 @@
+//KC03B13A JOB ,'Aaron Fosco',MSGCLASS=H
+//STEP1    EXEC  PGM=ASSIST
+//STEPLIB    DD  DSN=KC02293.ASSIST.LOADLIB,DISP=SHR
+//SYSPRINT   DD  SYSOUT=*
+//SYSIN      DD  *
+************************************************************
+*
+*  Program:     ASSIGN8
+*  Programmer:  Aaron Fosco
+*
+*  Register usage:
+* 
+*  1  Parameter list
+*  12 Base register
+*  13 Addr of 18F storage
+*  14 Return ptr for subroutines
+************************************************************
+MAIN     CSECT
+         STM   14,12,12(13)            STD ENTRY LINKAGE
+         LR    12,15
+         USING MAIN,12
+         LA    14,MAINSAV
+         ST    13,4(,14)
+         ST    14,8(,13)
+         LR    13,14
+         LA    1,PLIST                 4SETS OF CALLING EXTERN
+         L     15,=V(BUILD)            SUBROUTINES AND SETTING
+         BALR  14,15                   A VALUE IN PLIST
+         XDUMP TABLE,60
+         LA    1,PLIST
+         L     15,=V(PRINT)
+         BALR  14,15
+         LA    1,PLIST
+         L     15,=V(SORTID)
+         BALR  14,15
+         MVC   CAPTION(24),=CL24'      Table Sorted by ID'
+         LA    1,PLIST
+         L     15,=V(PRINT)
+         BALR  14,15
+         L     13,4(,13)                STD EXIT LINKAGE
+         LM    14,12,12(13)
+         BR    14                       END OF ROUTINE
+         LTORG
+MAINSAV  DS    18F                     MAIN SAVESPACE
+         DS    7F                      PLACE TABLE IN A WAY
+*                                      THAT XPRNT WILL ONLY
+*                                      PRINT 2 LINES
+TABLE    DS    20CL15                  MAIN TABLE FOR STORAGE
+CAPTION  DC    CL24'  Initial Table Contents'
+EOT      DC    A(TABLE)                END OF TABLE
+PLIST    DC    A(TABLE)                PARAMETER LIST
+         DC    A(EOT)
+         DC    A(CAPTION)
+********************************************
+* Subroutine: BUILD
+*
+* Desc: Used to build a table with Id numbers
+*       encrypted passwords, day of the week,
+*       time, and room number.
+*
+* Expected parameters:
+* 1F: Addr of table
+* 2F: Addr of EOT
+*
+* REG USAGE:
+*
+* R2 - Table Address Cursor
+* R3 - EOT ptr
+* R4 - Holder for table values
+* R5 - CVB Holder
+*
+********************************************
+BUILD    CSECT
+         STM   14,12,12(13)            STD ENTRY LINKAGE
+         LR    12,15
+         USING BUILD,12
+         LA    14,BUISAVE
+         ST    13,4(0,14)
+         ST    14,8(0,13)
+         LR    13,14
+         LM    2,3,0(1)                LOAD PARAMS
+LSRT     XREAD CARD,80                 READ SOME DATA
+         BC    B'0100',LEND            BR ON EOF
+         PACK  GENHOLD(8),CARD+1(7)    PACK ID
+         CVB   4,GENHOLD               CVB ID
+         STCM  4,B'1111',0(2)          STORE ID
+         MVC   GENHOLD(8),CARD+12      COPY IN PASSWORD
+         XC    GENHOLD(4),0(2)         XOR PASSWORD
+         XC    GENHOLD+4(4),0(2)       XOR PASSWORD
+         MVC   4(8,2),GENHOLD          STORE PASSWORD IN TALBE
+         SR    4,4                     ZERO REG4
+         CLC   CARD+24(2),=CL2'Su'     ADDS 1 TO R4 EACH TIME
+         BE    FOUNDD                  WE DONT FIND THE RIGHT 
+         A     4,=F'1'                 DAY OF WEEK
+         CLC   CARD+24(2),=CL2'Mo'
+         BE    FOUNDD
+         A     4,=F'1'
+         CLC   CARD+24(2),=CL2'Tu'
+         BE    FOUNDD
+         A     4,=F'1'
+         CLC   CARD+24(2),=CL2'We'
+         BE    FOUNDD
+         A     4,=F'1'
+         CLC   CARD+24(2),=CL2'Th'
+         BE    FOUNDD
+         A     4,=F'1'
+         CLC   CARD+24(2),=CL2'Fr'
+         BE    FOUNDD
+         A     4,=F'1'
+FOUNDD   SLL   4,5                     MOVE OVER 5 BITS
+         PACK  GENHOLD(8),CARD+37(2)   PACK THE HOUR
+         CVB   5,GENHOLD               CVB HOUR
+         AR    4,5                     ADD HOUR TO R4
+         SLL   4,6                     SHIFT HOUR OVER
+         PACK  GENHOLD(8),CARD+40(2)   PACK THE MIN
+         CVB   5,GENHOLD               CVB MIN
+         AR    4,5                     ADD MIN TO R4
+         SLL   4,10                    SHIFT MIN OVER
+         PACK  GENHOLD(8),CARD+46(3)   PACK ROOM NUM
+         CVB   5,GENHOLD               CVB ROOM NUM
+         AR    4,5                     ADD ROOM NUM TO R4
+         STCM  4,B'0111',12(2)         STORE ALL INFORMATION
+         LA    2,15(,2)                INCREMENT CURSOR
+         B     LSRT
+LEND     ST    2,0(,3)
+         L     13,4(0,13)              STD EXIT LINKAGE
+         LM    14,12,12(13)
+         BR    14
+         LTORG
+BUISAVE  DS    18F
+CARD     DS    CL80
+         DC    C'*'
+GENHOLD  DS    D
+*
+********************************************
+* Subroutine: PRINT
+*
+* Desc: Prints out all the data stored in a the
+*       table built by the build routine with
+*       a supplied header
+*
+* Expected parameters:
+* 1F: Addr of table
+* 2F: Addr of EOT ptr
+* 3F: Addr of Headder text
+*
+* R2 - Table cursor
+* R3 - EOT ptr
+* R4 - Used for shifting bits from the table
+*
+********************************************
+PRINT    CSECT
+         STM   14,12,12(13)            STD ENTRY LINKAGE
+         LR    12,15
+         USING PRINT,12
+         LA    14,PRNSAVE
+         ST    13,4(0,14)
+         ST    14,8(0,13)
+         LR    13,14
+         LM    2,4,0(1)
+         L     3,0(,3)
+         MVI   PRINTLN,C' '            UP TO TOPLOP: MAKE
+         MVC   PRINTLN+1(48),PRINTLN   HEADERS FOR XPRNT
+         XPRNT PRINTLN,49
+         MVC   PRINTLN(2),=CL2'0 '
+         MVC   PRINTLN+2(47),PRINTLN+1
+         MVC   PRINTLN+11(24),0(4)
+         XPRNT PRINTLN,49
+         MVC   PRINTLN(27),=CL27'-ID Number   Password   Day'
+         MVC   PRINTLN+27(22),=CL22'           Time   Room'
+         XPRNT PRINTLN,49
+TOPLOP   MVC   PRINTLN(4),=CL4'0 R '   CLEAR OUT THE LINE
+         MVC   PRINTLN+4(45),PRINTLN+3
+         ICM   4,B'1111',0(2)          NOW USING R4 FOR LOADER
+         CVD   4,PKHOLD                CVD THE ID & UNPK
+         UNPK  PRINTLN+3(7),PKHOLD+4(4)
+         TR    PRINTLN+9(1),WHYC       MAKE THE LAST CHAR A #
+         MVC   PRINTLN+13(8),4(2)      GET THE PASSWORD OUT
+         XC    PRINTLN+13(4),0(2)      XOR THE PASSWORD
+         XC    PRINTLN+17(4),0(2)
+         SR    4,4                     ZERO R4
+         ICM   4,B'0111',12(2)         LOAD 3BYTE PACKED DATA
+         SRL   4,21                    SHIFT TO GET ONLY DAY
+         C     4,=F'0'                 CONVERT THE DAY TO
+         BE    SUN                     TEXT (GOES ON 'TILL
+         C     4,=F'1'                 MOTHEND)
+         BE    MON
+         C     4,=F'2'
+         BE    TUS
+         C     4,=F'3'
+         BE    WED
+         C     4,=F'4'
+         BE    THU
+         C     4,=F'5'
+         BE    FRI
+         C     4,=F'6'
+         BE    SAT
+SUN      MVC   PRINTLN+25(6),=CL6'Sunday'
+         B     MOTHEND
+MON      MVC   PRINTLN+25(6),=CL6'Monday'
+         B     MOTHEND
+TUS      MVC   PRINTLN+25(7),=CL7'Tuesday'
+         B     MOTHEND
+WED      MVC   PRINTLN+25(9),=CL9'Wednesday'
+         B     MOTHEND
+THU      MVC   PRINTLN+25(8),=CL8'Thursday'
+         B     MOTHEND
+FRI      MVC   PRINTLN+25(6),=CL6'Friday'
+         B     MOTHEND
+SAT      MVC   PRINTLN+25(8),=CL8'Saturday'
+MOTHEND  ICM   4,B'0111',12(2)         LOAD 3BYTE PACKED DATA
+         SLL   4,11                    GET ONLY HOUR
+         SRL   4,27
+         CVD   4,PKHOLD                CVD HOUR & UNPK
+         UNPK  PRINTLN+37(2),PKHOLD+4(4)
+         TR    PRINTLN+38(1),WHYC      MAKE THE LAST CHAR A #
+         MVI   PRINTLN+39,C':'         PLACE A :
+         ICM   4,B'0111',12(2)         LOAD 3BYTE PACKED DATA
+         SLL   4,16                    GET ONLY MIN
+         SRL   4,26
+         CVD   4,PKHOLD                CVD MIN & UNPK
+         UNPK  PRINTLN+40(2),PKHOLD+4(4)
+         TR    PRINTLN+41(1),WHYC      AKE THE LAST CHAR A #
+         ICM   4,B'0111',12(2)         LOAD 3BYTE PACKED DATA
+         N     4,=X'000003FF'          AND TO GET ONLY ROOM#
+         CVD   4,PKHOLD                CVD ROOM# & UNPK
+         UNPK  PRINTLN+46(3),PKHOLD+4(4)
+         TR    PRINTLN+48(1),WHYC      AKE THE LAST CHAR A #
+         XPRNT PRINTLN,49              PRINT ALL THE DATA
+         LA    2,15(,2)                INCREMENT CURSOR
+         CR    2,3                     CHECK TO SEE IF AT EOT
+         BC    B'1010',LOPEND
+         B     TOPLOP
+LOPEND   DS    0H
+         L     13,4(0,13)              STD EXIT LINKAGE
+         LM    14,12,12(13)
+         BR    14
+         LTORG
+PRNSAVE  DS    18F
+WHYC     DC    256X'00'               THIS IS NEEDED SINCE THE
+         ORG   WHYC+X'A0'             THE NUMS DONT END IN F
+         DC    X'F0F1F2F3F4F5F6F7F8F9'
+         ORG   WHYC+X'C0'
+         DC    X'F0F1F2F3F4F5F6F7F8F9'
+         ORG   WHYC+X'E0'
+         DC    X'F0F1F2F3F4F5F6F7F8F9'
+         ORG
+PKHOLD   DS    D                       HOLDER FOR CVD
+PRINTLN  DS    CL49                    OUTPUT LINE
+********************************************
+* Subroutine: SORTID
+*
+* Desc: Sorts the table built by BUILD by ID
+*       Using a buble sort
+*
+* Expected parameters:
+* 1F: Addr of table
+* 2F: Addr of EOT ptr
+*
+* Reg usage:
+* R2 - I
+* R3 - STOP
+* R4 - J
+* R5 - K
+*
+* Sort Logic:
+*
+*         I is a pointer initially to the first entry
+*         J is a pointer initially to the first entry
+*         K is a pointer
+*         STOP is a pointer to the last entry
+*         Temp is a variable as large as a table entry
+*
+*         Do While (I < STOP)
+*           J = I
+*           Do While (J < STOP)
+*             K = J
+*             Increment J
+*             If Key(J) > Key(K)
+*               Temp = Entry(J)
+*               Entry(J) = Entry(K)
+*               Entry(K) = Temp
+*             EndIf
+*           EndDo
+*           Decrement STOP
+*         EndDo
+********************************************
+SORTID   CSECT
+         STM   14,12,12(13)            STD ENTRY LINKAGE
+         LR    12,15
+         USING SORTID,12
+         LA    14,SORTSAV
+         ST    13,4(0,14)
+         ST    14,8(0,13)
+         LR    13,14
+         LM    2,3,0(1)
+         L     3,0(,3)                 LOAD EOT PTR
+         S     3,=F'15'                POINT TO LAST ENTRY
+         LR    4,2                     LOAD I
+LOP1     CR    2,3                           WHILE I < STOP
+         BC    B'1010',LOPEND1
+         LR    4,2                           J = I
+LOP2     CR    4,3                           WILE J < STOP
+         BC    B'1010',LOPEND2
+         LR    5,4                           K = J
+         LA    4,15(,4)                      INCREMENT J
+SIF      CLC   0(4,4),0(5)             IF KEY(J) > KEY(K)
+         BC    B'1010',SIFEND          THEN...
+         MVC   TEMP(15),0(4)           TEMP = ENTRY(J)
+         MVC   0(15,4),0(5)            ENTRY(J) = ENTRY(K)
+         MVC   0(15,5),TEMP            ENTRY(K) = TEMP
+SIFEND   B     LOP2                    ENDIF
+LOPEND2  S     3,=F'15'                END DO, DECREMENT STOP
+         B     LOP1                    END DO
+LOPEND1  DS    0H
+         L     13,4(0,13)              STD EXIT LINKAGE
+         LM    14,12,12(13)
+         BR    14
+         LTORG
+SORTSAV  DS    18F                     SORT STORAGE SPACE
+TEMP     DS    15C                     SWAP VALUE
+         END   MAIN
+/*
+//FT05F001  DD  DSN=KC02314.SUMMER18.CSCI360.HW8DATA,DISP=SHR
+//FT06F001   DD SYSOUT=*
+//

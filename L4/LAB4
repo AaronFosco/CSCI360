@@ -1,0 +1,235 @@
+//KC03B13A JOB ,'Aaron Fosco',MSGCLASS=H
+//STEP1    EXEC  PGM=ASSIST
+//STEPLIB    DD  DSN=KC02293.ASSIST.LOADLIB,DISP=SHR
+//SYSPRINT   DD  SYSOUT=*
+//SYSIN      DD  *
+************************************************************
+*
+*  Program:     ASSIGN4
+*  Programmer:  Aaron Fosco
+*
+*  Register usage:
+*
+*  15 Base register
+*  1  Parameter list addr
+*  2  Loader for EOT ptr
+*  11 Return register for subroutines
+*
+************************************************************
+MAIN     CSECT
+         USING MAIN,15
+         LA    2,TABLE                 INITALIZE EOT
+         ST    2,EOT
+         LA    1,PLIST
+         BAL   11,BUILD
+         LA    1,PLIST
+         BAL   11,PRINT
+         LA    1,PLIST
+         BAL   11,ODDS
+         BR    14
+         LTORG
+********************************************
+* Subroutine: BUILD
+*
+* Desc: Used to build a table with a max of 60
+*       32bit numbers.
+*
+* Expected parameters:
+* 1F: Addr of table
+* 2F: Addr of EOT, should be the same as 1F
+*
+* REG USAGE:
+* 
+* R2 - PTR TO BEGINNING OF TABLE 
+* R3 - PTR TO EOT LABEL & TABLE OFFSET
+* R5 - READ REGISTER
+* R6 - ADDR OF EOT LABEL
+*
+********************************************
+BUILD    DS    0H
+         STM   2,6,BUISAVE             SAVE REGS 2-5
+         LM    2,3,0(1)                LOAD TABLE AND EOT PTRS
+         LR    6,3                     SAVE EOT LABEL LOC FOR L8TR
+         L     3,0(3)                  LOAD WHAT EOF IS POINTING TO
+LSRT     XREAD CARD,80                 READ SOME DATA TO SAVESPACE
+         BC    B'0100',LEND            BRANCH IF DATA IS NOT READ
+         LA    1,CARD                  LOAD ADDR OF SAVESPACE
+INPU     XDECI 5,0(1)                  READ DATA FROM SAVESPACE
+         BC    B'0001',LSRT            IF OVERFLOW, READ NEW LINE
+         ST    5,0(,3)                 STORE READ DATA AT EOT
+         A     3,=F'4'                 UPDATE EOT TO EOT+1FULLWORD
+         CR    6,3                     IF THE PTR EOT IS THE SAME AS
+         BC    B'1100',LEND             THE ADDR EOT, STOP THE LOOP
+         B     INPU                    READ MORE DATA FROM SAVESPACE
+LEND     ST    3,0(6)                  END OF READ, STORE ADDR OF EOT
+*                                      BACK INTO IT'S RIGHTFUL LABEL
+         LM    2,6,BUISAVE             RELOAD SAVED REGS 2-5
+         BR    11                      RETURN TO CALLING ROUTINE
+         LTORG
+CARD     DS    CL80
+         DC    C'*'
+BUISAVE  DS    5F
+********************************************
+* Subroutine: PRINT
+*
+* Desc: Prints out all the numbers stored in
+*       a table delimited by an EOT ptr
+*
+* Expected parameters:
+* 1F: Addr of table
+* 2F: Addr of EOT ptr
+*
+* UP TO: L2END 
+* REG USAGE:
+* R2 - PTR TO BEGINNING OF TABLE 
+* R3 - PTR TO EOT LABEL
+* R4 - GENERAL READ
+* R5 - TABLE CURSOR OFFSET 
+* R6 - XPRNT SPACE CURSOR
+*
+* AFTER: L2END
+* R4&R5 - OVERLAP COUNTER
+*
+********************************************
+PRINT    DS    0H
+         STM   2,6,PRNSAVE
+         LM    2,3,0(1)
+         L     3,0(3)
+         SR    5,5                    ZERO R5&R6 FOR TABLE AND
+         SR    6,6                    XPRNT SPACE DISPLACEMENT
+         A     6,=F'1'                R6 OFFSET FOR XPRNT CC
+*                                     NXT 5 LINES FOR HEADER &
+*                                     A BLANK LINE OUTPUT
+         XPRNT =CL38'1                  List  Of  Numbers  ',38
+         MVI   PRINTLN,C' '
+         MVC   PRINTLN+1(60),PRINTLN
+         XPRNT PRINTLN,61
+         XPRNT PRINTLN,61
+         MVI   PRINTLN,C'0'
+L2SRT    LA    4,0(5,2)                LOAD ADDR OF POS IN TABLE
+         CR    3,4                     COMP EOT TO CURSOR POS
+         BC    B'1100',L2END           BR IF EOT >= CURSOR POS
+         L     4,0(5,2)                R2 IS ADDR OF START OF TABLE
+*                                      R5 IS OFFSET OF READ OF TABLE
+*                                      R4 IS VAL TO BE XDECO INTO 
+*                                      XPRNT SPACE
+         XDECO 4,PRINTLN(6)            FORMAT VAL & PUT INTO PRNTSP
+         A     6,=F'12'                INCREMENT DISPLACEMENTS
+         A     5,=F'4'
+         C     6,=F'61'                IF DISP >= 61, RESET & XPRNT
+         BL    L2SRT                   (edit these lines for ass5?)
+         L     6,=F'1'
+         XPRNT PRINTLN,61
+         B     L2SRT
+L2END    C     6,=F'61'                IF WE ARE NOT AT THE END OF 
+         BC    B'1010',EXPR            OUR XPRNT SPACE, ADD SPACES
+         L     5,=F'61'                LOAD 61 INTO 5 AND 
+         SR    5,6                     GET 61 - OFFSET
+         M     4,=F'1'                 GET 64BIT NUM
+         D     4,=F'12'                HOW MANY BLANK LINES 
+*                                      DO WE NEED?
+         LA    3,PRINTLN
+         A     3,=F'1'
+         AR    6,3                     CALC TRUE OFFSET ADDR
+OVRLP    MVI   0(6),C' '               ADD SPACE FOR FIRST CHARACTER
+         MVC   1(11,6),0(6)            DISTRUCTIVE OVERLAP 
+         A     6,=F'12'                ADD OFFSET
+         BCT   5,OVRLP                 REPEAT OVERLAP UNTIL R5 = 0
+EXPR     XPRNT PRINTLN,61              FINAL PRINT FOR LAST LINE
+         LM    2,6,PRNSAVE             RELOAD DATA
+         BR    11
+         LTORG
+PRINTLN  DS    CL61
+PRNSAVE  DS    5F
+********************************************
+* Subroutine: ODDS
+*
+* Desc: Prints out all odd numbers stored in 
+*       a table delmited by a EOT ptr
+*
+* Expected parameters:
+* 1F: Addr of table
+* 2F: Addr of EOT ptr
+*
+* UP TO: L3END 
+* REG USAGE:
+* R2 - PTR TO BEGINNING OF TABLE 
+* R3 - PTR TO EOT LABEL
+* R4 - ODD VALUE CHECK
+* R5 - GENERAL READ
+* R6 - XPRNT SPACE CURSOR
+* R7 - TABLE CURSOR OFFSET 
+*
+* AFTER: L3END
+* R4&R5 - OVERLAP COUNTER
+*
+********************************************
+ODDS     DS    0H
+         STM   2,7,ODDSAVE
+         LM    2,3,0(1)
+         L     3,0(3)
+         SR    7,7                    ZERO R5&R6 FOR TABLE AND
+         SR    6,6                    XPRNT SPACE DISPLACEMENT
+         A     6,=F'1'                R6 OFFSET FOR XPRNT CC
+*                                     NXT 5 LINES FOR HEADER &
+*                                     A BLANK LINE OUTPUT
+         XPRNT =CL38'1             List  Of  Odd  Numbers  ',38
+         MVI   PRINTLN3,C' '
+         MVC   PRINTLN3+1(72),PRINTLN3
+         XPRNT PRINTLN3,73
+         XPRNT PRINTLN3,73
+         MVI   PRINTLN3,C'0'
+L3SRT    LA    5,0(7,2)                LOAD ADDR OF POS IN TABLE
+         CR    3,5                     COMP EOT TO CURSOR POS
+         BC    B'1100',L3END           BR IF EOT >= CURSOR POS
+         L     5,0(7,2)                R2 IS ADDR OF START OF TABLE
+*                                      R5 IS OFFSET OF READ OF TABLE
+*                                      R4 IS VAL TO BE XDECO INTO 
+*                                      XPRNT SPACE
+         M     4,=F'1'                 MAKE 64BIT NUM
+         D     4,=F'2'                 SETUP FOR ODD CHECK
+         L     5,0(7,2)                ONLY REMAINDER IS NEEDED
+         A     7,=F'4'                 INCREMENT TABLE CURSOR
+         C     4,=F'0'                 IF REMAIN != 0, IT IS ODD
+         BE    L3SRT                   READ NEXT VALUE ON =
+         XDECO 5,PRINTLN3(6)            FORMAT VAL & PUT INTO PRNTSP
+         A     6,=F'12'                INCREMENT XPRNT CURSOR OFFSET
+         C     6,=F'73'                IF DISP >= 73, RESET & XPRNT
+         BL    L3SRT                   (edit these lines for ass5?)
+         L     6,=F'1'
+         XPRNT PRINTLN3,73
+         B     L3SRT
+L3END    C     6,=F'73'                IF WE ARE NOT AT THE END OF 
+         BC    B'1010',EXPR3           OUR XPRNT SPACE, ADD SPACES
+         L     5,=F'73'                LOAD 73 INTO 5 AND 
+         SR    5,6                     GET 73 - OFFSET
+         M     4,=F'1'                 GET 64BIT NUM
+         D     4,=F'12'                HOW MANY BLANK LINES 
+*                                      DO WE NEED?
+         LA    3,PRINTLN3
+         A     3,=F'1'
+         AR    6,3                     CALC TRUE OFFSET ADDR
+OVRLP3   MVI   0(6),C' '               ADD SPACE FOR FIRST CHARACTER
+         MVC   1(11,6),0(6)            DISTRUCTIVE OVERLAP 
+         A     6,=F'12'                ADD OFFSET
+         BCT   5,OVRLP3                REPEAT OVERLAP UNTIL R5 = 0
+EXPR3    XPRNT PRINTLN3,73             FINAL PRINT FOR LAST LINE
+         LM    2,7,ODDSAVE
+         BR    11
+PRINTLN3 DS    73F
+ODDSAVE  DS    6F
+********************************************
+* General Storage
+*        &       
+*   End of MAIN  
+********************************************
+PLIST    DC    A(TABLE)                POINTER TO TALBE
+         DC    A(EOT)                  POINTER TO EOF
+*        DS    0H                      NUM OF LINES FOR PRINT ROUTINE
+TABLE    DC    60F'-8'
+EOT      DS    F
+         END   MAIN
+/*
+//FT05F001   DD  DSN=KC02314.SUMMER18.CSCI360.HW4DATA,DISP=SHR
+//FT06F001   DD SYSOUT=*
+//

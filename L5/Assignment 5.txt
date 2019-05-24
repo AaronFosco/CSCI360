@@ -1,0 +1,222 @@
+//KC03B13A JOB ,'Aaron Fosco',MSGCLASS=H
+//STEP1    EXEC  PGM=ASSIST
+//STEPLIB    DD  DSN=KC02293.ASSIST.LOADLIB,DISP=SHR
+//SYSPRINT   DD  SYSOUT=*
+//SYSIN      DD  *
+************************************************************
+*
+*  Program:     ASSIGN4
+*  Programmer:  Aaron Fosco
+*
+*  Register usage:
+*
+*  1  Parameter list addr
+*  2  Loader for EOT ptr
+*  12 Base register
+*  13 Address of 18F storage
+*  14 Return register for subroutines
+*
+************************************************************
+MAIN     CSECT
+         STM   14,12,12(13)            STD ENTRY LINKAGE
+         LR    12,15
+         USING MAIN,12
+         LA    14,MAINSAV
+         ST    13,4(,14)
+         ST    14,8(,13)
+         LR    13,14
+*
+         LA    1,BLIST                 LOAD PARAMS FOR BUILD AND
+         L     15,=V(BUILD)            EXECUTE ROUTINE 
+         BALR  14,15
+         XPRNT =CL15'1Table Contents',15
+         LA    1,PLIST                 LOAD PARAMS FOR PRINT AND
+         L     15,=V(PRINT)            EXCUTE PRINT
+         BALR  14,15
+PRNLOOP  XREAD CARD,80                 START OF LOOP FOR READING
+*                                      DIV AND HOWMANY VALUES FOR
+*                                      PRINT. WHEN EOF IS REACHED,
+*                                      EXIT THE LOOP
+         BC    B'0100',PRNEND
+         LA    1,CARD
+         XDECI 5,0(1)
+         ST    5,DIV
+         XDECO 5,MUTIOF
+         XPRNT MUTIOFLN,26
+         XDECI 5,0(1)
+         ST    5,HOWMANY
+         LA    1,PLIST
+         L     15,=V(PRINT)
+         BALR  14,15
+         B     PRNLOOP
+PRNEND   DS    0H
+         L     13,4(,13)
+         LM    14,12,12(13)
+         BR    14
+         LTORG
+BLIST    DC    A(CARD)                 PARAMETER LIST FOR BUILD
+         DC    A(EOT)                  NO
+         DC    A(TABLE)
+PLIST    DC    A(TABLE)                PARAMETER LIST FOR PRINT
+         DC    A(EOT)
+         DC    A(DIV)
+         DC    A(HOWMANY)
+MAINSAV  DS    18F                     MAIN SAVESPACE
+TABLE    DC    75F'-64'                TABLE FOR STORING NUMBERS
+EOT      DC    A(TABLE)                EOT POINTER
+CARD     DS    CL80                    XREAD SPACE
+         DC    C'*'
+DIV      DC    F'1'                    DIV FOR PRINT
+HOWMANY  DC    F'5'                    HOWMANY FOR PRINT
+MUTIOFLN DC    CL14'1Multiples of '
+MUTIOF   DS    CL12
+*
+********************************************
+* Subroutine: BUILD
+*
+* Desc: Used to build a table with a max of 60
+*       32bit numbers.
+*
+* Expected parameters:
+* 1F: Addr of input buffer
+* 2F: Addr of table
+* 3F: Addr of EOT
+*
+* REG USAGE:
+* 
+* R2 - PTR TO INPUT BUFFER
+* R3 - PTR TO EOT LABEL & TABLE OFFSET
+* R5 - READ REGISTER
+* R6 - ADDR OF EOT LABEL
+*
+********************************************
+BUILD    CSECT
+         STM   14,12,12(13)            STD ENTRY LINKAGE
+         LR    12,15
+         USING BUILD,12
+         LA    14,BUISAVE
+         ST    13,4(0,14)
+         ST    14,8(0,13)
+         LR    13,14
+         LM    2,4,0(1)                LOAD PARAMS
+         LR    6,3                     SAVE EOT LABEL LOC FOR L8TR
+         L     3,0(3)                  LOAD WHAT EOF IS POINTING TO
+LSRT     XREAD 0(,2),80                READ SOME DATA TO SAVESPACE
+         BC    B'0100',LEND            BRANCH IF DATA IS NOT READ
+         LA    1,0(,2)                 LOAD ADDR OF SAVESPACE
+INPU     XDECI 5,0(1)                  READ DATA FROM SAVESPACE
+         BC    B'0001',LSRT            IF OVERFLOW, READ NEW LINE
+         C     5,=F'-44444444'         IF THE VALUE READ WAS THE
+         BE    LEND                    DELIM, EXIT LOOP
+         ST    5,0(,3)                 STORE READ DATA AT EOT
+         A     3,=F'4'                 UPDATE EOT TO EOT+1FULLWORD
+         CR    6,3                     IF THE PTR EOT IS THE SAME AS
+         BC    B'1100',LEND            THE ADDR EOT, STOP THE LOOP
+         B     INPU                    READ MORE DATA FROM SAVESPACE
+LEND     ST    3,0(6)                  END OF READ, STORE ADDR OF EOT
+*                                      BACK INTO IT'S RIGHTFUL LABEL
+         L     13,4(0,13)              STD EXIT LINKAGE
+         LM    14,12,12(13)
+         BR    14
+         LTORG
+BUISAVE  DS    18F
+*
+********************************************
+* Subroutine: PRINT
+*
+* Desc: Prints out all the numbers stored in
+*       a table delimited by an EOT ptr. The
+*       value passed into 4F will become the 
+*       number of numbers per line, while the
+*       value in 3F will be multiples get 
+*       printed.
+*
+* Expected parameters:
+* 1F: Addr of table
+* 2F: Addr of EOT ptr
+* 3F: Addr of DIV
+* 4F: Addr of HOWMANY
+*
+* UP TO: L2END 
+* REG USAGE:
+* R2 - PTR TO BEGINNING OF TABLE 
+* R3 - PTR TO EOT LABEL
+* R4 - ODD VALUE CHECK
+* R5 - GENERAL READ
+* R6 - XPRNT SPACE CURSOR
+* R7 - TABLE CURSOR OFFSET 
+* R8 - DIV VALUE
+* R9 - MAX CHARACTER LENGTH FOR PRINTLN SPACE
+*
+* AFTER: L2END
+* R4&R5 - OVERLAP COUNTER
+*
+********************************************
+PRINT    CSECT
+         STM   14,12,12(13)            STD ENTRY LINKAGE
+         LR    12,15
+         USING PRINT,12
+         LA    14,PRNSAVE
+         ST    13,4(0,14)
+         ST    14,8(0,13)
+         LR    13,14
+         LM    2,3,0(1)               LOAD TABLE AND EOT PTRS
+         L     3,0(3)                 LOAD WHAT EOT IS POINTING TO
+         L     9,12(1)                LOAD HOWMANY INTO R9
+         L     9,0(9)                 GETVALUE OF HOWMANY
+         M     8,=F'12'               CALCULATE LINE LENGTH WITH
+         A     9,=F'1'                12*HOWMANY+1
+         L     8,8(1)                 LOAD DIV INTO R8
+         L     8,0(8)                 GETVALUE OF DIV
+         SR    7,7                    ZERO R7&R6 FOR TABLE AND
+         SR    6,6                    XPRNT SPACE DISPLACEMENT
+         A     6,=F'1'                R6 OFFSET FOR XPRNT CC
+         MVI   PRINTLN,C' '           BLANK OUT PRINTLN SO IT 
+         MVC   PRINTLN+1(84),PRINTLN  LOOKS PRETTY
+         MVI   PRINTLN,C'0'            ADD CC
+L2SRT    LA    5,0(7,2)                LOAD ADDR OF POS IN TABLE
+         CR    3,5                     COMP EOT TO CURSOR POS
+         BC    B'1100',L2END           BR IF EOT >= CURSOR POS
+         L     5,0(7,2)                R2 IS ADDR OF START OF TABLE
+*                                      R7 IS OFFSET OF READ OF TABLE
+*                                      R6 IS VAL TO BE XDECO INTO 
+*                                      XPRNT SPACE
+         M     4,=F'1'                 MAKE 64BIT NUM
+         DR    4,8                     SETUP FOR MULTIPLE OF CHECK
+         L     5,0(7,2)                ONLY REMAINDER IS NEEDED
+         A     7,=F'4'                 INCREMENT TABLE CURSOR
+         C     4,=F'0'                 IF REMAIN = 0, ITS A MULTI
+         BNE   L2SRT                   READ NEXT VALUE ON !=
+         XDECO 5,PRINTLN(6)            FORMAT VAL & PUT INTO PRNTLN
+         A     6,=F'12'                INCREMENT XPRNT CURSOR OFFSET
+         CR    6,9                     IF DISP >= 12*HOWMANY+1 THEN
+         BL    L2SRT                   RESET XPRNT OFFSET AND XPRNT
+         L     6,=F'1'
+         XPRNT PRINTLN,85
+         B     L2SRT
+L2END    C     6,=F'85'                IF WE ARE NOT AT THE END OF 
+         BC    B'1010',EXPR            OUR XPRNT SPACE, ADD SPACES
+         L     5,=F'85'                LOAD 85 INTO 5 AND 
+         SR    5,6                     GET 85 - OFFSET
+         M     4,=F'1'                 GET 64BIT NUM
+         D     4,=F'12'                HOW MANY BLANK LINES 
+*                                      DO WE NEED?
+         LA    3,PRINTLN
+         A     3,=F'1'
+         AR    6,3                     CALC TRUE OFFSET ADDR
+OVRLP    MVI   0(6),C' '               ADD SPACE FOR FIRST CHARACTER
+         MVC   1(11,6),0(6)            DISTRUCTIVE OVERLAP 
+         A     6,=F'12'                ADD OFFSET
+         BCT   5,OVRLP                 REPEAT OVERLAP UNTIL R5 = 0
+EXPR     XPRNT PRINTLN,85              FINAL PRINT FOR LAST LINE
+         L     13,4(0,13)              STD EXIT LINKAGE
+         LM    14,12,12(13)
+         BR    14
+         LTORG
+PRINTLN  DS    CL85
+PRNSAVE  DS    18F
+         END   MAIN
+/*
+//FT05F001  DD  DSN=KC02314.SUMMER18.CSCI360.HW5DATA,DISP=SHR
+//FT06F001   DD SYSOUT=*
+//

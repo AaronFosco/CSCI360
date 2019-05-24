@@ -1,0 +1,38 @@
+//KC03B13A JOB ,'Aaron Fosco',MSGCLASS=H                                00010002
+//STEP1 EXEC PGM=ASSIST                                                 00020000
+//STEPLIB DD DSN=KC02293.ASSIST.LOADLIB,DISP=SHR                        00030000
+//SYSPRINT DD SYSOUT=*                                                  00040000
+//SYSIN DD *                                                            00050000
+****************************                                            00060000
+* ARITHMETIC IN ASSEMBLY                                                00070000
+*                                                                       00080000
+* NAME: Aaron Fosco                                                     00090000
+*                                                                       00100000
+* ASSIGNMENT: 1 PART: B                                                 00110011
+*                                                                       00120000
+* REG USAGE                                                             00121011
+*                                                                       00122011
+* 1,3 LEFT                                                              00130011
+* 2,4 RIGHT                                                             00140011
+* 15 BASE REGISTER                                                      00150001
+*                                                                       00160000
+*                                                                       00161001
+****************************                                            00170000
+MAIN      CSECT                                                         00180000
+          USING MAIN,15                                                 00190000
+          L     1,LEFT                                                  00200009
+          L     2,RIGHT                                                 00210009
+          SR    1,2                                                     00220009
+          L     3,LEFT                                                  00230009
+          L     4,RIGHT                                                 00240009
+          AR    4,3                                                     00250009
+          ST    1,DIFF                                                  00251010
+          ST    4,SUM                                                   00252010
+          XDUMP LEFT,8                                                  00260010
+          XDUMP DIFF,8                                                  00261010
+          BR    14                                                      00270009
+LEFT      DC    F'169'                                                  00280009
+RIGHT     DC    F'74'                                                   00290009
+DIFF      DS    F                                                       00291010
+SUM       DS    F                                                       00292010
+          END   MAIN                                                    00300009

@@ -1,0 +1,840 @@
+1                    J E S 2  J O B  L O G  --  S Y S T E M  S 0 W 1  --  N O D E  Z O S K C T R         
+0 
+ 15.10.05 JOB08470 ---- SUNDAY,    05 AUG 2018 ----
+ 15.10.05 JOB08470  IRR010I  USERID KC03B13  IS ASSIGNED TO THIS JOB.
+ 15.10.05 JOB08470  ICH70001I KC03B13  LAST ACCESS AT 15:09:58 ON SUNDAY, AUGUST 5, 2018
+ 15.10.05 JOB08470  $HASP373 KC03B13A STARTED - INIT 2    - CLASS A        - SYS S0W1
+ 15.10.05 JOB08470  -                                         --TIMINGS (MINS.)--            ----PAGING COUNTS---
+ 15.10.05 JOB08470  -JOBNAME  STEPNAME PROCSTEP    RC   EXCP    TCB    SRB  CLOCK   SERV  PG   PAGE   SWAP    VIO SWAPS
+ 15.10.05 JOB08470  -KC03B13A                      00    290 ******    .00     .0    300   0      0      0      0     0
+ 15.10.05 JOB08470  -KC03B13A ENDED.  NAME-Aaron Fosco          TOTAL TCB CPU TIME=   .00  TOTAL ELAPSED TIME=    .0
+ 15.10.05 JOB08470  $HASP395 KC03B13A ENDED
+0------ JES2 JOB STATISTICS ------
+-  05 AUG 2018 JOB EXECUTION DATE
+-          107 CARDS READ
+-          840 SYSOUT PRINT RECORDS
+-            0 SYSOUT PUNCH RECORDS
+-           68 SYSOUT SPOOL KBYTES
+-         0.00 MINUTES EXECUTION TIME
+         1 //KC03B13A JOB ,'Aaron Fosco',MSGCLASS=H                                JOB08470
+         2 //STEP1   EXEC  PGM=ASSIST,PARM='MACRO=H'                                       
+         3 //STEPLIB   DD  DSN=KC02293.ASSIST.LOADLIB,DISP=SHR                             
+         4 //SYSPRINT  DD  SYSOUT=*                                                        
+         5 //SYSIN     DD  *                                                               
+         6 //          DD DSN=KC02314.SUMMER18.CSCI360.HW9DRVR,DISP=SHR                    
+         7 //FT05F001  DD DUMMY                                                            
+         8 //FT06F001  DD SYSOUT=*                                                         
+ ICH70001I KC03B13  LAST ACCESS AT 15:09:58 ON SUNDAY, AUGUST 5, 2018
+ IEF236I ALLOC. FOR KC03B13A STEP1
+ IGD103I SMS ALLOCATED TO DDNAME STEPLIB
+ IEF237I JES2 ALLOCATED TO SYSPRINT
+ IEF237I JES2 ALLOCATED TO SYSIN
+ IGD103I SMS ALLOCATED TO DDNAME
+ IEF237I DMY  ALLOCATED TO FT05F001
+ IEF237I JES2 ALLOCATED TO FT06F001
+ IEF142I KC03B13A STEP1 - STEP WAS EXECUTED - COND CODE 0000
+ IGD104I KC02293.ASSIST.LOADLIB                       RETAINED,  DDNAME=STEPLIB 
+ IEF285I   KC03B13.KC03B13A.JOB08470.D0000102.?         SYSOUT        
+ IEF285I   KC03B13.KC03B13A.JOB08470.D0000101.?         SYSIN         
+ IGD104I KC02314.SUMMER18.CSCI360.HW9DRVR             RETAINED,  DDNAME=        
+ IEF285I   KC03B13.KC03B13A.JOB08470.D0000103.?         SYSOUT        
+ IEF373I STEP/STEP1   /START 2018217.1510
+ IEF032I STEP/STEP1   /STOP  2018217.1510 
+         CPU:     0 HR  00 MIN  00.01 SEC    SRB:     0 HR  00 MIN  00.00 SEC    
+         VIRT:   584K  SYS:   272K  EXT:        4K  SYS:    11372K
+         ATB- REAL:                     0K  SLOTS:                     0K
+              VIRT- ALLOC:       0M SHRD:       0M
+ IEF375I  JOB/KC03B13A/START 2018217.1510
+ IEF033I  JOB/KC03B13A/STOP  2018217.1510 
+         CPU:     0 HR  00 MIN  00.01 SEC    SRB:     0 HR  00 MIN  00.00 SEC    
+1*** ASSIST 4.0/A2-05/15/82  470/V7A/0:OS/VS2  INS=SDFP7/X=BGHO, CHECK/TRC/=1180, OPTS=CDKMPR FROM PENN ST*NIU COMPSCI*LT         
+0MACRO=H                                                                                                                          
+0                                                                                                               PAGE    1         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+                                       1          MACRO                                                                           
+                                       2          STRLEN &STR,&LEN                                                                
+                                       3 .********************************************                                            
+                                       4 .* Macro: STRLEN                                                                         
+                                       5 .*                                                                                       
+                                       6 .* Desc: Used to calculate the length of a                                               
+                                       7 .*       C-Style String                                                                  
+                                       8 .*                                                                                       
+                                       9 .* Expected parameters:                                                                  
+                                      10 .* &STR: Address of the string to count the                                              
+                                      11 .*       Length                                                                          
+                                      12 .* &LEN: Adress to return the value of the                                               
+                                      13 .*       Length to                                                                       
+                                      14 .*                                                                                       
+                                      15 .* REG USAGE:                                                                            
+                                      16 .*                                                                                       
+                                      17 .* R2 - &STR Cursor                                                                      
+                                      18 .* R3 - Counter                                                                          
+                                      19 .*                                                                                       
+                                      20 .********************************************                                            
+                                      21 .*                                     ERROR ON WRONG PARAMS                             
+                                      22          AIF   ('&STR' EQ '').NOPARMS                                                    
+                                      23          AIF   ('&LEN' EQ '').NOPARMS                                                    
+                                      24          STM   2,3,A&SYSNDX            STORE R2 & R3                                     
+                                      25          B     B&SYSNDX                                                                  
+                                      26 A&SYSNDX DS    2F                      REG STORAGE                                       
+                                      27 B&SYSNDX LA    2,&STR                  LOAD ADDR INTO R2                                 
+                                      28          SR    3,3                     ZERO R3                                           
+                                      29 C&SYSNDX CLI   0(2),X'00'              COMPAIR CURR CHAR TO                              
+                                      30 *                                      NULL                                              
+                                      31          BE    D&SYSNDX                BR ON CHAR == NULL                                
+                                      32          A     2,=F'1'                 INCREMENT CURSOR                                  
+                                      33          A     3,=F'1'                 INCREMENT LENGTH                                  
+                                      34          B     C&SYSNDX                REPEAT LOOP                                       
+                                      35 D&SYSNDX ST    3,&LEN                  STORE LENGTH                                      
+                                      36          LM    2,3,A&SYSNDX            RESTORE REGS                                      
+                                      37          MEXIT                                                                           
+                                      38 .*                                     ERROR FOR WRONG PARAMS                            
+                                      39 .NOPARMS MNOTE  'Invalid Params'                                                         
+                                      40          MEXIT                                                                           
+                                      41          MEND                                                                            
+                                      42          MACRO                                                                           
+                                      43          FROMHEX &IN,&OUT                                                                
+                                      44 .********************************************                                            
+                                      45 .* Macro: FROMHEX                                                                        
+                                      46 .*                                                                                       
+                                      47 .* Desc: Used to convert a 6-byte Hex number                                             
+                                      48 .*       into A 16-byte decimal number                                                   
+                                      49 .*                                                                                       
+                                      50 .* Expected parameters:                                                                  
+                                      51 .* &IN: Address of the start of the 6-byte                                               
+                                      52 .*      number                                                                           
+1                                                                                                               PAGE    2         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+                                      53 .* &OUT: Address of the 16-byte output space                                             
+                                      54 .*                                                                                       
+                                      55 .* REG USAGE:                                                                            
+                                      56 .*                                                                                       
+                                      57 .* R2 - Addr of 6-byte input                                                             
+                                      58 .* R3 - 6-byte input Offset                                                              
+                                      59 .* R4 - Formatter for 'Zoned hex numbers'                                                
+                                      60 .* R5 - Storage for the full converted hex Num                                           
+                                      61 .*                                                                                       
+                                      62 .********************************************                                            
+                                      63 .*                                     ERROR ON WRONG PARAMS                             
+                                      64          AIF   ('&IN' EQ '').EP                                                          
+                                      65          AIF   ('&OUT' EQ '').EP                                                         
+                                      66          STM   2,5,Z&SYSNDX            STORE R2-R5                                       
+                                      67          B     Y&SYSNDX                                                                  
+                                      68 Z&SYSNDX DS    4F                      REG STORAGE SPACE                                 
+                                      69 Y&SYSNDX SR    3,3                     ZERO R3-R5                                        
+                                      70          SR    4,4                                                                       
+                                      71          SR    5,5                                                                       
+                                      72          LA    2,&IN                   LOAD ADDR OF &IN TO R2                            
+                                      73 X&SYSNDX IC    4,0(3,2)                INSERT CHAR AT R2+R3                              
+                                      74 *                                      INTO R4                                           
+                                      75          C     4,=F'239'               IF WHAT WAS READ WAS                              
+                                      76 *                                      NOT A NUMBER, THEN BR                             
+                                      77          BL    W&SYSNDX                TO SUB ONLY 183,                                  
+                                      78          S     4,=F'57'                ELSE SUB 240                                      
+                                      79 W&SYSNDX S     4,=F'183'                                                                 
+                                      80          AR    5,4                     ADD TRUE VALUE TO R5                              
+                                      81          A     3,=F'1'                 INCREMENT CURSOR                                  
+                                      82          C     3,=F'6'                 IF CURSOR == 6                                    
+                                      83          BE    V&SYSNDX                END LOOP                                          
+                                      84          SLA   5,4                     SHIFT R5 (R5 * 16)                                
+                                      85          B     X&SYSNDX                RESTART LOOP                                      
+                                      86 V&SYSNDX LA    2,&OUT                  LOAD OUTPUT                                       
+                                      87          CVD   5,U&SYSNDX              PUT R5 INTO STORAGE                               
+                                      88          B     T&SYSNDX                                                                  
+                                      89 U&SYSNDX DS    D                                                                         
+                                      90 T&SYSNDX UNPK  0(16,2),U&SYSNDX.(8)    UNPK STORAGE                                      
+                                      91          ICM   3,B'0001',15(2)         MAKE SURE LAST CHAR                               
+                                      92          A     3,=F'48'                IS A NUMBER CHAR AND                              
+                                      93          STCM  3,B'0001',15(2)         DOESN'T END IN X'XC'                              
+                                      94          LM    2,5,Z&SYSNDX            RESTORE R2-R5                                     
+                                      95          MEXIT                                                                           
+                                      96 .*                                     ERROR FOR WRONG PARAMS                            
+                                      97 .EP      MNOTE 'Invalid Params'                                                          
+                                      98          MEXIT                                                                           
+                                      99          MEND                                                                            
+                                     100 **********************************************************************                   
+                                     101 *                                                                    *                   
+                                     102 *            Name:  DRIVER.                                          *                   
+                                     103 *                                                                    *                   
+                                     104 *        Function:  Test platform for macros.                        *                   
+                                     105 *                                                                    *                   
+                                     106 *           Input:  None.                                            *                   
+                                     107 *                                                                    *                   
+                                     108 *          Output:  Results of the tests.                            *                   
+                                     109 *                                                                    *                   
+1                                                                                                               PAGE    3         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+                                     110 *     Entry Conds:  14 -- Return address to the operating            *                   
+                                     111 *                         system.                                    *                   
+                                     112 *                   15 -- Address of entry to the program.           *                   
+                                     113 *                                                                    *                   
+                                     114 *  Register Usage:   2 -- Used in addresses in macro tests.          *                   
+                                     115 *                   11 -- Second base register.                      *                   
+                                     116 *                   12 -- Base register.                             *                   
+                                     117 *                                                                    *                   
+                                     118 *      Exit Conds:  14 -- Return address to the operating            *                   
+                                     119 *                         system.                                    *                   
+                                     120 *                                                                    *                   
+                                     121 **********************************************************************                   
+1                                                                                                               PAGE    4         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+                                                                                                                                  
+                                                                                                                                  
+                                     123 **********************************************************************                   
+                                     124 *               The DRIVER program begins here.                      *                   
+                                     125 **********************************************************************                   
+                                     126 *                                                                                        
+ 000000                              127 DRIVER   CSECT                         Beginning of the program                          
+                                     128 *                                                                                        
+                                     130 *                                                                                        
+                                     131 *  Standard entry linkage.                                                               
+                                     132 *                                                                                        
+ 000000 90EC D00C            0000C   133          STM   14,12,12(13)            Store the registers in the save                   
+                                     134 *                                      area of the calling routine                       
+                                     135 *                                                                                        
+ 000004 18CF                         136          LR    12,15                   Point register 12 at DRIVER                       
+ 000000                              137          USING DRIVER,12               The base register is 12                           
+                                     138 *                                                                                        
+ 000006 41E0 C8E0            008E0   139          LA    14,DRIVSAV              Point register 14 at DRIVER's                     
+                                     140 *                                      save area                                         
+ 00000A 50DE 0004            00004   141          ST    13,4(14)                Store the backward pointer                        
+ 00000E 50ED 0008            00008   142          ST    14,8(13)                Store the forward pointer                         
+ 000012 18DE                         143          LR    13,14                   Point register 13 at DRIVER's                     
+                                     144 *                                      save area                                         
+                                     145 *                                                                                        
+ 000014 E020 C7E4 001A 007E4         146          XPRNT =CL26'1Results of testing Macros',26                                      
+                                     147 *                                      Print the title                                   
+                                     148 *                                                                                        
+                                     149 * This block of code tests the STRLEN macro.                                             
+                                     150 *                                                                                        
+ 00001A E020 C834 0001 00834         151          XPRNT =C'0',1                 Skip an extra 2 lines                             
+ 000020 E020 C788 0020 00788         152          XPRNT =CL32'-First we test the STRLEN macro.',32                                
+                                     153 *                                      Print a heading                                   
+                                     154 *                                                                                        
+                                     155 * These first three calls to STRLEN all have problems which should                       
+                                     156 * result in MNOTEs.                                                                      
+                                     157 *                                                                                        
+                                     158          STRLEN   S1                                                                     
+ ----->AS***MNOTE***     1,Invalid Params                                                                         <-ERROR         
+                                     160 *                                                                                        
+                                     161          STRLEN   ,LENGTH                                                                
+ ----->AS***MNOTE***     1,Invalid Params                                                                         <-ERROR         
+                                     163 *                                                                                        
+                                     164          STRLEN                                                                          
+ ----->AS***MNOTE***     1,Invalid Params                                                                         <-ERROR         
+                                     166 *                                                                                        
+                                     167 * The next few calls to STRLEN should all work.                                          
+                                     168 *                                                                                        
+ 000026 E020 C835 0017 00835         169          XPRNT =CL23'The input value is:  00',23                                         
+ 00002C E020 C84C 001B 0084C         170          XPRNT =CL27'0The actual length is:    0',27                                     
+                                     171          STRLEN   S1,LENGTH                                                              
+ 000032 9023 C03C            0003C   172+         STM   2,3,A0004               STORE R2 & R3                                     
+ 000036 47F0 C044            00044   173+         B     B0004                                                                     
+ 00003C                              174+A0004    DS    2F                      REG STORAGE                                       
+ 000044 4120 C928            00928   175+B0004    LA    2,S1                    LOAD ADDR INTO R2                                 
+ 000048 1B33                         176+         SR    3,3                     ZERO R3                                           
+ 00004A 9500 2000      00000         177+C0004    CLI   0(2),X'00'              COMPAIR CURR CHAR TO                              
+                                     178+*                                      NULL                                              
+1                                                                                                               PAGE    5         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 00004E 4780 C05E            0005E   179+         BE    D0004                   BR ON CHAR == NULL                                
+ 000052 5A20 C7C8            007C8   180+         A     2,=F'1'                 INCREMENT CURSOR                                  
+ 000056 5A30 C7C8            007C8   181+         A     3,=F'1'                 INCREMENT LENGTH                                  
+ 00005A 47F0 C04A            0004A   182+         B     C0004                   REPEAT LOOP                                       
+ 00005E 5030 C938            00938   183+D0004    ST    3,LENGTH                STORE LENGTH                                      
+ 000062 9823 C03C            0003C   184+         LM    2,3,A0004               RESTORE REGS                                      
+ 000066 5840 C938            00938   185          L     4,LENGTH                                                                  
+ 00006A 4E40 C958            00958   186          CVD   4,TEMP                                                                    
+ 00006E D203 C953 C7CC 00953 007CC   187          MVC   SVALUE(4),=XL4'40202120'                                                  
+ 000074 DE03 C953 C95E 00953 0095E   188          ED    SVALUE(4),TEMP+6                                                          
+ 00007A E020 C93C 001B 0093C         189          XPRNT SLINE,27                                                                  
+                                     190 *                                                                                        
+ 000080 E020 C867 001D 00867         191          XPRNT =CL29'The input value is:  C1C2C300',29                                   
+ 000086 E020 C884 001B 00884         192          XPRNT =CL27'0The actual length is:    3',27                                     
+                                     193          STRLEN   S2,LENGTH                                                              
+ 00008C 9023 C094            00094   194+         STM   2,3,A0005               STORE R2 & R3                                     
+ 000090 47F0 C09C            0009C   195+         B     B0005                                                                     
+ 000094                              196+A0005    DS    2F                      REG STORAGE                                       
+ 00009C 4120 C929            00929   197+B0005    LA    2,S2                    LOAD ADDR INTO R2                                 
+ 0000A0 1B33                         198+         SR    3,3                     ZERO R3                                           
+ 0000A2 9500 2000      00000         199+C0005    CLI   0(2),X'00'              COMPAIR CURR CHAR TO                              
+                                     200+*                                      NULL                                              
+ 0000A6 4780 C0B6            000B6   201+         BE    D0005                   BR ON CHAR == NULL                                
+ 0000AA 5A20 C7C8            007C8   202+         A     2,=F'1'                 INCREMENT CURSOR                                  
+ 0000AE 5A30 C7C8            007C8   203+         A     3,=F'1'                 INCREMENT LENGTH                                  
+ 0000B2 47F0 C0A2            000A2   204+         B     C0005                   REPEAT LOOP                                       
+ 0000B6 5030 C938            00938   205+D0005    ST    3,LENGTH                STORE LENGTH                                      
+ 0000BA 9823 C094            00094   206+         LM    2,3,A0005               RESTORE REGS                                      
+ 0000BE 5840 C938            00938   207          L     4,LENGTH                                                                  
+ 0000C2 4E40 C958            00958   208          CVD   4,TEMP                                                                    
+ 0000C6 D203 C953 C7CC 00953 007CC   209          MVC   SVALUE(4),=XL4'40202120'                                                  
+ 0000CC DE03 C953 C95E 00953 0095E   210          ED    SVALUE(4),TEMP+6                                                          
+ 0000D2 E020 C93C 001B 0093C         211          XPRNT SLINE,27                                                                  
+                                     212 *                                                                                        
+ 0000D8 E020 C89F 001B 0089F         213          XPRNT =CL27'The input value is:  000000',27                                     
+ 0000DE E020 C84C 001B 0084C         214          XPRNT =CL27'0The actual length is:    0',27                                     
+                                     215          STRLEN   S3,LENGTH                                                              
+ 0000E4 9023 C0EC            000EC   216+         STM   2,3,A0006               STORE R2 & R3                                     
+ 0000E8 47F0 C0F4            000F4   217+         B     B0006                                                                     
+ 0000EC                              218+A0006    DS    2F                      REG STORAGE                                       
+ 0000F4 4120 C92D            0092D   219+B0006    LA    2,S3                    LOAD ADDR INTO R2                                 
+ 0000F8 1B33                         220+         SR    3,3                     ZERO R3                                           
+ 0000FA 9500 2000      00000         221+C0006    CLI   0(2),X'00'              COMPAIR CURR CHAR TO                              
+                                     222+*                                      NULL                                              
+ 0000FE 4780 C10E            0010E   223+         BE    D0006                   BR ON CHAR == NULL                                
+ 000102 5A20 C7C8            007C8   224+         A     2,=F'1'                 INCREMENT CURSOR                                  
+ 000106 5A30 C7C8            007C8   225+         A     3,=F'1'                 INCREMENT LENGTH                                  
+ 00010A 47F0 C0FA            000FA   226+         B     C0006                   REPEAT LOOP                                       
+ 00010E 5030 C938            00938   227+D0006    ST    3,LENGTH                STORE LENGTH                                      
+ 000112 9823 C0EC            000EC   228+         LM    2,3,A0006               RESTORE REGS                                      
+ 000116 5840 C938            00938   229          L     4,LENGTH                                                                  
+ 00011A 4E40 C958            00958   230          CVD   4,TEMP                                                                    
+ 00011E D203 C953 C7CC 00953 007CC   231          MVC   SVALUE(4),=XL4'40202120'                                                  
+ 000124 DE03 C953 C95E 00953 0095E   232          ED    SVALUE(4),TEMP+6                                                          
+ 00012A E020 C93C 001B 0093C         233          XPRNT SLINE,27                                                                  
+                                     234 *                                                                                        
+ 000130 E020 C867 001D 00867         235          XPRNT =CL29'The input value is:  C1C2C300',29                                   
+1                                                                                                               PAGE    6         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 000136 E020 C884 001B 00884         236          XPRNT =CL27'0The actual length is:    3',27                                     
+ 00013C 4130 C929            00929   237          LA    3,S2                                                                      
+                                     238          STRLEN   0(3),LENGTH                                                            
+ 000140 9023 C148            00148   239+         STM   2,3,A0007               STORE R2 & R3                                     
+ 000144 47F0 C150            00150   240+         B     B0007                                                                     
+ 000148                              241+A0007    DS    2F                      REG STORAGE                                       
+ 000150 4123 0000            00000   242+B0007    LA    2,0(3)                  LOAD ADDR INTO R2                                 
+ 000154 1B33                         243+         SR    3,3                     ZERO R3                                           
+ 000156 9500 2000      00000         244+C0007    CLI   0(2),X'00'              COMPAIR CURR CHAR TO                              
+                                     245+*                                      NULL                                              
+ 00015A 4780 C16A            0016A   246+         BE    D0007                   BR ON CHAR == NULL                                
+ 00015E 5A20 C7C8            007C8   247+         A     2,=F'1'                 INCREMENT CURSOR                                  
+ 000162 5A30 C7C8            007C8   248+         A     3,=F'1'                 INCREMENT LENGTH                                  
+ 000166 47F0 C156            00156   249+         B     C0007                   REPEAT LOOP                                       
+ 00016A 5030 C938            00938   250+D0007    ST    3,LENGTH                STORE LENGTH                                      
+ 00016E 9823 C148            00148   251+         LM    2,3,A0007               RESTORE REGS                                      
+ 000172 5840 C938            00938   252          L     4,LENGTH                                                                  
+ 000176 4E40 C958            00958   253          CVD   4,TEMP                                                                    
+ 00017A D203 C953 C7CC 00953 007CC   254          MVC   SVALUE(4),=XL4'40202120'                                                  
+ 000180 DE03 C953 C95E 00953 0095E   255          ED    SVALUE(4),TEMP+6                                                          
+ 000186 E020 C93C 001B 0093C         256          XPRNT SLINE,27                                                                  
+                                     257 *                                                                                        
+ 00018C E020 C867 001D 00867         258          XPRNT =CL29'The input value is:  C1C2C300',29                                   
+ 000192 E020 C884 001B 00884         259          XPRNT =CL27'0The actual length is:    3',27                                     
+ 000198 4150 C938            00938   260          LA    5,LENGTH                                                                  
+                                     261          STRLEN   S2,0(5)                                                                
+ 00019C 9023 C1A4            001A4   262+         STM   2,3,A0008               STORE R2 & R3                                     
+ 0001A0 47F0 C1AC            001AC   263+         B     B0008                                                                     
+ 0001A4                              264+A0008    DS    2F                      REG STORAGE                                       
+ 0001AC 4120 C929            00929   265+B0008    LA    2,S2                    LOAD ADDR INTO R2                                 
+ 0001B0 1B33                         266+         SR    3,3                     ZERO R3                                           
+ 0001B2 9500 2000      00000         267+C0008    CLI   0(2),X'00'              COMPAIR CURR CHAR TO                              
+                                     268+*                                      NULL                                              
+ 0001B6 4780 C1C6            001C6   269+         BE    D0008                   BR ON CHAR == NULL                                
+ 0001BA 5A20 C7C8            007C8   270+         A     2,=F'1'                 INCREMENT CURSOR                                  
+ 0001BE 5A30 C7C8            007C8   271+         A     3,=F'1'                 INCREMENT LENGTH                                  
+ 0001C2 47F0 C1B2            001B2   272+         B     C0008                   REPEAT LOOP                                       
+ 0001C6 5035 0000            00000   273+D0008    ST    3,0(5)                  STORE LENGTH                                      
+ 0001CA 9823 C1A4            001A4   274+         LM    2,3,A0008               RESTORE REGS                                      
+ 0001CE 5840 C938            00938   275          L     4,LENGTH                                                                  
+ 0001D2 4E40 C958            00958   276          CVD   4,TEMP                                                                    
+ 0001D6 D203 C953 C7CC 00953 007CC   277          MVC   SVALUE(4),=XL4'40202120'                                                  
+ 0001DC DE03 C953 C95E 00953 0095E   278          ED    SVALUE(4),TEMP+6                                                          
+ 0001E2 E020 C93C 001B 0093C         279          XPRNT SLINE,27                                                                  
+                                     280 *                                                                                        
+ 0001E8 E020 C867 001D 00867         281          XPRNT =CL29'The input value is:  C1C2C300',29                                   
+ 0001EE E020 C884 001B 00884         282          XPRNT =CL27'0The actual length is:    3',27                                     
+ 0001F4 4130 C929            00929   283          LA    3,S2                                                                      
+ 0001F8 4150 C938            00938   284          LA    5,LENGTH                                                                  
+                                     285          STRLEN   0(3),0(5)                                                              
+ 0001FC 9023 C204            00204   286+         STM   2,3,A0009               STORE R2 & R3                                     
+ 000200 47F0 C20C            0020C   287+         B     B0009                                                                     
+ 000204                              288+A0009    DS    2F                      REG STORAGE                                       
+ 00020C 4123 0000            00000   289+B0009    LA    2,0(3)                  LOAD ADDR INTO R2                                 
+ 000210 1B33                         290+         SR    3,3                     ZERO R3                                           
+ 000212 9500 2000      00000         291+C0009    CLI   0(2),X'00'              COMPAIR CURR CHAR TO                              
+                                     292+*                                      NULL                                              
+1                                                                                                               PAGE    7         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 000216 4780 C226            00226   293+         BE    D0009                   BR ON CHAR == NULL                                
+ 00021A 5A20 C7C8            007C8   294+         A     2,=F'1'                 INCREMENT CURSOR                                  
+ 00021E 5A30 C7C8            007C8   295+         A     3,=F'1'                 INCREMENT LENGTH                                  
+ 000222 47F0 C212            00212   296+         B     C0009                   REPEAT LOOP                                       
+ 000226 5035 0000            00000   297+D0009    ST    3,0(5)                  STORE LENGTH                                      
+ 00022A 9823 C204            00204   298+         LM    2,3,A0009               RESTORE REGS                                      
+ 00022E 5840 C938            00938   299          L     4,LENGTH                                                                  
+ 000232 4E40 C958            00958   300          CVD   4,TEMP                                                                    
+ 000236 D203 C953 C7CC 00953 007CC   301          MVC   SVALUE(4),=XL4'40202120'                                                  
+ 00023C DE03 C953 C95E 00953 0095E   302          ED    SVALUE(4),TEMP+6                                                          
+ 000242 E020 C93C 001B 0093C         303          XPRNT SLINE,27                                                                  
+                                     304 *                                                                                        
+ 000248 E020 C8BA 0023 008BA         305          XPRNT =CL35'The input value is:  D1D2D300D4D500',35                             
+ 00024E E020 C884 001B 00884         306          XPRNT =CL27'0The actual length is:    3',27                                     
+ 000254 4150 C938            00938   307          LA    5,LENGTH                                                                  
+                                     308          STRLEN   S4,0(5)                                                                
+ 000258 9023 C260            00260   309+         STM   2,3,A0010               STORE R2 & R3                                     
+ 00025C 47F0 C268            00268   310+         B     B0010                                                                     
+ 000260                              311+A0010    DS    2F                      REG STORAGE                                       
+ 000268 4120 C930            00930   312+B0010    LA    2,S4                    LOAD ADDR INTO R2                                 
+ 00026C 1B33                         313+         SR    3,3                     ZERO R3                                           
+ 00026E 9500 2000      00000         314+C0010    CLI   0(2),X'00'              COMPAIR CURR CHAR TO                              
+                                     315+*                                      NULL                                              
+ 000272 4780 C282            00282   316+         BE    D0010                   BR ON CHAR == NULL                                
+ 000276 5A20 C7C8            007C8   317+         A     2,=F'1'                 INCREMENT CURSOR                                  
+ 00027A 5A30 C7C8            007C8   318+         A     3,=F'1'                 INCREMENT LENGTH                                  
+ 00027E 47F0 C26E            0026E   319+         B     C0010                   REPEAT LOOP                                       
+ 000282 5035 0000            00000   320+D0010    ST    3,0(5)                  STORE LENGTH                                      
+ 000286 9823 C260            00260   321+         LM    2,3,A0010               RESTORE REGS                                      
+ 00028A 5840 C938            00938   322          L     4,LENGTH                                                                  
+ 00028E 4E40 C958            00958   323          CVD   4,TEMP                                                                    
+ 000292 D203 C953 C7CC 00953 007CC   324          MVC   SVALUE(4),=XL4'40202120'                                                  
+ 000298 DE03 C953 C95E 00953 0095E   325          ED    SVALUE(4),TEMP+6                                                          
+ 00029E E020 C93C 001B 0093C         326          XPRNT SLINE,27                                                                  
+                                     327 *                                                                                        
+                                     328 * The second block of code deals with the FROMHEX macro.                                 
+                                     329 *                                                                                        
+ 0002A4 E020 C834 0001 00834         330          XPRNT =C'0',1                 Skip an extra 2 lines.                            
+ 0002AA E020 C7A8 0020 007A8         331          XPRNT =CL32'-Next we test the FROMHEX macro.',32                                
+                                     332 *                                      Print a heading.                                  
+                                     333 *                                                                                        
+                                     334 * These first three calls to FROMHEX have problems which should                          
+                                     335 * result in MNOTEs.                                                                      
+                                     336          FROMHEX  PIN                                                                    
+ ----->AS***MNOTE***    1,Invalid Params                                                                          <-ERROR         
+                                     338 *                                                                                        
+                                     339          FROMHEX  ,POUT                                                                  
+ ----->AS***MNOTE***    1,Invalid Params                                                                          <-ERROR         
+                                     341 *                                                                                        
+                                     342          FROMHEX                                                                         
+ ----->AS***MNOTE***    1,Invalid Params                                                                          <-ERROR         
+                                     344 *                                                                                        
+                                     345 * The next group of calls should all work.                                               
+                                     346 *                                                                                        
+ 0002B0 D205 C969 C7FE 00969 007FE   347          MVC   PIN(6),=CL6'000001'                                                       
+                                     348          FROMHEX  PIN,POUT                                                               
+ 0002B6 9025 C2C0            002C0   349+         STM   2,5,Z0014               STORE R2-R5                                       
+1                                                                                                               PAGE    8         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 0002BA 47F0 C2D0            002D0   350+         B     Y0014                                                                     
+ 0002C0                              351+Z0014    DS    4F                      REG STORAGE SPACE                                 
+ 0002D0 1B33                         352+Y0014    SR    3,3                     ZERO R3-R5                                        
+ 0002D2 1B44                         353+         SR    4,4                                                                       
+ 0002D4 1B55                         354+         SR    5,5                                                                       
+ 0002D6 4120 C969            00969   355+         LA    2,PIN                   LOAD ADDR OF &IN TO R2                            
+ 0002DA 4343 2000            00000   356+X0014    IC    4,0(3,2)                INSERT CHAR AT R2+R3                              
+                                     357+*                                      INTO R4                                           
+ 0002DE 5940 C7D0            007D0   358+         C     4,=F'239'               IF WHAT WAS READ WAS                              
+                                     359+*                                      NOT A NUMBER, THEN BR                             
+ 0002E2 4740 C2EA            002EA   360+         BL    W0014                   TO SUB ONLY 183,                                  
+ 0002E6 5B40 C7D4            007D4   361+         S     4,=F'57'                ELSE SUB 240                                      
+ 0002EA 5B40 C7D8            007D8   362+W0014    S     4,=F'183'                                                                 
+ 0002EE 1A54                         363+         AR    5,4                     ADD TRUE VALUE TO R5                              
+ 0002F0 5A30 C7C8            007C8   364+         A     3,=F'1'                 INCREMENT CURSOR                                  
+ 0002F4 5930 C7DC            007DC   365+         C     3,=F'6'                 IF CURSOR == 6                                    
+ 0002F8 4780 C304            00304   366+         BE    V0014                   END LOOP                                          
+ 0002FC 8B50 0004            00004   367+         SLA   5,4                     SHIFT R5 (R5 * 16)                                
+ 000300 47F0 C2DA            002DA   368+         B     X0014                   RESTART LOOP                                      
+ 000304 4120 C97D            0097D   369+V0014    LA    2,POUT                  LOAD OUTPUT                                       
+ 000308 4E50 C310            00310   370+         CVD   5,U0014                 PUT R5 INTO STORAGE                               
+ 00030C 47F0 C318            00318   371+         B     T0014                                                                     
+ 000310                              372+U0014    DS    D                                                                         
+ 000318 F3F7 2000 C310 00000 00310   373+T0014    UNPK  0(16,2),U0014(8)        UNPK STORAGE                                      
+ 00031E BF31 200F            0000F   374+         ICM   3,B'0001',15(2)         MAKE SURE LAST CHAR                               
+ 000322 5A30 C7E0            007E0   375+         A     3,=F'48'                IS A NUMBER CHAR AND                              
+ 000326 BE31 200F            0000F   376+         STCM  3,B'0001',15(2)         DOESN'T END IN X'XC'                              
+ 00032A 9825 C2C0            002C0   377+         LM    2,5,Z0014               RESTORE R2-R5                                     
+ 00032E E020 C960 002D 00960         378          XPRNT PLINE,45                                                                  
+                                     379 *                                                                                        
+ 000334 D205 C969 C804 00969 00804   380          MVC   PIN(6),=CL6'000A00'                                                       
+                                     381          FROMHEX  PIN,POUT                                                               
+ 00033A 9025 C344            00344   382+         STM   2,5,Z0015               STORE R2-R5                                       
+ 00033E 47F0 C354            00354   383+         B     Y0015                                                                     
+ 000344                              384+Z0015    DS    4F                      REG STORAGE SPACE                                 
+ 000354 1B33                         385+Y0015    SR    3,3                     ZERO R3-R5                                        
+ 000356 1B44                         386+         SR    4,4                                                                       
+ 000358 1B55                         387+         SR    5,5                                                                       
+ 00035A 4120 C969            00969   388+         LA    2,PIN                   LOAD ADDR OF &IN TO R2                            
+ 00035E 4343 2000            00000   389+X0015    IC    4,0(3,2)                INSERT CHAR AT R2+R3                              
+                                     390+*                                      INTO R4                                           
+ 000362 5940 C7D0            007D0   391+         C     4,=F'239'               IF WHAT WAS READ WAS                              
+                                     392+*                                      NOT A NUMBER, THEN BR                             
+ 000366 4740 C36E            0036E   393+         BL    W0015                   TO SUB ONLY 183,                                  
+ 00036A 5B40 C7D4            007D4   394+         S     4,=F'57'                ELSE SUB 240                                      
+ 00036E 5B40 C7D8            007D8   395+W0015    S     4,=F'183'                                                                 
+ 000372 1A54                         396+         AR    5,4                     ADD TRUE VALUE TO R5                              
+ 000374 5A30 C7C8            007C8   397+         A     3,=F'1'                 INCREMENT CURSOR                                  
+ 000378 5930 C7DC            007DC   398+         C     3,=F'6'                 IF CURSOR == 6                                    
+ 00037C 4780 C388            00388   399+         BE    V0015                   END LOOP                                          
+ 000380 8B50 0004            00004   400+         SLA   5,4                     SHIFT R5 (R5 * 16)                                
+ 000384 47F0 C35E            0035E   401+         B     X0015                   RESTART LOOP                                      
+ 000388 4120 C97D            0097D   402+V0015    LA    2,POUT                  LOAD OUTPUT                                       
+ 00038C 4E50 C398            00398   403+         CVD   5,U0015                 PUT R5 INTO STORAGE                               
+ 000390 47F0 C3A0            003A0   404+         B     T0015                                                                     
+ 000398                              405+U0015    DS    D                                                                         
+ 0003A0 F3F7 2000 C398 00000 00398   406+T0015    UNPK  0(16,2),U0015(8)        UNPK STORAGE                                      
+1                                                                                                               PAGE    9         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 0003A6 BF31 200F            0000F   407+         ICM   3,B'0001',15(2)         MAKE SURE LAST CHAR                               
+ 0003AA 5A30 C7E0            007E0   408+         A     3,=F'48'                IS A NUMBER CHAR AND                              
+ 0003AE BE31 200F            0000F   409+         STCM  3,B'0001',15(2)         DOESN'T END IN X'XC'                              
+ 0003B2 9825 C344            00344   410+         LM    2,5,Z0015               RESTORE R2-R5                                     
+ 0003B6 E020 C960 002D 00960         411          XPRNT PLINE,45                                                                  
+                                     412 *                                                                                        
+ 0003BC D205 C969 C80A 00969 0080A   413          MVC   PIN(6),=CL6'100000'                                                       
+                                     414          FROMHEX  PIN,POUT                                                               
+ 0003C2 9025 C3CC            003CC   415+         STM   2,5,Z0016               STORE R2-R5                                       
+ 0003C6 47F0 C3DC            003DC   416+         B     Y0016                                                                     
+ 0003CC                              417+Z0016    DS    4F                      REG STORAGE SPACE                                 
+ 0003DC 1B33                         418+Y0016    SR    3,3                     ZERO R3-R5                                        
+ 0003DE 1B44                         419+         SR    4,4                                                                       
+ 0003E0 1B55                         420+         SR    5,5                                                                       
+ 0003E2 4120 C969            00969   421+         LA    2,PIN                   LOAD ADDR OF &IN TO R2                            
+ 0003E6 4343 2000            00000   422+X0016    IC    4,0(3,2)                INSERT CHAR AT R2+R3                              
+                                     423+*                                      INTO R4                                           
+ 0003EA 5940 C7D0            007D0   424+         C     4,=F'239'               IF WHAT WAS READ WAS                              
+                                     425+*                                      NOT A NUMBER, THEN BR                             
+ 0003EE 4740 C3F6            003F6   426+         BL    W0016                   TO SUB ONLY 183,                                  
+ 0003F2 5B40 C7D4            007D4   427+         S     4,=F'57'                ELSE SUB 240                                      
+ 0003F6 5B40 C7D8            007D8   428+W0016    S     4,=F'183'                                                                 
+ 0003FA 1A54                         429+         AR    5,4                     ADD TRUE VALUE TO R5                              
+ 0003FC 5A30 C7C8            007C8   430+         A     3,=F'1'                 INCREMENT CURSOR                                  
+ 000400 5930 C7DC            007DC   431+         C     3,=F'6'                 IF CURSOR == 6                                    
+ 000404 4780 C410            00410   432+         BE    V0016                   END LOOP                                          
+ 000408 8B50 0004            00004   433+         SLA   5,4                     SHIFT R5 (R5 * 16)                                
+ 00040C 47F0 C3E6            003E6   434+         B     X0016                   RESTART LOOP                                      
+ 000410 4120 C97D            0097D   435+V0016    LA    2,POUT                  LOAD OUTPUT                                       
+ 000414 4E50 C420            00420   436+         CVD   5,U0016                 PUT R5 INTO STORAGE                               
+ 000418 47F0 C428            00428   437+         B     T0016                                                                     
+ 000420                              438+U0016    DS    D                                                                         
+ 000428 F3F7 2000 C420 00000 00420   439+T0016    UNPK  0(16,2),U0016(8)        UNPK STORAGE                                      
+ 00042E BF31 200F            0000F   440+         ICM   3,B'0001',15(2)         MAKE SURE LAST CHAR                               
+ 000432 5A30 C7E0            007E0   441+         A     3,=F'48'                IS A NUMBER CHAR AND                              
+ 000436 BE31 200F            0000F   442+         STCM  3,B'0001',15(2)         DOESN'T END IN X'XC'                              
+ 00043A 9825 C3CC            003CC   443+         LM    2,5,Z0016               RESTORE R2-R5                                     
+ 00043E E020 C960 002D 00960         444          XPRNT PLINE,45                                                                  
+                                     445 *                                                                                        
+ 000444 D205 C969 C810 00969 00810   446          MVC   PIN(6),=CL6'000000'                                                       
+                                     447          FROMHEX  PIN,POUT                                                               
+ 00044A 9025 C454            00454   448+         STM   2,5,Z0017               STORE R2-R5                                       
+ 00044E 47F0 C464            00464   449+         B     Y0017                                                                     
+ 000454                              450+Z0017    DS    4F                      REG STORAGE SPACE                                 
+ 000464 1B33                         451+Y0017    SR    3,3                     ZERO R3-R5                                        
+ 000466 1B44                         452+         SR    4,4                                                                       
+ 000468 1B55                         453+         SR    5,5                                                                       
+ 00046A 4120 C969            00969   454+         LA    2,PIN                   LOAD ADDR OF &IN TO R2                            
+ 00046E 4343 2000            00000   455+X0017    IC    4,0(3,2)                INSERT CHAR AT R2+R3                              
+                                     456+*                                      INTO R4                                           
+ 000472 5940 C7D0            007D0   457+         C     4,=F'239'               IF WHAT WAS READ WAS                              
+                                     458+*                                      NOT A NUMBER, THEN BR                             
+ 000476 4740 C47E            0047E   459+         BL    W0017                   TO SUB ONLY 183,                                  
+ 00047A 5B40 C7D4            007D4   460+         S     4,=F'57'                ELSE SUB 240                                      
+ 00047E 5B40 C7D8            007D8   461+W0017    S     4,=F'183'                                                                 
+ 000482 1A54                         462+         AR    5,4                     ADD TRUE VALUE TO R5                              
+ 000484 5A30 C7C8            007C8   463+         A     3,=F'1'                 INCREMENT CURSOR                                  
+1                                                                                                               PAGE   10         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 000488 5930 C7DC            007DC   464+         C     3,=F'6'                 IF CURSOR == 6                                    
+ 00048C 4780 C498            00498   465+         BE    V0017                   END LOOP                                          
+ 000490 8B50 0004            00004   466+         SLA   5,4                     SHIFT R5 (R5 * 16)                                
+ 000494 47F0 C46E            0046E   467+         B     X0017                   RESTART LOOP                                      
+ 000498 4120 C97D            0097D   468+V0017    LA    2,POUT                  LOAD OUTPUT                                       
+ 00049C 4E50 C4A8            004A8   469+         CVD   5,U0017                 PUT R5 INTO STORAGE                               
+ 0004A0 47F0 C4B0            004B0   470+         B     T0017                                                                     
+ 0004A8                              471+U0017    DS    D                                                                         
+ 0004B0 F3F7 2000 C4A8 00000 004A8   472+T0017    UNPK  0(16,2),U0017(8)        UNPK STORAGE                                      
+ 0004B6 BF31 200F            0000F   473+         ICM   3,B'0001',15(2)         MAKE SURE LAST CHAR                               
+ 0004BA 5A30 C7E0            007E0   474+         A     3,=F'48'                IS A NUMBER CHAR AND                              
+ 0004BE BE31 200F            0000F   475+         STCM  3,B'0001',15(2)         DOESN'T END IN X'XC'                              
+ 0004C2 9825 C454            00454   476+         LM    2,5,Z0017               RESTORE R2-R5                                     
+ 0004C6 E020 C960 002D 00960         477          XPRNT PLINE,45                                                                  
+                                     478 *                                                                                        
+ 0004CC D205 C969 C816 00969 00816   479          MVC   PIN(6),=CL6'ABCDEF'                                                       
+                                     480          FROMHEX  PIN,POUT                                                               
+ 0004D2 9025 C4DC            004DC   481+         STM   2,5,Z0018               STORE R2-R5                                       
+ 0004D6 47F0 C4EC            004EC   482+         B     Y0018                                                                     
+ 0004DC                              483+Z0018    DS    4F                      REG STORAGE SPACE                                 
+ 0004EC 1B33                         484+Y0018    SR    3,3                     ZERO R3-R5                                        
+ 0004EE 1B44                         485+         SR    4,4                                                                       
+ 0004F0 1B55                         486+         SR    5,5                                                                       
+ 0004F2 4120 C969            00969   487+         LA    2,PIN                   LOAD ADDR OF &IN TO R2                            
+ 0004F6 4343 2000            00000   488+X0018    IC    4,0(3,2)                INSERT CHAR AT R2+R3                              
+                                     489+*                                      INTO R4                                           
+ 0004FA 5940 C7D0            007D0   490+         C     4,=F'239'               IF WHAT WAS READ WAS                              
+                                     491+*                                      NOT A NUMBER, THEN BR                             
+ 0004FE 4740 C506            00506   492+         BL    W0018                   TO SUB ONLY 183,                                  
+ 000502 5B40 C7D4            007D4   493+         S     4,=F'57'                ELSE SUB 240                                      
+ 000506 5B40 C7D8            007D8   494+W0018    S     4,=F'183'                                                                 
+ 00050A 1A54                         495+         AR    5,4                     ADD TRUE VALUE TO R5                              
+ 00050C 5A30 C7C8            007C8   496+         A     3,=F'1'                 INCREMENT CURSOR                                  
+ 000510 5930 C7DC            007DC   497+         C     3,=F'6'                 IF CURSOR == 6                                    
+ 000514 4780 C520            00520   498+         BE    V0018                   END LOOP                                          
+ 000518 8B50 0004            00004   499+         SLA   5,4                     SHIFT R5 (R5 * 16)                                
+ 00051C 47F0 C4F6            004F6   500+         B     X0018                   RESTART LOOP                                      
+ 000520 4120 C97D            0097D   501+V0018    LA    2,POUT                  LOAD OUTPUT                                       
+ 000524 4E50 C530            00530   502+         CVD   5,U0018                 PUT R5 INTO STORAGE                               
+ 000528 47F0 C538            00538   503+         B     T0018                                                                     
+ 000530                              504+U0018    DS    D                                                                         
+ 000538 F3F7 2000 C530 00000 00530   505+T0018    UNPK  0(16,2),U0018(8)        UNPK STORAGE                                      
+ 00053E BF31 200F            0000F   506+         ICM   3,B'0001',15(2)         MAKE SURE LAST CHAR                               
+ 000542 5A30 C7E0            007E0   507+         A     3,=F'48'                IS A NUMBER CHAR AND                              
+ 000546 BE31 200F            0000F   508+         STCM  3,B'0001',15(2)         DOESN'T END IN X'XC'                              
+ 00054A 9825 C4DC            004DC   509+         LM    2,5,Z0018               RESTORE R2-R5                                     
+ 00054E E020 C960 002D 00960         510          XPRNT PLINE,45                                                                  
+                                     511 *                                                                                        
+ 000554 D205 C969 C81C 00969 0081C   512          MVC   PIN(6),=CL6'654321'                                                       
+                                     513          FROMHEX  PIN,POUT                                                               
+ 00055A 9025 C564            00564   514+         STM   2,5,Z0019               STORE R2-R5                                       
+ 00055E 47F0 C574            00574   515+         B     Y0019                                                                     
+ 000564                              516+Z0019    DS    4F                      REG STORAGE SPACE                                 
+ 000574 1B33                         517+Y0019    SR    3,3                     ZERO R3-R5                                        
+ 000576 1B44                         518+         SR    4,4                                                                       
+ 000578 1B55                         519+         SR    5,5                                                                       
+ 00057A 4120 C969            00969   520+         LA    2,PIN                   LOAD ADDR OF &IN TO R2                            
+1                                                                                                               PAGE   11         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 00057E 4343 2000            00000   521+X0019    IC    4,0(3,2)                INSERT CHAR AT R2+R3                              
+                                     522+*                                      INTO R4                                           
+ 000582 5940 C7D0            007D0   523+         C     4,=F'239'               IF WHAT WAS READ WAS                              
+                                     524+*                                      NOT A NUMBER, THEN BR                             
+ 000586 4740 C58E            0058E   525+         BL    W0019                   TO SUB ONLY 183,                                  
+ 00058A 5B40 C7D4            007D4   526+         S     4,=F'57'                ELSE SUB 240                                      
+ 00058E 5B40 C7D8            007D8   527+W0019    S     4,=F'183'                                                                 
+ 000592 1A54                         528+         AR    5,4                     ADD TRUE VALUE TO R5                              
+ 000594 5A30 C7C8            007C8   529+         A     3,=F'1'                 INCREMENT CURSOR                                  
+ 000598 5930 C7DC            007DC   530+         C     3,=F'6'                 IF CURSOR == 6                                    
+ 00059C 4780 C5A8            005A8   531+         BE    V0019                   END LOOP                                          
+ 0005A0 8B50 0004            00004   532+         SLA   5,4                     SHIFT R5 (R5 * 16)                                
+ 0005A4 47F0 C57E            0057E   533+         B     X0019                   RESTART LOOP                                      
+ 0005A8 4120 C97D            0097D   534+V0019    LA    2,POUT                  LOAD OUTPUT                                       
+ 0005AC 4E50 C5B8            005B8   535+         CVD   5,U0019                 PUT R5 INTO STORAGE                               
+ 0005B0 47F0 C5C0            005C0   536+         B     T0019                                                                     
+ 0005B8                              537+U0019    DS    D                                                                         
+ 0005C0 F3F7 2000 C5B8 00000 005B8   538+T0019    UNPK  0(16,2),U0019(8)        UNPK STORAGE                                      
+ 0005C6 BF31 200F            0000F   539+         ICM   3,B'0001',15(2)         MAKE SURE LAST CHAR                               
+ 0005CA 5A30 C7E0            007E0   540+         A     3,=F'48'                IS A NUMBER CHAR AND                              
+ 0005CE BE31 200F            0000F   541+         STCM  3,B'0001',15(2)         DOESN'T END IN X'XC'                              
+ 0005D2 9825 C564            00564   542+         LM    2,5,Z0019               RESTORE R2-R5                                     
+ 0005D6 E020 C960 002D 00960         543          XPRNT PLINE,45                                                                  
+                                     544 *                                                                                        
+ 0005DC D205 C969 C822 00969 00822   545          MVC   PIN(6),=CL6'00000F'                                                       
+                                     546          FROMHEX  PIN,POUT                                                               
+ 0005E2 9025 C5EC            005EC   547+         STM   2,5,Z0020               STORE R2-R5                                       
+ 0005E6 47F0 C5FC            005FC   548+         B     Y0020                                                                     
+ 0005EC                              549+Z0020    DS    4F                      REG STORAGE SPACE                                 
+ 0005FC 1B33                         550+Y0020    SR    3,3                     ZERO R3-R5                                        
+ 0005FE 1B44                         551+         SR    4,4                                                                       
+ 000600 1B55                         552+         SR    5,5                                                                       
+ 000602 4120 C969            00969   553+         LA    2,PIN                   LOAD ADDR OF &IN TO R2                            
+ 000606 4343 2000            00000   554+X0020    IC    4,0(3,2)                INSERT CHAR AT R2+R3                              
+                                     555+*                                      INTO R4                                           
+ 00060A 5940 C7D0            007D0   556+         C     4,=F'239'               IF WHAT WAS READ WAS                              
+                                     557+*                                      NOT A NUMBER, THEN BR                             
+ 00060E 4740 C616            00616   558+         BL    W0020                   TO SUB ONLY 183,                                  
+ 000612 5B40 C7D4            007D4   559+         S     4,=F'57'                ELSE SUB 240                                      
+ 000616 5B40 C7D8            007D8   560+W0020    S     4,=F'183'                                                                 
+ 00061A 1A54                         561+         AR    5,4                     ADD TRUE VALUE TO R5                              
+ 00061C 5A30 C7C8            007C8   562+         A     3,=F'1'                 INCREMENT CURSOR                                  
+ 000620 5930 C7DC            007DC   563+         C     3,=F'6'                 IF CURSOR == 6                                    
+ 000624 4780 C630            00630   564+         BE    V0020                   END LOOP                                          
+ 000628 8B50 0004            00004   565+         SLA   5,4                     SHIFT R5 (R5 * 16)                                
+ 00062C 47F0 C606            00606   566+         B     X0020                   RESTART LOOP                                      
+ 000630 4120 C97D            0097D   567+V0020    LA    2,POUT                  LOAD OUTPUT                                       
+ 000634 4E50 C640            00640   568+         CVD   5,U0020                 PUT R5 INTO STORAGE                               
+ 000638 47F0 C648            00648   569+         B     T0020                                                                     
+ 000640                              570+U0020    DS    D                                                                         
+ 000648 F3F7 2000 C640 00000 00640   571+T0020    UNPK  0(16,2),U0020(8)        UNPK STORAGE                                      
+ 00064E BF31 200F            0000F   572+         ICM   3,B'0001',15(2)         MAKE SURE LAST CHAR                               
+ 000652 5A30 C7E0            007E0   573+         A     3,=F'48'                IS A NUMBER CHAR AND                              
+ 000656 BE31 200F            0000F   574+         STCM  3,B'0001',15(2)         DOESN'T END IN X'XC'                              
+ 00065A 9825 C5EC            005EC   575+         LM    2,5,Z0020               RESTORE R2-R5                                     
+ 00065E E020 C960 002D 00960         576          XPRNT PLINE,45                                                                  
+                                     577 *                                                                                        
+1                                                                                                               PAGE   12         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 000664 D205 C969 C828 00969 00828   578          MVC   PIN(6),=CL6'005000'                                                       
+                                     579          FROMHEX  PIN,POUT                                                               
+ 00066A 9025 C674            00674   580+         STM   2,5,Z0021               STORE R2-R5                                       
+ 00066E 47F0 C684            00684   581+         B     Y0021                                                                     
+ 000674                              582+Z0021    DS    4F                      REG STORAGE SPACE                                 
+ 000684 1B33                         583+Y0021    SR    3,3                     ZERO R3-R5                                        
+ 000686 1B44                         584+         SR    4,4                                                                       
+ 000688 1B55                         585+         SR    5,5                                                                       
+ 00068A 4120 C969            00969   586+         LA    2,PIN                   LOAD ADDR OF &IN TO R2                            
+ 00068E 4343 2000            00000   587+X0021    IC    4,0(3,2)                INSERT CHAR AT R2+R3                              
+                                     588+*                                      INTO R4                                           
+ 000692 5940 C7D0            007D0   589+         C     4,=F'239'               IF WHAT WAS READ WAS                              
+                                     590+*                                      NOT A NUMBER, THEN BR                             
+ 000696 4740 C69E            0069E   591+         BL    W0021                   TO SUB ONLY 183,                                  
+ 00069A 5B40 C7D4            007D4   592+         S     4,=F'57'                ELSE SUB 240                                      
+ 00069E 5B40 C7D8            007D8   593+W0021    S     4,=F'183'                                                                 
+ 0006A2 1A54                         594+         AR    5,4                     ADD TRUE VALUE TO R5                              
+ 0006A4 5A30 C7C8            007C8   595+         A     3,=F'1'                 INCREMENT CURSOR                                  
+ 0006A8 5930 C7DC            007DC   596+         C     3,=F'6'                 IF CURSOR == 6                                    
+ 0006AC 4780 C6B8            006B8   597+         BE    V0021                   END LOOP                                          
+ 0006B0 8B50 0004            00004   598+         SLA   5,4                     SHIFT R5 (R5 * 16)                                
+ 0006B4 47F0 C68E            0068E   599+         B     X0021                   RESTART LOOP                                      
+ 0006B8 4120 C97D            0097D   600+V0021    LA    2,POUT                  LOAD OUTPUT                                       
+ 0006BC 4E50 C6C8            006C8   601+         CVD   5,U0021                 PUT R5 INTO STORAGE                               
+ 0006C0 47F0 C6D0            006D0   602+         B     T0021                                                                     
+ 0006C8                              603+U0021    DS    D                                                                         
+ 0006D0 F3F7 2000 C6C8 00000 006C8   604+T0021    UNPK  0(16,2),U0021(8)        UNPK STORAGE                                      
+ 0006D6 BF31 200F            0000F   605+         ICM   3,B'0001',15(2)         MAKE SURE LAST CHAR                               
+ 0006DA 5A30 C7E0            007E0   606+         A     3,=F'48'                IS A NUMBER CHAR AND                              
+ 0006DE BE31 200F            0000F   607+         STCM  3,B'0001',15(2)         DOESN'T END IN X'XC'                              
+ 0006E2 9825 C674            00674   608+         LM    2,5,Z0021               RESTORE R2-R5                                     
+ 0006E6 E020 C960 002D 00960         609          XPRNT PLINE,45                                                                  
+                                     610 *                                                                                        
+ 0006EC D205 C969 C82E 00969 0082E   611          MVC   PIN(6),=CL6'FFFFFF'                                                       
+                                     612          FROMHEX  PIN,POUT                                                               
+ 0006F2 9025 C6FC            006FC   613+         STM   2,5,Z0022               STORE R2-R5                                       
+ 0006F6 47F0 C70C            0070C   614+         B     Y0022                                                                     
+ 0006FC                              615+Z0022    DS    4F                      REG STORAGE SPACE                                 
+ 00070C 1B33                         616+Y0022    SR    3,3                     ZERO R3-R5                                        
+ 00070E 1B44                         617+         SR    4,4                                                                       
+ 000710 1B55                         618+         SR    5,5                                                                       
+ 000712 4120 C969            00969   619+         LA    2,PIN                   LOAD ADDR OF &IN TO R2                            
+ 000716 4343 2000            00000   620+X0022    IC    4,0(3,2)                INSERT CHAR AT R2+R3                              
+                                     621+*                                      INTO R4                                           
+ 00071A 5940 C7D0            007D0   622+         C     4,=F'239'               IF WHAT WAS READ WAS                              
+                                     623+*                                      NOT A NUMBER, THEN BR                             
+ 00071E 4740 C726            00726   624+         BL    W0022                   TO SUB ONLY 183,                                  
+ 000722 5B40 C7D4            007D4   625+         S     4,=F'57'                ELSE SUB 240                                      
+ 000726 5B40 C7D8            007D8   626+W0022    S     4,=F'183'                                                                 
+ 00072A 1A54                         627+         AR    5,4                     ADD TRUE VALUE TO R5                              
+ 00072C 5A30 C7C8            007C8   628+         A     3,=F'1'                 INCREMENT CURSOR                                  
+ 000730 5930 C7DC            007DC   629+         C     3,=F'6'                 IF CURSOR == 6                                    
+ 000734 4780 C740            00740   630+         BE    V0022                   END LOOP                                          
+ 000738 8B50 0004            00004   631+         SLA   5,4                     SHIFT R5 (R5 * 16)                                
+ 00073C 47F0 C716            00716   632+         B     X0022                   RESTART LOOP                                      
+ 000740 4120 C97D            0097D   633+V0022    LA    2,POUT                  LOAD OUTPUT                                       
+ 000744 4E50 C750            00750   634+         CVD   5,U0022                 PUT R5 INTO STORAGE                               
+1                                                                                                               PAGE   13         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 000748 47F0 C758            00758   635+         B     T0022                                                                     
+ 000750                              636+U0022    DS    D                                                                         
+ 000758 F3F7 2000 C750 00000 00750   637+T0022    UNPK  0(16,2),U0022(8)        UNPK STORAGE                                      
+ 00075E BF31 200F            0000F   638+         ICM   3,B'0001',15(2)         MAKE SURE LAST CHAR                               
+ 000762 5A30 C7E0            007E0   639+         A     3,=F'48'                IS A NUMBER CHAR AND                              
+ 000766 BE31 200F            0000F   640+         STCM  3,B'0001',15(2)         DOESN'T END IN X'XC'                              
+ 00076A 9825 C6FC            006FC   641+         LM    2,5,Z0022               RESTORE R2-R5                                     
+ 00076E E020 C960 002D 00960         642          XPRNT PLINE,45                                                                  
+                                     643 *                                                                                        
+1                                                                                                               PAGE   14         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+                                                                                                                                  
+                                                                                                                                  
+                                     645 *                                                                                        
+                                     646 *  Standard exit linkage with return code = 0.                                           
+                                     647 *                                                                                        
+ 000774 17FF                         648          XR    15,15                   Put 0 in register 15                              
+ 000776 58DD 0004            00004   649          L     13,4(13)                Point register 13 at the calling                  
+                                     650 *                                      program's save area                               
+ 00077A 58ED 000C            0000C   651          L     14,12(13)               Restore all registers except                      
+ 00077E 980C D014            00014   652          LM    0,12,20(13)             15                                                
+ 000782 07FE                         653          BR    14                      Return to the calling program                     
+1                                                                                                               PAGE   15         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+                                                                                                                                  
+                                                                                                                                  
+                                     655 **********************************************************************                   
+                                     656 *          The storage section for DRIVER starts here.               *                   
+                                     657 **********************************************************************                   
+                                     658 *                                                                                        
+                                     659          LTORG                                                                           
+ 000788 60C68999A2A340A6             660                =CL32'-First we test the STRLEN macro.'                                   
+ 0007A8 60D585A7A340A685             661                =CL32'-Next we test the FROMHEX macro.'                                   
+ 0007C8 00000001                     662                =F'1'                                                                     
+ 0007CC 40202120                     663                =XL4'40202120'                                                            
+ 0007D0 000000EF                     664                =F'239'                                                                   
+ 0007D4 00000039                     665                =F'57'                                                                    
+ 0007D8 000000B7                     666                =F'183'                                                                   
+ 0007DC 00000006                     667                =F'6'                                                                     
+ 0007E0 00000030                     668                =F'48'                                                                    
+ 0007E4 F1D985A2A493A3A2             669                =CL26'1Results of testing Macros'                                         
+ 0007FE F0F0F0F0F0F1                 670                =CL6'000001'                                                              
+ 000804 F0F0F0C1F0F0                 671                =CL6'000A00'                                                              
+ 00080A F1F0F0F0F0F0                 672                =CL6'100000'                                                              
+ 000810 F0F0F0F0F0F0                 673                =CL6'000000'                                                              
+ 000816 C1C2C3C4C5C6                 674                =CL6'ABCDEF'                                                              
+ 00081C F6F5F4F3F2F1                 675                =CL6'654321'                                                              
+ 000822 F0F0F0F0F0C6                 676                =CL6'00000F'                                                              
+ 000828 F0F0F5F0F0F0                 677                =CL6'005000'                                                              
+ 00082E C6C6C6C6C6C6                 678                =CL6'FFFFFF'                                                              
+ 000834 F0                           679                =C'0'                                                                     
+ 000835 E3888540899597A4             680                =CL23'The input value is:  00'                                            
+ 00084C F0E38885408183A3             681                =CL27'0The actual length is:    0'                                        
+ 000867 E3888540899597A4             682                =CL29'The input value is:  C1C2C300'                                      
+ 000884 F0E38885408183A3             683                =CL27'0The actual length is:    3'                                        
+ 00089F E3888540899597A4             684                =CL27'The input value is:  000000'                                        
+ 0008BA E3888540899597A4             685                =CL35'The input value is:  D1D2D300D4D500'                                
+                                     686 *                                                                                        
+ 0008E0 FFFFFFFFFFFFFFFF             687 DRIVSAV  DC    18F'-1'                 Save area for linkage                             
+                                     688 *                                                                                        
+                                     689 * Variables for testing STRLEN                                                           
+ 000928 00                           690 S1       DC    X'00'                                                                     
+                                     691 *                                                                                        
+ 000929 C1C2C300                     692 S2       DC    XL4'C1C2C300'                                                             
+                                     693 *                                                                                        
+ 00092D 000000                       694 S3       DC    XL3'000000'                                                               
+                                     695 *                                                                                        
+ 000930 D1D2D300D4D500               696 S4       DC    XL7'D1D2D300D4D500'                                                       
+                                     697 *                                                                                        
+ 000938                              698 LENGTH   DS    F                                                                         
+                                     699 *                                                                                        
+ 00093C F0                           700 SLINE    DC    C'0'                                                                      
+ 00093D E388854083969497             701          DC    CL22'The computed length is'                                              
+ 000953                              702 SVALUE   DS    4C                                                                        
+                                     703 *                                                                                        
+ 000958                              704 TEMP     DS    D                                                                         
+                                     705 *                                                                                        
+                                     706 * Storage for testing FROMHEX                                                            
+ 000960 F0                           707 PLINE    DC    C'0'                                                                      
+ 000961 C9D5D7E4E3407E40             708          DC    CL8'INPUT = '                                                             
+ 000969                              709 PIN      DS    CL6                                                                       
+1                                                                                                               PAGE   16         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 00096F 4040404040                   710          DC    5C' '                                                                     
+ 000974 D6E4E3D7E4E3407E             711          DC    CL9'OUTPUT = '                                                            
+ 00097D                              712 POUT     DS    16C                                                                       
+                                     713          END   DRIVER                  End of the overall program                        
+0***  NO   STATEMENTS FLAGGED -  NO   WARNINGS,  NO   ERRORS                                                                      
+0*** DYNAMIC CORE AREA USED:  LOW:   38104 HIGH:    3264 LEAVING:  452200 FREE BYTES. AVERAGE:       57 BYTES/STMT ***            
+0*** ASSEMBLY TIME =    0.006 SECS,   119000 STATEMENTS/SEC ***                                                                   
+0*** PROGRAM EXECUTION BEGINNING - ANY OUTPUT BEFORE EXECUTION TIME MESSAGE IS PRODUCED BY USER PROGRAM ***                       
+1Results of testing Macros                                                                                                        
+0                                                                                                                                 
+-First we test the STRLEN macro.                                                                                                  
+ he input value is:  00                                                                                                           
+0The actual length is:    0                                                                                                       
+0The computed length is   0                                                                                                       
+ he input value is:  C1C2C300                                                                                                     
+0The actual length is:    3                                                                                                       
+0The computed length is   3                                                                                                       
+ he input value is:  000000                                                                                                       
+0The actual length is:    0                                                                                                       
+0The computed length is   0                                                                                                       
+ he input value is:  C1C2C300                                                                                                     
+0The actual length is:    3                                                                                                       
+0The computed length is   3                                                                                                       
+ he input value is:  C1C2C300                                                                                                     
+0The actual length is:    3                                                                                                       
+0The computed length is   3                                                                                                       
+ he input value is:  C1C2C300                                                                                                     
+0The actual length is:    3                                                                                                       
+0The computed length is   3                                                                                                       
+ he input value is:  D1D2D300D4D500                                                                                               
+0The actual length is:    3                                                                                                       
+0The computed length is   3                                                                                                       
+0                                                                                                                                 
+-Next we test the FROMHEX macro.                                                                                                  
+0INPUT = 000001     OUTPUT = 0000000000000001                                                                                     
+0INPUT = 000A00     OUTPUT = 0000000000002560                                                                                     
+0INPUT = 100000     OUTPUT = 0000000001048576                                                                                     
+0INPUT = 000000     OUTPUT = 0000000000000000                                                                                     
+0INPUT = ABCDEF     OUTPUT = 0000000011259375                                                                                     
+0INPUT = 654321     OUTPUT = 0000000006636321                                                                                     
+0INPUT = 00000F     OUTPUT = 0000000000000015                                                                                     
+0INPUT = 005000     OUTPUT = 0000000000020480                                                                                     
+1INPUT = FFFFFF     OUTPUT = 0000000016777215                                                                                     
+0*** EXECUTION TIME =    0.000 SECS.       907 INSTRUCTIONS EXECUTED -   907000 INSTRUCTIONS/SEC ***                              
+0*** FIRST CARD NOT READ: NO CARDS READ:FILE UNOPENED                                                                             
+0*** AM004 - NORMAL USER TERMINATION BY RETURN ***                                                                                

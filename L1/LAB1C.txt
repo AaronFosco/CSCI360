@@ -1,0 +1,38 @@
+//KC03B13A JOB ,'Aaron Fosco',MSGCLASS=H                                00010002
+//STEP1 EXEC PGM=ASSIST                                                 00020000
+//STEPLIB DD DSN=KC02293.ASSIST.LOADLIB,DISP=SHR                        00030000
+//SYSPRINT DD SYSOUT=*                                                  00040000
+//SYSIN DD *                                                            00050000
+****************************                                            00060000
+* ARITHMETIC IN ASSEMBLY                                                00070000
+*                                                                       00080000
+* NAME: Aaron Fosco                                                     00090000
+*                                                                       00100000
+* ASSIGNMENT: 1 PART: B                                                 00110011
+*                                                                       00120000
+* Register Usage                                                        00121015
+*                                                                       00122011
+* 1,3 LEFT                                                              00130011
+* 2,4 RIGHT                                                             00140011
+* 15 BASE REGISTER                                                      00150001
+*                                                                       00160000
+*                                                                       00161001
+****************************                                            00170000
+MAIN      CSECT                                                         00180000
+          USING MAIN,15                                                 00190000
+          L     1,44 LOAD 169 TO R1                                     00200020
+          L     2,48 LOAD 74TO R2                                       00210020
+          SR    1,2 SUBTRACT 169-74                                     00220020
+          L     3,44 LOAD 169 TO R3                                     00230020
+          L     4,48 LOAD 74 TO R4                                      00240020
+          AR    4,3   ADD 169+74                                        00250020
+          ST    1,52 STORE R1 TO ADDR 52                                00251020
+          ST    4,56 STORE R4 TO ADDR 56                                00252020
+          XDUMP 52,4 DUMP ADDR 52 ON 4b                                 00260021
+          XDUMP 56,4 DUMP ADDR 56 ON 4b                                 00261020
+          BR    14                                                      00270009
+LEFT      DC    F'169'                                                  00280009
+RIGHT     DC    F'74'                                                   00290009
+DIFF      DS    F                                                       00291010
+SUM       DS    F                                                       00292010
+          END   MAIN                                                    00300009

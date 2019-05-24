@@ -1,0 +1,100 @@
+//KC03B13A JOB ,'Aaron Fosco',MSGCLASS=H
+//STEP1    EXEC  PGM=ASSIST
+//STEPLIB    DD  DSN=KC02293.ASSIST.LOADLIB,DISP=SHR
+//SYSPRINT   DD  SYSOUT=*
+//SYSIN      DD  *
+************************************************************
+*
+*  Program:     ASSIGN3
+*  Programmer:  Aaron Fosco
+*
+*  Register usage:
+*
+*  15 Base register
+*  2 Product ID and Order ID
+*  3 Num ordered and Pretotal
+*  4 Price
+*  5 Total
+*  6 Counter for free shipping
+*  7 Final total with shipping and discounts
+*  8 Counter for number of orders
+************************************************************
+MAIN     CSECT
+         USING MAIN,15
+         SR    2,2             ZERO REGS 2-8
+         SR    3,3
+         SR    4,4
+         SR    5,5
+         SR    6,6
+         SR    7,7
+         SR    8,8
+         XPRNT =CL35'1   Sales Report -- Widgets-R-Us   ',35
+         XPRNT OUTP,85         SECOND HEADER
+LSRT     XREAD CARD,80         READ SOME DATA
+         BC    B'0100',LEND    BRANCH ON EOF
+         LA    1,CARD          POINT REG1 TO CARD
+         A     8,=F'1'         ADD A COUNT FOR NUM OF RECORDS
+         XDECI 2,0(1)          READ IN ORDER ID
+         XDECO 2,RED
+         XDECI 3,0(1)          READ IN NUM ORDERED
+         XDECO 3,RED+36
+         XDECI 4,0(1)          READ IN PRICE
+         XDECO 4,RED+24
+         XDECI 2,0(1)          READ IN PROD ID
+         XDECO 2,RED+12
+         MR    2,4             PRETOTAL = PRICE * NUM ORDERED
+         XDECO 5,RED+48        ZERO OUT DISCOUNT & SHIPPING
+         XDECO 5,RED+60
+         C     3,=F'25000'     IF PRETOTAL >= 25000
+         BC    B'0100',SHED    THEN
+         L     2,=F'500'       DICOUNT = 500
+         XDECO 2,RED+48        STORE NUMBER
+SHED     C     3,=F'10000'     IF PRETOTOAL < 10000
+         BC    B'1010',FSHIP   THEN
+         L     5,=F'750'       SHIPPING = 750
+         XDECO 5,RED+60        STORE NUMBER
+         B     TOTE            SKIP A LINE
+FSHIP    A     6,=F'1'         COUNTER FOR FREE SHIPPING
+TOTE     AR    5,3             COMPUTE TOTAL=PRETOTAL+SHIP-DISCOUNT
+         SR    5,2
+         XDECO 5,RED+72        STORE TOTAL
+         AR    7,5
+         SR    5,5
+         XPRNT START,85
+         B     LSRT            UNCONDITIONAL BACK TO READ LOOP
+LEND     DS    0H
+         XDECO 8,TOTAL         OUTPUT SUMS
+         XDECO 6,NUMSHP
+         XDECO 7,SUMSAL
+         M     6,=F'1'         ZERO OUT EVEN REG
+         DR    6,8             FIND THE AVG
+         LR    5,6             FIND OUT IF ROUNDING IS NEEDED
+         M     4,=F'2'
+         CR    5,8             IF REMAINDER*2 >= QUOTENT
+         BC    B'0100',FINI    THEN
+         A     7,=F'1'         ADD 1 TO AVG SALE
+FINI     XDECO 7,AVGSAL        STORE AVG SALE
+         XPRNT OTOTAL,36       PRINT FINAL RESULTS
+         XPRNT ONUMSHP,40
+         XPRNT OSUMSAL,31
+         XPRNT OAVGSAL,33
+         BR    14              END EXEC PROGRAM
+CARD     DS    CL80
+START    DC    C'0'
+RED      DS    CL84
+OUTP     DC    C'0    ORDER ID  PRODUCT ID  PRICE EACH '
+         DC    C'NUMBER ORDERED DISCOUNT    SHIPPING'
+         DC    C'       TOTAL'
+OTOTAL   DC    C'0TOTAL NUMBER OF SALES: '
+TOTAL    DS    CL12
+ONUMSHP  DC    C'0NUMBER WITH FREE SHIPPING: '
+NUMSHP   DS    CL12
+OSUMSAL  DC    C'0SUM OF ALL SALES: '
+SUMSAL   DS    CL12
+OAVGSAL  DC    C'0AVERAGE SALE TOTAL: '
+AVGSAL   DS    CL12
+         END   MAIN
+/*
+//FT05F001   DD  DSN=KC02314.SUMMER18.CSCI360.HW3DATA,DISP=SHR
+//FT06F001   DD SYSOUT=*
+//

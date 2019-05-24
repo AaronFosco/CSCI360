@@ -1,0 +1,296 @@
+//KC03B13A JOB ,'Aaron Fosco',MSGCLASS=H
+//STEP1    EXEC  PGM=ASSIST
+//STEPLIB    DD  DSN=KC02293.ASSIST.LOADLIB,DISP=SHR
+//SYSPRINT   DD  SYSOUT=*
+//SYSIN      DD  *
+************************************************************
+*
+*  Program:     ASSIGN6
+*  Programmer:  Aaron Fosco
+*
+*  Register usage:
+* 
+*  1  Parameter list
+*  12 Base register
+*  13 Addr of 18F storage
+*  14 Return ptr for subroutines
+************************************************************
+MAIN     CSECT
+         STM   14,12,12(13)            STD ENTRY LINKAGE
+         LR    12,15
+         USING MAIN,12
+         LA    14,MAINSAV
+         ST    13,4(,14)
+         ST    14,8(,13)
+         LR    13,14
+         LA    1,PLIST                 LOAD PARAMS AND 
+         L     15,=V(BUILD)            EXCUTE ROUTINES
+         BALR  14,15
+         LA    1,PLIST
+         L     15,=V(PRINT)
+         BALR  14,15
+         LA    1,PLIST
+         L     15,=V(TALLY)
+         BALR  14,15
+         L     13,4(,13)                STD EXIT LINKAGE
+         LM    14,12,12(13)
+         BR    14
+         LTORG
+MAINSAV  DS    18F                     MAIN SAVESPACE
+PLIST    DC    A(TABLE)
+         DC    A(EOT)
+         ORG   MAIN+(*-MAIN+15)/16*16
+TABLE    DS    70CL48
+EOT      DC    A(TABLE)
+TABLM    DSECT
+FNAME    DS    CL10
+LNAME    DS    CL10
+BALAC    DS    PL5
+PASSW    DS    CL8
+EXPDT    DS    PL5
+IDNUM    DS    CL9
+FILLR    DS    C
+*
+********************************************
+* Subroutine: BUILD
+*
+* Desc: Used to build a table with first names
+*       last names, balances, passwords, exp.dates
+*       and ID numbers
+*
+* Expected parameters:
+* 1F: Addr of table
+* 2F: Addr of EOT
+*
+* REG USAGE:
+* 
+* R2 - PTR TO INPUT BUFFER
+* R3 - PTR TO EOT LABEL
+*
+********************************************
+BUILD    CSECT
+         STM   14,12,12(13)            STD ENTRY LINKAGE
+         LR    12,15
+         USING BUILD,12
+         LA    14,BUISAVE
+         ST    13,4(0,14)
+         ST    14,8(0,13)
+         LR    13,14
+         USING TABLM,2                 OFFSETS FOR EASE OF USE
+         LM    2,3,0(1)                LOAD TABLE & EOF PTRS
+LSRT     XREAD CARD,80                 READ SOME DATA
+         BC    B'0100',LEND            BRANCH ON EOF
+         MVC   FNAME(10),CARD          COPY DATA FROM CARDSPACE TO
+         MVC   LNAME(10),CARD+12       TABLE. DATA IS COPIED INTO
+         MVC   PASSW(8),CARD+24        THE TABLE THE SAME ORDER IT
+         MVC   IDNUM(9),CARD+34        WILL BE PRINTED OUT
+         PACK  EXPDT(5),CARD+45(8)
+         PACK  BALAC(5),CARD+55(7)
+         LA    2,48(,2)                DISPACE TABLE CURSOR
+         B     LSRT
+LEND     ST    2,0(,3)                 STORE TABLE CURSOR TO EOT
+         DROP  2                       CLEAR ASSOCATION
+         L     13,4(0,13)              STD EXIT LINKAGE
+         LM    14,12,12(13)
+         BR    14
+         LTORG
+BUISAVE  DS    18F
+CARD     DS    CL80                    XREAD SPACE
+         DC    C'*'
+*
+********************************************
+* Subroutine: PRINT
+*
+* Desc: Prints out all the data stored in a the
+*       table built by the build routine
+*
+* Expected parameters:
+* 1F: Addr of table
+* 2F: Addr of EOT ptr
+*
+* R2 - PTR TO INPUT BUFFER
+* R3 - PTR TO EOT LABEL
+* R4 - Counter for page
+*
+*
+********************************************
+PRINT    CSECT
+         STM   14,12,12(13)            STD ENTRY LINKAGE
+         LR    12,15
+         USING PRINT,12
+         LA    14,PRNSAVE
+         ST    13,4(0,14)
+         ST    14,8(0,13)
+         LR    13,14
+         USING TABLM,2                OFFSETS FOR EASE OF USE
+         LM    2,3,0(1)               LOAD PARAMS
+         L     3,0(,3)                LOAD WHAT EOT IS POINTING TO
+REPRNT   DS    0H
+         EJECT                        MAKE A NEW PAGE AT 20
+         SR    4,4                    ZERO PRNT COUNTER
+         MVI   PRINTLN,C'1'           NEXT LINES UP TO TOPLOP
+         MVI   PRINTLN+1,C' '         ARE USED TO MAKE A HEADER
+         MVC   PRINTLN+2(119),PRINTLN+1
+         MVC   PRINTLN+46(29),=CL29'Familiar Names -- Client List'
+         XPRNT PRINTLN,121
+         MVI   PRINTLN,C'-'
+         MVC   PRINTLN+2(119),PRINTLN+1
+         MVC   PRINTLN+10(10),=CL10'First Name'
+         MVC   PRINTLN+29(9),=CL9'Last Name'
+         MVC   PRINTLN+48(7),=CL7'Balance'
+         MVC   PRINTLN+66(8),=CL8'Password'
+         MVC   PRINTLN+84(9),=CL9'Exp. Date'
+         MVC   PRINTLN+103(9),=CL9'ID Number'
+         XPRNT PRINTLN,121
+         MVI   PRINTLN,C' '
+         MVC   PRINTLN+1(120),PRINTLN
+         MVC   PRINTLN+10(10),=CL10'----------'
+         MVC   PRINTLN+29(10),=CL10'----------'
+         MVC   PRINTLN+48(10),=CL10'----------'
+         MVC   PRINTLN+66(10),=CL10'----------'
+         MVC   PRINTLN+84(10),=CL10'----------'
+         MVC   PRINTLN+103(10),=CL10'----------'
+         XPRNT PRINTLN,121
+         MVI   PRINTLN,C'0'
+         MVI   PRINTLN+1,C' '
+TOPLOP   MVC   PRINTLN+2(119),PRINTLN+1  START PLACING DATA INTO 
+         MVC   PRINTLN+10(10),FNAME      A PRINTLN
+         MVC   PRINTLN+29(10),LNAME
+         MVC   PRINTLN+43(13),=X'40206B2020206B2021204B2020'
+         LA    1,PRINTLN+52
+         EDMK  PRINTLN+43(13),BALAC     FORMAT BALAC FOR OUTPUT
+         BC    B'1011',AFTCR
+         MVC   PRINTLN+56(2),=CL2'CR'   ADD CR IF NEGATIVE
+AFTCR    BCTR  1,0
+         MVI   0(1),C'$'                LEADING $ SIGN
+         MVC   PRINTLN+66(8),PASSW
+         MVC   PRINTLN+84,=X'402020202020612020612020'
+         ED    PRINTLN+84(12),EXPDT     OUTPUT DATE
+         MVC   PRINTLN+103(9),IDNUM
+         MVI   PRINTLN+112,C' '
+         MVC   PRINTLN+113(8),PRINTLN+112
+         XPRNT PRINTLN,121
+         LA    2,48(,2)                ADD 48 TO TABLE CURSOR
+         CR    2,3                     COMPAIR EOT
+         BC    B'1010',ENDL
+         A     4,=F'1'                 ADD 1 TO PAGE COUNT
+         C     4,=F'20'                EJECT & PRINT HEADER IF
+         BE    REPRNT                  PAGECNT REACHS 20
+         B     TOPLOP
+ENDL     DS    0H
+         DROP  2                       CLEAR ASSOCIATION
+         L     13,4(0,13)              STD EXIT LINKAGE
+         LM    14,12,12(13)
+         BR    14
+         LTORG
+PRNSAVE  DS    18F
+PRINTLN  DS    CL121
+         DS    24F
+*
+********************************************
+* Subroutine: TALLY
+*
+* Desc: Calculates # of clients, Sum of balances,
+*       Avg balance, Largest Balance, & # of neg
+*       balances.
+*
+* Expected parameters:
+* 1F: Addr of table
+* 2F: Addr of EOT ptr
+*
+* REG USAGE:
+* R2 - PTR TO INPUT BUFFER
+* R3 - PTR TO EOT LABEL
+*
+********************************************
+TALLY    CSECT
+         STM   14,12,12(13)            STD ENTRY LINKAGE
+         LR    12,15
+         USING TALLY,12
+         LA    14,TALSAVE
+         ST    13,4(0,14)
+         ST    14,8(0,13)
+         LR    13,14
+         USING TABLM,2                 OFFSETS FOR EASE OF USE
+         LM    2,3,0(1)                LOAD TABLE & EOF PTRS
+         L     3,0(,3)                 LOAD WHAT EOT IF PTING TO
+         ZAP   NCOUNT,=P'0'            ZERO NEGATIVE COUNT
+         ZAP   COUNT,=P'1'             ADD 1 TO TOTAL COUNT
+         CP    BALAC(5),=P'0'          IF THE FIRST NUMBER IS 
+         BC    B'1011',NONEGO          NEG, ADD 1 TO NCOUNT
+         AP    NCOUNT,=P'1'
+NONEGO   ZAP   SUM,BALAC               INITALIZE SUM AND THE
+         ZAP   LARGST,BALAC            LARGEST NUMBER
+L1SRT    LA    2,48(,2)                UPDATE TABLE CURSOR
+         CR    2,3                     IF AT EOT, EXIT LOOP
+         BC    B'1010',L1END
+         AP    COUNT,=P'1'             ADD 1 TO TOTAL COUNT
+         AP    SUM,BALAC               ADD CURRENT BALAC TO SUM
+         CP    BALAC(5),=PL5'0'        CHECK IF BALAC IS NEG
+         BC    B'1011',NONEG           IF SO, ADD 1 TO NCOUNT
+         AP    NCOUNT,=P'1'
+NONEG    CP    LARGST(5),BALAC(5)      CHECK IF THE CURRENT NUM
+         BC    B'1011',L1SRT           IS BIGGER THAN THE LARGST
+         ZAP   LARGST(5),BALAC(5)
+         B     L1SRT
+L1END    MVI   TALPNT,C'0'             FORMAT DATA FOR OUTPUT
+         MVI   TALPNT+1,C' '
+         MVC   TALPNT+2(119),TALPNT+1
+         MVC   TALPNT+35(18),=CL18'Number of clients:'
+         MVC   TALPNT+65(4),=X'40202020'
+         ED    TALPNT+65(4),COUNT      PRINT OUT COUNT
+         XPRNT TALPNT,121
+         MVI   TALPNT+65,C' '
+         MVC   TALPNT+66(54),TALPNT+65
+         MVC   TALPNT+35(24),=CL24'Sum of account balances:'
+         MVC   TALPNT+65(18),=X'4020206B2020206B2020206B2021204B2020'
+         LA    1,TALPNT
+         EDMK  TALPNT+65(18),SUM     PRINT OUT SUM
+         BCTR  1,0
+         MVI   0(1),C'$'
+         XPRNT TALPNT,121
+         MVI   TALPNT+65,C' '
+         MVC   TALPNT+66(54),TALPNT+65
+         MVC   TALPNT+35(24),=CL24'Average account balance:'
+         MVC   TALPNT+65(13),=X'40206B2020206B2021204B2020'
+         ZAP   AVG,SUM
+         DP    AVG(7),COUNT(2)         CALCULATE THE AVG
+         LA    1,TALPNT+68
+         EDMK  TALPNT+65(13),AVG       PRINT OUT AVG
+         BCTR  1,0
+         MVI   0(1),C'$'
+         XPRNT TALPNT,121
+         MVI   TALPNT+65,C' '
+         MVC   TALPNT+66(54),TALPNT+65
+         MVC   TALPNT+35(24),=CL24'Largest account balance:'
+         MVC   TALPNT+65(13),=X'40206B2020206B2021204B2020'
+         LA    1,TALPNT
+         EDMK  TALPNT+65(13),LARGST    PRINT OUT LARGEST NUM
+         BCTR  1,0
+         MVI   0(1),C'$'
+         XPRNT TALPNT,121
+         MVI   TALPNT+65,C' '
+         MVC   TALPNT+66(54),TALPNT+65
+         MVC   TALPNT+35(28),=CL28'Number of negative balances:'
+         MVI   TALPNT+64,C' '
+         MVC   TALPNT+65(20),TALPNT+64
+         MVC   TALPNT+65(4),=X'40202020'
+         ED    TALPNT+65(4),NCOUNT     PRINT OUT NEG COUNT
+         XPRNT TALPNT,121
+         DROP  2
+         L     13,4(0,13)              STD EXIT LINKAGE
+         LM    14,12,12(13)
+         BR    14
+         LTORG
+TALSAVE  DS    18F
+TALPNT   DS    121F
+SUM      DS    PL7
+AVG      DS    PL7
+LARGST   DS    PL5
+COUNT    DS    PL2
+NCOUNT   DS    PL2
+         END   MAIN
+/*
+//FT05F001  DD  DSN=KC02314.SUMMER18.CSCI360.HW6DATA,DISP=SHR
+//FT06F001   DD SYSOUT=*
+//

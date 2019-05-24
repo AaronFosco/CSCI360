@@ -1,0 +1,108 @@
+//KC03B13A JOB ,'Aaron Fosco',MSGCLASS=H
+//STEP1   EXEC  PGM=ASSIST,PARM='MACRO=H'
+//STEPLIB   DD  DSN=KC02293.ASSIST.LOADLIB,DISP=SHR
+//SYSPRINT  DD  SYSOUT=*
+//SYSIN     DD  * 
+         MACRO
+         STRLEN &STR,&LEN
+.********************************************
+.* Macro: STRLEN
+.*
+.* Desc: Used to calculate the length of a 
+.*       C-Style String
+.*
+.* Expected parameters:
+.* &STR: Address of the string to count the
+.*       Length
+.* &LEN: Adress to return the value of the 
+.*       Length to
+.*
+.* REG USAGE:
+.*
+.* R2 - &STR Cursor
+.* R3 - Counter
+.*
+.********************************************
+.*                                     ERROR ON WRONG PARAMS
+         AIF   ('&STR' EQ '').NOPARMS
+         AIF   ('&LEN' EQ '').NOPARMS
+         STM   2,3,A&SYSNDX            STORE R2 & R3
+         B     B&SYSNDX
+A&SYSNDX DS    2F                      REG STORAGE
+B&SYSNDX LA    2,&STR                  LOAD ADDR INTO R2
+         SR    3,3                     ZERO R3
+C&SYSNDX CLI   0(2),X'00'              COMPAIR CURR CHAR TO
+*                                      NULL
+         BE    D&SYSNDX                BR ON CHAR == NULL
+         A     2,=F'1'                 INCREMENT CURSOR
+         A     3,=F'1'                 INCREMENT LENGTH
+         B     C&SYSNDX                REPEAT LOOP
+D&SYSNDX ST    3,&LEN                  STORE LENGTH
+         LM    2,3,A&SYSNDX            RESTORE REGS
+         MEXIT
+.*                                     ERROR FOR WRONG PARAMS
+.NOPARMS MNOTE  'Invalid Params'
+         MEXIT
+         MEND
+         MACRO
+         FROMHEX &IN,&OUT
+.********************************************
+.* Macro: FROMHEX
+.*
+.* Desc: Used to convert a 6-byte Hex number
+.*       into A 16-byte decimal number
+.*
+.* Expected parameters:
+.* &IN: Address of the start of the 6-byte
+.*      number
+.* &OUT: Address of the 16-byte output space
+.*
+.* REG USAGE:
+.*
+.* R2 - Addr of 6-byte input
+.* R3 - 6-byte input Offset
+.* R4 - Formatter for 'Zoned hex numbers'
+.* R5 - Storage for the full converted hex Num
+.*
+.********************************************
+.*                                     ERROR ON WRONG PARAMS
+         AIF   ('&IN' EQ '').EP
+         AIF   ('&OUT' EQ '').EP
+         STM   2,5,Z&SYSNDX            STORE R2-R5
+         B     Y&SYSNDX
+Z&SYSNDX DS    4F                      REG STORAGE SPACE
+Y&SYSNDX SR    3,3                     ZERO R3-R5
+         SR    4,4
+         SR    5,5
+         LA    2,&IN                   LOAD ADDR OF &IN TO R2
+X&SYSNDX IC    4,0(3,2)                INSERT CHAR AT R2+R3
+*                                      INTO R4
+         C     4,=F'239'               IF WHAT WAS READ WAS
+*                                      NOT A NUMBER, THEN BR 
+         BL    W&SYSNDX                TO SUB ONLY 183,
+         S     4,=F'57'                ELSE SUB 240
+W&SYSNDX S     4,=F'183'
+         AR    5,4                     ADD TRUE VALUE TO R5
+         A     3,=F'1'                 INCREMENT CURSOR
+         C     3,=F'6'                 IF CURSOR == 6
+         BE    V&SYSNDX                END LOOP
+         SLA   5,4                     SHIFT R5 (R5 * 16)
+         B     X&SYSNDX                RESTART LOOP
+V&SYSNDX LA    2,&OUT                  LOAD OUTPUT
+         CVD   5,U&SYSNDX              PUT R5 INTO STORAGE
+         B     T&SYSNDX
+U&SYSNDX DS    D
+T&SYSNDX UNPK  0(16,2),U&SYSNDX.(8)    UNPK STORAGE
+         ICM   3,B'0001',15(2)         MAKE SURE LAST CHAR
+         A     3,=F'48'                IS A NUMBER CHAR AND
+         STCM  3,B'0001',15(2)         DOESN'T END IN X'XC'
+         LM    2,5,Z&SYSNDX            RESTORE R2-R5
+         MEXIT
+.*                                     ERROR FOR WRONG PARAMS
+.EP      MNOTE 'Invalid Params'
+         MEXIT
+         MEND
+//          DD DSN=KC02314.SUMMER18.CSCI360.HW9DRVR,DISP=SHR
+//FT05F001  DD DUMMY
+//FT06F001  DD SYSOUT=*
+//

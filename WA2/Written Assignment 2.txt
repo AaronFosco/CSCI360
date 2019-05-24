@@ -1,0 +1,31 @@
+
+1) Did this error occur (a) while the program was being assembled or (b) when it was being run?
+b: when it was being run
+2) What is the address of the next instruction which will be executed?
+000016
+3) What is the value of the condition code at the time of the ABEND?
+The PSW was FFC50006 A0000016, with 'A' representing ILC & CC. A = 1010, thus the CC was 10 or 2.
+4) What is the length of the instruction that caused the ABEND (a number of bytes)?
+A = 1010, thus the ILC was 10 or 2H, or 8 bytes
+5) What is the address of the instruction that caused the abend?
+000012
+6) What type of error occurred (number and name)?
+S0C6 Specification Exception
+7) What actually causes this error?
+D(X,B) address evaluated to an incorrect value for the instruction that it was used on
+8) Correct the error by rewriting the section of code that caused it. (The sum should be stored in THIRD.) (There are several correct ways to do this.)
+Change ST 3,0(6,5) TO 3,0(,5)
+9) At the time of the ABEND, what is the value of register 3 in decimal?
+305
+10) What does the value in register 3 represent at the time of the ABEND?
+The result of the AR 3,4. 211+94=305. This is the value that would've been stored into THRID
+11) Why is the address (LOC column) of the storage area with the label TWO on it at X'000024' when the DC statement whose address is X'000020' only takes up 2 bytes?
+A fullword must start on an address that is a multiple of four.
+12) What are the contents of the two bytes of user storage starting at address X'000022'? What do they represent?
+F5F5. They are the bytes that go unused; "wasted space"
+13) Why do we not have XDUMP output?
+Because it ABENDed before we got to that instruction
+14) How many bytes are taken up by the XDUMP pseudo-instruction?
+6 bytes
+15) If we correct the error, what should be the value of the condition code at the end of the program (when we reach the BCR line)? 
+0, set by SR 6,6. 

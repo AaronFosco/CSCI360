@@ -1,0 +1,311 @@
+1                    J E S 2  J O B  L O G  --  S Y S T E M  S 0 W 1  --  N O D E  Z O S K C T R         
+0 
+ 18.58.56 JOB01270 ---- TUESDAY,   17 JUL 2018 ----
+ 18.58.56 JOB01270  IRR010I  USERID KC03B13  IS ASSIGNED TO THIS JOB.
+ 18.58.56 JOB01270  ICH70001I KC03B13  LAST ACCESS AT 18:58:11 ON TUESDAY, JULY 17, 2018
+ 18.58.56 JOB01270  $HASP373 KC03B13A STARTED - INIT 2    - CLASS A        - SYS S0W1
+ 18.58.56 JOB01270  -                                         --TIMINGS (MINS.)--            ----PAGING COUNTS---
+ 18.58.56 JOB01270  -JOBNAME  STEPNAME PROCSTEP    RC   EXCP    TCB    SRB  CLOCK   SERV  PG   PAGE   SWAP    VIO SWAPS
+ 18.58.56 JOB01270  -KC03B13A                      00     80 ******    .00     .0    239   0      0      0      0     0
+ 18.58.56 JOB01270  -KC03B13A ENDED.  NAME-Aaron Fosco          TOTAL TCB CPU TIME=   .00  TOTAL ELAPSED TIME=    .0
+ 18.58.56 JOB01270  $HASP395 KC03B13A ENDED
+0------ JES2 JOB STATISTICS ------
+-  17 JUL 2018 JOB EXECUTION DATE
+-          221 CARDS READ
+-          311 SYSOUT PRINT RECORDS
+-            0 SYSOUT PUNCH RECORDS
+-           23 SYSOUT SPOOL KBYTES
+-         0.00 MINUTES EXECUTION TIME
+         1 //KC03B13A JOB ,'Aaron Fosco',MSGCLASS=H                                JOB01270
+         2 //STEP1    EXEC  PGM=ASSIST                                                     
+         3 //STEPLIB    DD  DSN=KC02293.ASSIST.LOADLIB,DISP=SHR                            
+         4 //SYSPRINT   DD  SYSOUT=*                                                       
+         5 //SYSIN      DD  *                                                              
+         6 //FT05F001  DD  DSN=KC02314.SUMMER18.CSCI360.HW5DATA,DISP=SHR                   
+         7 //FT06F001   DD SYSOUT=*                                                        
+ ICH70001I KC03B13  LAST ACCESS AT 18:58:11 ON TUESDAY, JULY 17, 2018
+ IEF236I ALLOC. FOR KC03B13A STEP1
+ IGD103I SMS ALLOCATED TO DDNAME STEPLIB
+ IEF237I JES2 ALLOCATED TO SYSPRINT
+ IEF237I JES2 ALLOCATED TO SYSIN
+ IGD103I SMS ALLOCATED TO DDNAME FT05F001
+ IEF237I JES2 ALLOCATED TO FT06F001
+ IEF142I KC03B13A STEP1 - STEP WAS EXECUTED - COND CODE 0000
+ IGD104I KC02293.ASSIST.LOADLIB                       RETAINED,  DDNAME=STEPLIB 
+ IEF285I   KC03B13.KC03B13A.JOB01270.D0000102.?         SYSOUT        
+ IEF285I   KC03B13.KC03B13A.JOB01270.D0000101.?         SYSIN         
+ IGD104I KC02314.SUMMER18.CSCI360.HW5DATA             RETAINED,  DDNAME=FT05F001
+ IEF285I   KC03B13.KC03B13A.JOB01270.D0000103.?         SYSOUT        
+ IEF373I STEP/STEP1   /START 2018198.1858
+ IEF032I STEP/STEP1   /STOP  2018198.1858 
+         CPU:     0 HR  00 MIN  00.01 SEC    SRB:     0 HR  00 MIN  00.00 SEC    
+         VIRT:   584K  SYS:   276K  EXT:        4K  SYS:    11440K
+         ATB- REAL:                     0K  SLOTS:                     0K
+              VIRT- ALLOC:       0M SHRD:       0M
+ IEF375I  JOB/KC03B13A/START 2018198.1858
+ IEF033I  JOB/KC03B13A/STOP  2018198.1858 
+         CPU:     0 HR  00 MIN  00.01 SEC    SRB:     0 HR  00 MIN  00.00 SEC    
+1*** ASSIST 4.0/A2-05/15/82  470/V7A/0:OS/VS2  INS=SDFP7/X=BGHO, CHECK/TRC/=1180, OPTS=CDKMPR FROM PENN ST*NIU COMPSCI*LT         
+0                                                                                                                                 
+0                                                                                                               PAGE    1         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+                                       1 ************************************************************                             
+                                       2 *                                                                                        
+                                       3 *  Program:     ASSIGN4                                                                  
+                                       4 *  Programmer:  Aaron Fosco                                                              
+                                       5 *                                                                                        
+                                       6 *  Register usage:                                                                       
+                                       7 *                                                                                        
+                                       8 *  1  Parameter list addr                                                                
+                                       9 *  2  Loader for EOT ptr                                                                 
+                                      10 *  12 Base register                                                                      
+                                      11 *  13 Address of 18F storage                                                             
+                                      12 *  14 Return register for subroutines                                                    
+                                      13 *                                                                                        
+                                      14 ************************************************************                             
+ 000000                               15 MAIN     CSECT                                                                           
+ 000000 90EC D00C            0000C    16          STM   14,12,12(13)            STD ENTRY LINKAGE                                 
+ 000004 18CF                          17          LR    12,15                                                                     
+ 000000                               18          USING MAIN,12                                                                   
+ 000006 41E0 C0A4            000A4    19          LA    14,MAINSAV                                                                
+ 00000A 50D0 E004            00004    20          ST    13,4(,14)                                                                 
+ 00000E 50E0 D008            00008    21          ST    14,8(,13)                                                                 
+ 000012 18DE                          22          LR    13,14                                                                     
+                                      23 *                                                                                        
+ 000014 4110 C088            00088    24          LA    1,BLIST                 LOAD PARAMS FOR BUILD AND                         
+ 000018 58F0 C070            00070    25          L     15,=V(BUILD)            EXECUTE ROUTINE                                   
+ 00001C 05EF                          26          BALR  14,15                                                                     
+ 00001E E020 C078 000F 00078          27          XPRNT =CL15'1Table Contents',15                                                 
+ 000024 4110 C094            00094    28          LA    1,PLIST                 LOAD PARAMS FOR PRINT AND                         
+ 000028 58F0 C074            00074    29          L     15,=V(PRINT)            EXCUTE PRINT                                      
+ 00002C 05EF                          30          BALR  14,15                                                                     
+ 00002E E000 C21C 0050 0021C          31 PRNLOOP  XREAD CARD,80                 START OF LOOP FOR READING                         
+                                      32 *                                      DIV AND HOWMANY VALUES FOR                        
+                                      33 *                                      PRINT. WHEN EOF IS REACHED,                       
+                                      34 *                                      EXIT THE LOOP                                     
+ 000034 4740 C064            00064    35          BC    B'0100',PRNEND                                                            
+ 000038 4110 C21C            0021C    36          LA    1,CARD                                                                    
+ 00003C 5351 0000            00000    37          XDECI 5,0(1)                                                                    
+ 000040 5050 C270            00270    38          ST    5,DIV                                                                     
+ 000044 5250 C286            00286    39          XDECO 5,MUTIOF                                                                  
+ 000048 E020 C278 001A 00278          40          XPRNT MUTIOFLN,26                                                               
+ 00004E 5351 0000            00000    41          XDECI 5,0(1)                                                                    
+ 000052 5050 C274            00274    42          ST    5,HOWMANY                                                                 
+ 000056 4110 C094            00094    43          LA    1,PLIST                                                                   
+ 00005A 58F0 C074            00074    44          L     15,=V(PRINT)                                                              
+ 00005E 05EF                          45          BALR  14,15                                                                     
+ 000060 47F0 C02E            0002E    46          B     PRNLOOP                                                                   
+ 000064                               47 PRNEND   DS    0H                                                                        
+ 000064 58D0 D004            00004    48          L     13,4(,13)                                                                 
+ 000068 98EC D00C            0000C    49          LM    14,12,12(13)                                                              
+ 00006C 07FE                          50          BR    14                                                                        
+                                      51          LTORG                                                                           
+ 000070 00000298                      52                =V(BUILD)                                                                 
+1                                                                                                               PAGE    2         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 000074 00000348                      53                =V(PRINT)                                                                 
+ 000078 F1E38182938540C3              54                =CL15'1Table Contents'                                                    
+ 000088 0000021C                      55 BLIST    DC    A(CARD)                 PARAMETER LIST FOR BUILD                          
+ 00008C 00000218                      56          DC    A(EOT)                  NO                                                
+ 000090 000000EC                      57          DC    A(TABLE)                                                                  
+ 000094 000000EC                      58 PLIST    DC    A(TABLE)                PARAMETER LIST FOR PRINT                          
+ 000098 00000218                      59          DC    A(EOT)                                                                    
+ 00009C 00000270                      60          DC    A(DIV)                                                                    
+ 0000A0 00000274                      61          DC    A(HOWMANY)                                                                
+ 0000A4                               62 MAINSAV  DS    18F                     MAIN SAVESPACE                                    
+ 0000EC FFFFFFC0FFFFFFC0              63 TABLE    DC    75F'-64'                TABLE FOR STORING NUMBERS                         
+ 000218 000000EC                      64 EOT      DC    A(TABLE)                EOT POINTER                                       
+ 00021C                               65 CARD     DS    CL80                    XREAD SPACE                                       
+ 00026C 5C                            66          DC    C'*'                                                                      
+ 000270 00000001                      67 DIV      DC    F'1'                    DIV FOR PRINT                                     
+ 000274 00000005                      68 HOWMANY  DC    F'5'                    HOWMANY FOR PRINT                                 
+ 000278 F1D4A493A3899793              69 MUTIOFLN DC    CL14'1Multiples of '                                                      
+ 000286                               70 MUTIOF   DS    CL12                                                                      
+                                      71 *                                                                                        
+                                      72 ********************************************                                             
+                                      73 * Subroutine: BUILD                                                                      
+                                      74 *                                                                                        
+                                      75 * Desc: Used to build a table with a max of 60                                           
+                                      76 *       32bit numbers.                                                                   
+                                      77 *                                                                                        
+                                      78 * Expected parameters:                                                                   
+                                      79 * 1F: Addr of input buffer                                                               
+                                      80 * 2F: Addr of table                                                                      
+                                      81 * 3F: Addr of EOT                                                                        
+                                      82 *                                                                                        
+                                      83 * REG USAGE:                                                                             
+                                      84 *                                                                                        
+                                      85 * R2 - PTR TO INPUT BUFFER                                                               
+                                      86 * R3 - PTR TO EOT LABEL & TABLE OFFSET                                                   
+                                      87 * R5 - READ REGISTER                                                                     
+                                      88 * R6 - ADDR OF EOT LABEL                                                                 
+                                      89 *                                                                                        
+                                      90 ********************************************                                             
+ 000298                               91 BUILD    CSECT                                                                           
+ 000298 90EC D00C            0000C    92          STM   14,12,12(13)            STD ENTRY LINKAGE                                 
+ 00029C 18CF                          93          LR    12,15                                                                     
+ 000298                               94          USING BUILD,12                                                                  
+ 00029E 41E0 C068            00300    95          LA    14,BUISAVE                                                                
+ 0002A2 50D0 E004            00004    96          ST    13,4(0,14)                                                                
+ 0002A6 50E0 D008            00008    97          ST    14,8(0,13)                                                                
+ 0002AA 18DE                          98          LR    13,14                                                                     
+ 0002AC 9824 1000            00000    99          LM    2,4,0(1)                LOAD PARAMS                                       
+ 0002B0 1863                         100          LR    6,3                     SAVE EOT LABEL LOC FOR L8TR                       
+ 0002B2 5833 0000            00000   101          L     3,0(3)                  LOAD WHAT EOF IS POINTING TO                      
+ 0002B6 E000 2000 0050 00000         102 LSRT     XREAD 0(,2),80                READ SOME DATA TO SAVESPACE                       
+ 0002BC 4740 C04E            002E6   103          BC    B'0100',LEND            BRANCH IF DATA IS NOT READ                        
+ 0002C0 4110 2000            00000   104          LA    1,0(,2)                 LOAD ADDR OF SAVESPACE                            
+ 0002C4 5351 0000            00000   105 INPU     XDECI 5,0(1)                  READ DATA FROM SAVESPACE                          
+ 0002C8 4710 C01E            002B6   106          BC    B'0001',LSRT            IF OVERFLOW, READ NEW LINE                        
+ 0002CC 5950 C060            002F8   107          C     5,=F'-44444444'         IF THE VALUE READ WAS THE                         
+ 0002D0 4780 C04E            002E6   108          BE    LEND                    DELIM, EXIT LOOP                                  
+ 0002D4 5050 3000            00000   109          ST    5,0(,3)                 STORE READ DATA AT EOT                            
+1                                                                                                               PAGE    3         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 0002D8 5A30 C064            002FC   110          A     3,=F'4'                 UPDATE EOT TO EOT+1FULLWORD                       
+ 0002DC 1963                         111          CR    6,3                     IF THE PTR EOT IS THE SAME AS                     
+ 0002DE 47C0 C04E            002E6   112          BC    B'1100',LEND            THE ADDR EOT, STOP THE LOOP                       
+ 0002E2 47F0 C02C            002C4   113          B     INPU                    READ MORE DATA FROM SAVESPACE                     
+ 0002E6 5036 0000            00000   114 LEND     ST    3,0(6)                  END OF READ, STORE ADDR OF EOT                    
+                                     115 *                                      BACK INTO IT'S RIGHTFUL LABEL                     
+ 0002EA 58D0 D004            00004   116          L     13,4(0,13)              STD EXIT LINKAGE                                  
+ 0002EE 98EC D00C            0000C   117          LM    14,12,12(13)                                                              
+ 0002F2 07FE                         118          BR    14                                                                        
+                                     119          LTORG                                                                           
+ 0002F8 FD59D4E4                     120                =F'-44444444'                                                             
+ 0002FC 00000004                     121                =F'4'                                                                     
+ 000300                              122 BUISAVE  DS    18F                                                                       
+                                     123 *                                                                                        
+                                     124 ********************************************                                             
+                                     125 * Subroutine: PRINT                                                                      
+                                     126 *                                                                                        
+                                     127 * Desc: Prints out all the numbers stored in                                             
+                                     128 *       a table delimited by an EOT ptr. The                                             
+                                     129 *       value passed into 4F will become the                                             
+                                     130 *       number of numbers per line, while the                                            
+                                     131 *       value in 3F will be multiples get                                                
+                                     132 *       printed.                                                                         
+                                     133 *                                                                                        
+                                     134 * Expected parameters:                                                                   
+                                     135 * 1F: Addr of table                                                                      
+                                     136 * 2F: Addr of EOT ptr                                                                    
+                                     137 * 3F: Addr of DIV                                                                        
+                                     138 * 4F: Addr of HOWMANY                                                                    
+                                     139 *                                                                                        
+                                     140 * UP TO: L2END                                                                           
+                                     141 * REG USAGE:                                                                             
+                                     142 * R2 - PTR TO BEGINNING OF TABLE                                                         
+                                     143 * R3 - PTR TO EOT LABEL                                                                  
+                                     144 * R4 - ODD VALUE CHECK                                                                   
+                                     145 * R5 - GENERAL READ                                                                      
+                                     146 * R6 - XPRNT SPACE CURSOR                                                                
+                                     147 * R7 - TABLE CURSOR OFFSET                                                               
+                                     148 * R8 - DIV VALUE                                                                         
+                                     149 * R9 - MAX CHARACTER LENGTH FOR PRINTLN SPACE                                            
+                                     150 *                                                                                        
+                                     151 * AFTER: L2END                                                                           
+                                     152 * R4&R5 - OVERLAP COUNTER                                                                
+                                     153 *                                                                                        
+                                     154 ********************************************                                             
+ 000348                              155 PRINT    CSECT                                                                           
+ 000348 90EC D00C            0000C   156          STM   14,12,12(13)            STD ENTRY LINKAGE                                 
+ 00034C 18CF                         157          LR    12,15                                                                     
+ 000348                              158          USING PRINT,12                                                                  
+ 00034E 41E0 C13C            00484   159          LA    14,PRNSAVE                                                                
+ 000352 50D0 E004            00004   160          ST    13,4(0,14)                                                                
+ 000356 50E0 D008            00008   161          ST    14,8(0,13)                                                                
+ 00035A 18DE                         162          LR    13,14                                                                     
+ 00035C 9823 1000            00000   163          LM    2,3,0(1)               LOAD TABLE AND EOT PTRS                            
+ 000360 5833 0000            00000   164          L     3,0(3)                 LOAD WHAT EOT IS POINTING TO                       
+ 000364 5891 000C            0000C   165          L     9,12(1)                LOAD HOWMANY INTO R9                               
+ 000368 5899 0000            00000   166          L     9,0(9)                 GETVALUE OF HOWMANY                                
+1                                                                                                               PAGE    4         
+0  LOC  OBJECT CODE    ADDR1 ADDR2  STMT   SOURCE STATEMENT                                                                       
+ 00036C 5C80 C0D0            00418   167          M     8,=F'12'               CALCULATE LINE LENGTH WITH                         
+ 000370 5A90 C0D4            0041C   168          A     9,=F'1'                12*HOWMANY+1                                       
+ 000374 5881 0008            00008   169          L     8,8(1)                 LOAD DIV INTO R8                                   
+ 000378 5888 0000            00000   170          L     8,0(8)                 GETVALUE OF DIV                                    
+ 00037C 1B77                         171          SR    7,7                    ZERO R7&R6 FOR TABLE AND                           
+ 00037E 1B66                         172          SR    6,6                    XPRNT SPACE DISPLACEMENT                           
+ 000380 5A60 C0D4            0041C   173          A     6,=F'1'                R6 OFFSET FOR XPRNT CC                             
+ 000384 9240 C0E4      0042C         174          MVI   PRINTLN,C' '           BLANK OUT PRINTLN SO IT                            
+ 000388 D253 C0E5 C0E4 0042D 0042C   175          MVC   PRINTLN+1(84),PRINTLN  LOOKS PRETTY                                       
+ 00038E 92F0 C0E4      0042C         176          MVI   PRINTLN,C'0'            ADD CC                                            
+ 000392 4157 2000            00000   177 L2SRT    LA    5,0(7,2)                LOAD ADDR OF POS IN TABLE                         
+ 000396 1935                         178          CR    3,5                     COMP EOT TO CURSOR POS                            
+ 000398 47C0 C08A            003D2   179          BC    B'1100',L2END           BR IF EOT >= CURSOR POS                           
+ 00039C 5857 2000            00000   180          L     5,0(7,2)                R2 IS ADDR OF START OF TABLE                      
+                                     181 *                                      R7 IS OFFSET OF READ OF TABLE                     
+                                     182 *                                      R6 IS VAL TO BE XDECO INTO                        
+                                     183 *                                      XPRNT SPACE                                       
+ 0003A0 5C40 C0D4            0041C   184          M     4,=F'1'                 MAKE 64BIT NUM                                    
+ 0003A4 1D48                         185          DR    4,8                     SETUP FOR MULTIPLE OF CHECK                       
+ 0003A6 5857 2000            00000   186          L     5,0(7,2)                ONLY REMAINDER IS NEEDED                          
+ 0003AA 5A70 C0D8            00420   187          A     7,=F'4'                 INCREMENT TABLE CURSOR                            
+ 0003AE 5940 C0DC            00424   188          C     4,=F'0'                 IF REMAIN = 0, ITS A MULTI                        
+ 0003B2 4770 C04A            00392   189          BNE   L2SRT                   READ NEXT VALUE ON !=                             
+ 0003B6 5256 C0E4            0042C   190          XDECO 5,PRINTLN(6)            FORMAT VAL & PUT INTO PRNTLN                      
+ 0003BA 5A60 C0D0            00418   191          A     6,=F'12'                INCREMENT XPRNT CURSOR OFFSET                     
+ 0003BE 1969                         192          CR    6,9                     IF DISP >= 12*HOWMANY+1 THEN                      
+ 0003C0 4740 C04A            00392   193          BL    L2SRT                   RESET XPRNT OFFSET AND XPRNT                      
+ 0003C4 5860 C0D4            0041C   194          L     6,=F'1'                                                                   
+ 0003C8 E020 C0E4 0055 0042C         195          XPRNT PRINTLN,85                                                                
+ 0003CE 47F0 C04A            00392   196          B     L2SRT                                                                     
+ 0003D2 5960 C0E0            00428   197 L2END    C     6,=F'85'                IF WE ARE NOT AT THE END OF                       
+ 0003D6 47A0 C0BC            00404   198          BC    B'1010',EXPR            OUR XPRNT SPACE, ADD SPACES                       
+ 0003DA 5850 C0E0            00428   199          L     5,=F'85'                LOAD 85 INTO 5 AND                                
+ 0003DE 1B56                         200          SR    5,6                     GET 85 - OFFSET                                   
+ 0003E0 5C40 C0D4            0041C   201          M     4,=F'1'                 GET 64BIT NUM                                     
+ 0003E4 5D40 C0D0            00418   202          D     4,=F'12'                HOW MANY BLANK LINES                              
+                                     203 *                                      DO WE NEED?                                       
+ 0003E8 4130 C0E4            0042C   204          LA    3,PRINTLN                                                                 
+ 0003EC 5A30 C0D4            0041C   205          A     3,=F'1'                                                                   
+ 0003F0 1A63                         206          AR    6,3                     CALC TRUE OFFSET ADDR                             
+ 0003F2 9240 6000      00000         207 OVRLP    MVI   0(6),C' '               ADD SPACE FOR FIRST CHARACTER                     
+ 0003F6 D20A 6001 6000 00001 00000   208          MVC   1(11,6),0(6)            DISTRUCTIVE OVERLAP                               
+ 0003FC 5A60 C0D0            00418   209          A     6,=F'12'                ADD OFFSET                                        
+ 000400 4650 C0AA            003F2   210          BCT   5,OVRLP                 REPEAT OVERLAP UNTIL R5 = 0                       
+ 000404 E020 C0E4 0055 0042C         211 EXPR     XPRNT PRINTLN,85              FINAL PRINT FOR LAST LINE                         
+ 00040A 58D0 D004            00004   212          L     13,4(0,13)              STD EXIT LINKAGE                                  
+ 00040E 98EC D00C            0000C   213          LM    14,12,12(13)                                                              
+ 000412 07FE                         214          BR    14                                                                        
+                                     215          LTORG                                                                           
+ 000418 0000000C                     216                =F'12'                                                                    
+ 00041C 00000001                     217                =F'1'                                                                     
+ 000420 00000004                     218                =F'4'                                                                     
+ 000424 00000000                     219                =F'0'                                                                     
+ 000428 00000055                     220                =F'85'                                                                    
+ 00042C                              221 PRINTLN  DS    CL85                                                                      
+ 000484                              222 PRNSAVE  DS    18F                                                                       
+                                     223          END   MAIN                                                                      
+0***  NO   STATEMENTS FLAGGED -  NO   WARNINGS,  NO   ERRORS                                                                      
+1*** DYNAMIC CORE AREA USED:  LOW:   10372 HIGH:    1076 LEAVING:  482120 FREE BYTES. AVERAGE:       51 BYTES/STMT ***            
+0*** ASSEMBLY TIME =    0.001 SECS,   224000 STATEMENTS/SEC ***                                                                   
+0*** PROGRAM EXECUTION BEGINNING - ANY OUTPUT BEFORE EXECUTION TIME MESSAGE IS PRODUCED BY USER PROGRAM ***                       
+1Table Contents                                                                                                                   
+0           7         -37          53       -8909          21                                                                     
+0          46          13         591          10          26                                                                     
+0       -1869       -6299           3         333      -15141                                                                     
+0         868         662         859        -529          35                                                                     
+0        -288       -8942       27446       -6729           6                                                                     
+0        3548        5705      -16827        2995        5436                                                                     
+0         960         382         718       -5537          82                                                                     
+0         833          58        3977       22386       20537                                                                     
+0        7595       -4350        -374          21      -26924                                                                     
+0          29          97        3290         355          74                                                                     
+0        -350        -724         -68        4734       -3728                                                                     
+0       22483         310         514       18935       -5249                                                                     
+0         798       11008       14989         485          23                                                                     
+0        9503           6          76           4           6                                                                     
+0      -18467        -169         -58                                                                                             
+1Multiples of           12                                                                                                        
+0        -288        5436         960                                                                                             
+1Multiples of           10                                                                                                        
+0          10         960       -4350        3290        -350                                                                     
+0         310                                                                                                                     
+1Multiples of            7                                                                                                        
+0           7          21       -1869      -15141         868          35        5705                                             
+0       -5537         833       22386        7595          21        3290        -350                                             
+0       18935         798                                                                                                         
+0*** EXECUTION TIME =    0.003 SECS.      4442 INSTRUCTIONS EXECUTED -  1480666 INSTRUCTIONS/SEC ***                              
+0*** AM004 - NORMAL USER TERMINATION BY RETURN ***                                                                                
